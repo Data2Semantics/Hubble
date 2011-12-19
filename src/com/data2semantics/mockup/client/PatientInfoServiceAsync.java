@@ -4,5 +4,5 @@ import com.data2semantics.mockup.shared.Patient;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface PatientInfoServiceAsync {
-	void getInfo(int patientID, AsyncCallback<String> callback) throws IllegalArgumentException;;
+	void getInfo(int patientID, AsyncCallback<Patient> callback) throws IllegalArgumentException;;
 }

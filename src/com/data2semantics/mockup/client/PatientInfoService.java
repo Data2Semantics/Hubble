@@ -6,5 +6,5 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 @RemoteServiceRelativePath("patientinfo") //needs to be same as servlet path definition in web.xml
 public interface PatientInfoService extends RemoteService {
-  String getInfo(int patientID) throws IllegalArgumentException;;
+  Patient getInfo(int patientID) throws IllegalArgumentException;;
 }

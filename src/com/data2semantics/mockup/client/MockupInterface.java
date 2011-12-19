@@ -65,24 +65,24 @@ public class MockupInterface implements EntryPoint {
 
 	private FlexTable getPatientInfo(int patientID) {
 		patientInfoTable = new FlexTable();
-		patientInfoTable.setText(0, 0, "Patient ID");
 		
-//		infoTable.setText(0, 0, "Patient ID");
-//		infoTable.setText(0, 1, Integer.toString(patientInfo.getPatientID()));
-//
-//		infoTable.setText(1, 0, "Temperature");
-//		infoTable.setText(1, 1, patientInfo.getTemperature() + " C");
-//
-//		infoTable.setText(2, 0, "White blood cell count");
-//		infoTable.setText(2, 1, Double.toString(patientInfo.getWBloodCellCount()));
 		
-		PatientInfoService.getInfo(patientID, new AsyncCallback<String>() {
+
+		
+		PatientInfoService.getInfo(patientID, new AsyncCallback<Patient>() {
 			public void onFailure(Throwable caught) {
 				Window.alert(caught.getMessage());
 			}
 
-			public void onSuccess(String patient) {
-				patientInfoTable.setText(0, 1, patient);
+			public void onSuccess(Patient patientInfo) {
+				patientInfoTable.setText(0, 0, "Patient ID");
+				patientInfoTable.setText(0, 1, Integer.toString(patientInfo.getPatientID()));
+				//
+				patientInfoTable.setText(1, 0, "Temperature");
+				patientInfoTable.setText(1, 1, patientInfo.getTemperature() + " C");
+				//
+				patientInfoTable.setText(2, 0, "White blood cell count");
+				patientInfoTable.setText(2, 1, Double.toString(patientInfo.getWBloodCellCount()));
 			}
 		});
 		return patientInfoTable;
