@@ -1,0 +1,6 @@
+war/mockupinterface/*
+.gwt
+.project
+gwt-unitCache
+war/WEB-INF/classes/*
+war/WEB-INF/deploy/*

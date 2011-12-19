@@ -6,6 +6,16 @@
          xmlns="http://java.sun.com/xml/ns/javaee">
 
   <!-- Servlets -->
+  <servlet>
+    <servlet-name>patientServlet</servlet-name>
+    <servlet-class>com.data2semantics.mockup.server.PatientInfoServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>patientServlet</servlet-name>
+    <url-pattern>/mockupinterface/patientinfo</url-pattern>
+  </servlet-mapping>
+  
   
   <!-- Default page to serve -->
   <welcome-file-list>
