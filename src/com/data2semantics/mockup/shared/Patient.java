@@ -2,7 +2,7 @@ package com.data2semantics.mockup.shared;
 
 import java.io.Serializable;
 
-public class Patient implements Serializable{
+public class Patient implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	

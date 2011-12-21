@@ -8,7 +8,7 @@
   <!-- Servlets -->
   <servlet>
     <servlet-name>patientServlet</servlet-name>
-    <servlet-class>com.data2semantics.mockup.server.PatientInfoServiceImpl</servlet-class>
+    <servlet-class>com.data2semantics.mockup.server.MockupServersideApiImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
