@@ -1,7 +1,3 @@
-/** Add css rules here for your application. */
-
-
-/** Example rules used by the template application (remove for your app) */
 h1 {
   font-size: 2em;
   font-weight: bold;
@@ -9,21 +5,32 @@ h1 {
   margin: 40px 0px 70px;
   text-align: center;
 }
-
-.sendButton {
-  display: block;
-  font-size: 16pt;
+h3 {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #777777;
+  margin: 10px;
+  text-align: center;
 }
 
-.dialogVPanel {
-  margin: 5px;
+.imageBtn {
+	cursor: pointer;
 }
 
-.serverResponseLabelError {
-  color: red;
+/*Fix to avoid border being messed up when increasing width decoratorpanel*/
+.gwt-DecoratorPanel .topLeft,
+.gwt-DecoratorPanel .topRight {
+    width: 5px;
 }
 
-/** Set ids using widget.getElement().setId("idOfElement") */
-#closeButton {
-  margin: 15px 6px 6px;
+.tableBorders td {
+	border: 1px solid #BBBBBB;
+	padding: 3px;
+}
+
+.tableHeader td {
+	text-align: center;
+	font-size: 1.2em;
+	font-weight: bold;
+	color: #777777;
 }

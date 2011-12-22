@@ -9,24 +9,26 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.Button;
 
 public class MockupInterface implements EntryPoint {
 	private HorizontalPanel mainPanel = new HorizontalPanel();
 	private final MockupServersideApiAsync serverSideApi = GWT.create(MockupServersideApi.class);
 	private FlexTable patientInfoTable;
 	private FlexTable patientTable;
+	private static String RHS_WIDTH = "700px";
 	/**
 	 * Entry point method.
 	 */
 	public void onModuleLoad() {
 		populatePatientTable();
 		mainPanel.add(patientTable);
-
 		// Associate the Main panel with the HTML host page.
 		RootPanel.get("mockupInterface").add(mainPanel);
 	}
@@ -43,10 +45,11 @@ public class MockupInterface implements EntryPoint {
 			public void onSuccess(ArrayList<Integer> patients) {
 				for (int index = 0; index < patients.size(); index++) {
 					final int patientID = patients.get(index);
-					patientTable.setText(index, 0, Integer.toString(patientID));
-					Button showPatientResultBtn = new Button("Show Information");
-					patientTable.setWidget(index, 1, showPatientResultBtn);
-					showPatientResultBtn.addClickHandler(new ClickHandler() {
+					Image image = new Image("static/icons/fugue/magnifier--arrow.png");
+					image.addStyleName("imageBtn");
+					patientTable.setWidget(index, 0, image);
+					patientTable.setText(index, 1, Integer.toString(patientID));
+					image.addClickHandler(new ClickHandler() {
 						public void onClick(ClickEvent event) {
 							showPatientResults(patientID);
 						}
@@ -54,7 +57,8 @@ public class MockupInterface implements EntryPoint {
 				}
 			}
 		});
-		patientTable.setText(0, 0, "Executing request");
+		//Loading time very short. No loader icon needed yet
+		//patientTable.setWidget(0, 1, new Image("static/icons/loader_small.gif"));
 	}
 
 	private void showPatientResults(int patientID) {
@@ -62,18 +66,28 @@ public class MockupInterface implements EntryPoint {
 		if (mainPanel.getWidgetCount() > 1) {
 			mainPanel.remove(1);
 		}
-
+		DecoratorPanel rhs = new DecoratorPanel();
+		rhs.setWidth(RHS_WIDTH);
 		VerticalPanel container = new VerticalPanel();
-
+		rhs.add(container);
+		
 		container.add(getPatientInfo(patientID));
+		container.add(new HTML("&nbsp;"));
 		container.add(getRelevantInfo(patientID));
 
-		mainPanel.add(container);
+		mainPanel.add(rhs);
 	}
 
-	private FlexTable getPatientInfo(int patientID) {
-		patientInfoTable = new FlexTable();
+	private DecoratorPanel getPatientInfo(int patientID) {
+		DecoratorPanel patientInfoPanel = new DecoratorPanel();
+		patientInfoPanel.setWidth(RHS_WIDTH);
+		VerticalPanel patientInfoVPanel = new VerticalPanel();
+		patientInfoPanel.add(patientInfoVPanel);
+		patientInfoVPanel.add(new HTML("<h3>Patient Information</h3>"));
 		
+		patientInfoTable = new FlexTable();
+		patientInfoTable.setStyleName("tableBorders");
+		patientInfoVPanel.add(patientInfoTable);
 		serverSideApi.getInfo(patientID, new AsyncCallback<Patient>() {
 			public void onFailure(Throwable caught) {
 				Window.alert(caught.getMessage());
@@ -88,11 +102,15 @@ public class MockupInterface implements EntryPoint {
 				patientInfoTable.setText(2, 1, Double.toString(patientInfo.getWBloodCellCount()));
 			}
 		});
-		return patientInfoTable;
+		return patientInfoPanel;
 	}
 
-	private HorizontalPanel getRelevantInfo(int patientID) {
-		HorizontalPanel panel = new HorizontalPanel();
-		return panel;
+	private DecoratorPanel getRelevantInfo(int patientID) {
+		DecoratorPanel infoPanel = new DecoratorPanel();
+		infoPanel.setWidth(RHS_WIDTH);
+		VerticalPanel infoVPanel = new VerticalPanel();
+		infoPanel.add(infoVPanel);
+		infoVPanel.add(new HTML("<h3>Relevant information</h3>"));
+		return infoPanel;
 	}
 }
