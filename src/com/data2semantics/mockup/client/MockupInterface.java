@@ -9,11 +9,15 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -22,15 +26,21 @@ public class MockupInterface implements EntryPoint {
 	private final MockupServersideApiAsync serverSideApi = GWT.create(MockupServersideApi.class);
 	private FlexTable patientInfoTable;
 	private FlexTable patientTable;
+	private FlowPanel widgetsContainer;
 	private static String RHS_WIDTH = "700px";
+	private TextArea queryTextArea;
+	private DecoratorPanel queryResultArea;
 	/**
 	 * Entry point method.
 	 */
 	public void onModuleLoad() {
+		RootPanel.get().add(showQueryForm());
 		populatePatientTable();
 		mainPanel.add(patientTable);
 		// Associate the Main panel with the HTML host page.
 		RootPanel.get("mockupInterface").add(mainPanel);
+		
+		
 	}
 
 
@@ -51,7 +61,7 @@ public class MockupInterface implements EntryPoint {
 					patientTable.setText(index, 1, Integer.toString(patientID));
 					image.addClickHandler(new ClickHandler() {
 						public void onClick(ClickEvent event) {
-							showPatientResults(patientID);
+							showRhs(patientID);
 						}
 					});
 				}
@@ -61,7 +71,7 @@ public class MockupInterface implements EntryPoint {
 		//patientTable.setWidget(0, 1, new Image("static/icons/loader_small.gif"));
 	}
 
-	private void showPatientResults(int patientID) {
+	private void showRhs(int patientID) {
 		//Cleanup any other already shown info
 		if (mainPanel.getWidgetCount() > 1) {
 			mainPanel.remove(1);
@@ -71,14 +81,14 @@ public class MockupInterface implements EntryPoint {
 		VerticalPanel container = new VerticalPanel();
 		rhs.add(container);
 		
-		container.add(getPatientInfo(patientID));
+		container.add(showPatientInfo(patientID));
 		container.add(new HTML("&nbsp;"));
-		container.add(getRelevantInfo(patientID));
+		container.add(showWidgets(patientID));
 
 		mainPanel.add(rhs);
 	}
 
-	private DecoratorPanel getPatientInfo(int patientID) {
+	private DecoratorPanel showPatientInfo(int patientID) {
 		DecoratorPanel patientInfoPanel = new DecoratorPanel();
 		patientInfoPanel.setWidth(RHS_WIDTH);
 		VerticalPanel patientInfoVPanel = new VerticalPanel();
@@ -105,12 +115,81 @@ public class MockupInterface implements EntryPoint {
 		return patientInfoPanel;
 	}
 
-	private DecoratorPanel getRelevantInfo(int patientID) {
+	private DecoratorPanel showWidgets(int patientID) {
 		DecoratorPanel infoPanel = new DecoratorPanel();
 		infoPanel.setWidth(RHS_WIDTH);
 		VerticalPanel infoVPanel = new VerticalPanel();
 		infoPanel.add(infoVPanel);
 		infoVPanel.add(new HTML("<h3>Relevant information</h3>"));
+		
+		widgetsContainer = new FlowPanel();
+		infoVPanel.add(widgetsContainer);
+		drawProteineInfoWidget();
 		return infoPanel;
+	}
+	
+	private DecoratorPanel showQueryForm() {
+		ArrayList<String> namespaceList = new ArrayList<String>();
+		namespaceList.add("PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>");
+		namespaceList.add("PREFIX skos: <http://www.w3.org/2004/02/skos/core#>");
+		namespaceList.add("PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>");
+		namespaceList.add("PREFIX owl: <http://www.w3.org/2002/07/owl#>");
+		namespaceList.add("PREFIX r4: <http://aers.data2semantics.org/vocab/>");
+		
+		DecoratorPanel queryPanel = new DecoratorPanel();
+		VerticalPanel vQueryPanel = new VerticalPanel();
+	    queryTextArea = new TextArea();
+	    queryTextArea.setWidth("800px");
+	    queryTextArea.setHeight("400px");
+	    queryTextArea.setText(implode(namespaceList, "\n") + "\n" +
+	    		"SELECT ?x ?y ?z {?x ?y ?z} LIMIT 10");
+	    queryResultArea = new DecoratorPanel();
+	    Button submitButton = new Button("Submit Query");
+	    submitButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				queryResultArea.clear();
+				serverSideApi.query(queryTextArea.getText(), new AsyncCallback<String>() {
+					public void onFailure(Throwable caught) {
+						queryResultArea.add(new Label(caught.getMessage()));
+					}
+
+					public void onSuccess(String queryResult) {
+						queryResultArea.add(new Label(queryResult));
+					}
+				});
+			}
+		});
+	    queryPanel.add(vQueryPanel);
+	    vQueryPanel.add(queryTextArea);
+	    vQueryPanel.add(submitButton);
+	    vQueryPanel.add(queryResultArea);
+		return queryPanel;
+	}
+	
+	private String implode(ArrayList<String> arrayList, String glue) {
+		String result = "";
+		for (String stringItem: arrayList) {
+			if (result.length() > 0) {
+				result += glue;
+			}
+			result += stringItem;
+		}
+		return result;
+	}
+	
+	private void drawProteineInfoWidget() {
+		serverSideApi.getProteineInfo(new AsyncCallback<String>() {
+			public void onFailure(Throwable caught) {
+				Window.alert(caught.getMessage());
+			}
+
+			public void onSuccess(String proteineString) {
+				Image image = new Image(proteineString);
+				image.setWidth("200px");
+				image.setHeight("200px");
+				widgetsContainer.add(image);
+			}
+		});
+		
 	}
 }

@@ -10,4 +10,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface MockupServersideApi extends RemoteService {
   Patient getInfo(int patientID) throws IllegalArgumentException;
   ArrayList<Integer> getPatients() throws IllegalArgumentException;
+  String getProteineInfo() throws IllegalArgumentException;
+  String query(String query) throws IllegalArgumentException;
 }
