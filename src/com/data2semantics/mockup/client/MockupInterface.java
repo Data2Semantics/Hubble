@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.data2semantics.mockup.shared.Patient;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -17,6 +18,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -193,10 +195,13 @@ public class MockupInterface implements EntryPoint {
 				}
 
 				public void onSuccess(String proteineString) {
-					Image image = new Image(proteineString);
-					image.setWidth("200px");
-					image.setHeight("200px");
-					widgetsContainer.add(image);
+					if (Document.get().getElementById("proteineString") == null) {
+						Image image = new Image(proteineString);
+						image.getElement().setId("proteineString");
+						image.setWidth("200px");
+						image.setHeight("200px");
+						widgetsContainer.add(image);
+					}
 				}
 			});
 		} catch (Exception e) {
