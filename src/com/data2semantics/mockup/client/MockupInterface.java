@@ -135,6 +135,10 @@ public class MockupInterface implements EntryPoint {
 		namespaceList.add("PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>");
 		namespaceList.add("PREFIX owl: <http://www.w3.org/2002/07/owl#>");
 		namespaceList.add("PREFIX r4: <http://aers.data2semantics.org/vocab/>");
+		namespaceList.add("PREFIX ns3: <tag:eric@w3.org:2009/tmo/translator#>");
+		namespaceList.add("PREFIX ns4: <http://www.obofoundry.org/ro/ro.owl#>");
+		namespaceList.add("PREFIX ns1: <http://purl.org/cpr/0.75#>");
+		namespaceList.add("PREFIX foaf: <http://xmlns.com/foaf/0.1/>");
 		
 		DecoratorPanel queryPanel = new DecoratorPanel();
 		VerticalPanel vQueryPanel = new VerticalPanel();
@@ -148,15 +152,19 @@ public class MockupInterface implements EntryPoint {
 	    submitButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				queryResultArea.clear();
-				serverSideApi.query(queryTextArea.getText(), new AsyncCallback<String>() {
-					public void onFailure(Throwable caught) {
-						queryResultArea.add(new Label(caught.getMessage()));
-					}
+				try {
+					serverSideApi.query(queryTextArea.getText(), new AsyncCallback<String>() {
+						public void onFailure(Throwable caught) {
+							queryResultArea.add(new Label(caught.getMessage()));
+						}
 
-					public void onSuccess(String queryResult) {
-						queryResultArea.add(new Label(queryResult));
-					}
-				});
+						public void onSuccess(String queryResult) {
+							queryResultArea.add(new Label(queryResult));
+						}
+					});
+				} catch (Exception e) {
+					queryResultArea.add(new Label(e.getMessage()));
+				}
 			}
 		});
 	    queryPanel.add(vQueryPanel);
@@ -178,18 +186,22 @@ public class MockupInterface implements EntryPoint {
 	}
 	
 	private void drawProteineInfoWidget() {
-		serverSideApi.getProteineInfo(new AsyncCallback<String>() {
-			public void onFailure(Throwable caught) {
-				Window.alert(caught.getMessage());
-			}
+		try {
+			serverSideApi.getProteineInfo(new AsyncCallback<String>() {
+				public void onFailure(Throwable caught) {
+					Window.alert(caught.getMessage());
+				}
 
-			public void onSuccess(String proteineString) {
-				Image image = new Image(proteineString);
-				image.setWidth("200px");
-				image.setHeight("200px");
-				widgetsContainer.add(image);
-			}
-		});
+				public void onSuccess(String proteineString) {
+					Image image = new Image(proteineString);
+					image.setWidth("200px");
+					image.setHeight("200px");
+					widgetsContainer.add(image);
+				}
+			});
+		} catch (Exception e) {
+			widgetsContainer.add(new Label(e.getMessage()));
+		}
 		
 	}
 }

@@ -46,12 +46,16 @@ public class JsonObject implements Serializable {
 	public static class BindingSpec {
 		private String type;
 		private String value;
+		private String datatype;
 		
 		public String getType() {
 			return this.type;
 		}
 		public String getValue() {
 			return this.value;
+		}
+		public String getDataType() {
+			return this.datatype;
 		}
 	}
 

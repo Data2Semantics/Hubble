@@ -3,7 +3,6 @@ package com.data2semantics.mockup.server;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,9 +11,6 @@ import com.data2semantics.mockup.shared.JsonObject;
 import com.data2semantics.mockup.shared.Patient;
 import com.data2semantics.mockup.shared.JsonObject.BindingSpec;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import uk.co.magus.fourstore.client.Store;
 
@@ -60,30 +56,44 @@ public class MockupServersideApiImpl extends RemoteServiceServlet implements Moc
 				"FILTER regex(str(?sameAs), \"^" + drugBankUrl + "\", \"i\")\n" + 
 				"} LIMIT 1\n" + 
 				"";
-		String queryResult = query(queryString);
-		JsonObject jsonObject = parseJson(queryResult);
-		List<HashMap<String, BindingSpec>> bindingSets = jsonObject.getResults().getBindings();
-		if (bindingSets.size() > 0) {
-			String uri = bindingSets.get(0).get("sameAs").getValue();
-			String drugbankID = uri.substring(drugBankUrl.length());
-			proteineInfo = "http://moldb.wishartlab.com/molecules/DB" + drugbankID + "/image.png";
+		String queryResult = "";
+		try {
+			queryResult = queryHandler(queryString);
+			JsonObject jsonObject = parseJson(queryResult);
+			List<HashMap<String, BindingSpec>> bindingSets = jsonObject.getResults().getBindings();
+			if (bindingSets.size() > 0) {
+				String uri = bindingSets.get(0).get("sameAs").getValue();
+				String drugbankID = uri.substring(drugBankUrl.length());
+				proteineInfo = "http://moldb.wishartlab.com/molecules/DB" + drugbankID + "/image.png";
+			}
+		} catch (MalformedURLException e) {
+			proteineInfo = "http://www.iphone4jailbreaks.com/wp-content/uploads/2011/09/error.png";
+		} catch (IOException e) {
+			proteineInfo = "http://www.iphone4jailbreaks.com/wp-content/uploads/2011/09/error.png";
 		}
+
 		return proteineInfo;
 	}
 
 
 	public String query(String queryString) throws IllegalArgumentException {
 		String queryResult = "";
-		Store endpoint;
 		try {
-			endpoint = getEndpoint();
-			String response1 = endpoint.query(queryString, Store.OutputFormat.JSON);
-			queryResult = response1;
+			queryResult = queryHandler(queryString);
 		} catch (MalformedURLException e) {
 			queryResult = e.getMessage();
 		} catch (IOException e) {
 			queryResult = e.getMessage();
 		}
+		return queryResult;
+	}
+	
+	private String queryHandler(String queryString) throws MalformedURLException, IOException {
+		String queryResult = "";
+		Store endpoint;
+		endpoint = getEndpoint();
+		String response1 = endpoint.query(queryString, Store.OutputFormat.JSON);
+		queryResult = response1;
 		return queryResult;
 	}
 
