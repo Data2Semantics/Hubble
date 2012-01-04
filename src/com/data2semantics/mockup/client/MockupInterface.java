@@ -195,6 +195,7 @@ public class MockupInterface implements EntryPoint {
 				}
 
 				public void onSuccess(String proteineString) {
+					//avoid adding too many (of the same) image elements
 					if (Document.get().getElementById("proteineString") == null) {
 						Image image = new Image(proteineString);
 						image.getElement().setId("proteineString");

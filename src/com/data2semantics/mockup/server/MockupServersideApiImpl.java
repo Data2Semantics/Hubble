@@ -21,11 +21,27 @@ import uk.co.magus.fourstore.client.Store;
 public class MockupServersideApiImpl extends RemoteServiceServlet implements MockupServersideApi {
 
 	private Store endpoint;
-
+	private static String ENDPOINT_LOCATION = "http://eculture2.cs.vu.nl:5020";
+	private static String DRUGBANK_URI_PREFIX = "http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB";
+	
+	/**
+	 * Get info for a given patient. Currently static values. Should evantually load this data from patient data records
+	 * 
+	 * @param patientID ID of patient
+	 * @return Patient
+	 * @throws IllegalArgumentException
+	 */
 	public Patient getInfo(int patientID) throws IllegalArgumentException {
 		Patient patientInfo = new Patient(patientID, 38.3, 2.0);
 		return patientInfo;
 	}
+	
+	/**
+	 * Get patients (currently just a set of random numbers)
+	 * 
+	 * @return List of patient Id's
+	 * @throws IllegalArgumentException
+	 */
 	public ArrayList<Integer> getPatients() throws IllegalArgumentException {
 		ArrayList<Integer> patientList = new ArrayList<Integer>();
 		int numberOfRecords = 10;
@@ -36,10 +52,15 @@ public class MockupServersideApiImpl extends RemoteServiceServlet implements Moc
 		return patientList;
 
 	}
-
+	
+	/**
+	 * Retrieve chemical structure image using drugbank
+	 * 
+	 * @return Url to chemical structure image. If no valid url is found, an url to an error image is retrieved
+	 * @throws IllegalArgumentException
+	 */
 	public String getProteineInfo() throws IllegalArgumentException {
 		String proteineInfo = "";
-		final String drugBankUrl = "http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB";
 		String queryString = "" + 
 				"\n" + 
 				"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" + 
@@ -53,7 +74,7 @@ public class MockupServersideApiImpl extends RemoteServiceServlet implements Moc
 				"?involvement :drug ?drug.\n" + 
 				"?drug rdfs:label ?drugLabel.\n" + 
 				"?drug owl:sameAs ?sameAs.\n" + 
-				"FILTER regex(str(?sameAs), \"^" + drugBankUrl + "\", \"i\")\n" + 
+				"FILTER regex(str(?sameAs), \"^" + DRUGBANK_URI_PREFIX + "\", \"i\")\n" + 
 				"} LIMIT 1\n" + 
 				"";
 		String queryResult = "";
@@ -63,7 +84,7 @@ public class MockupServersideApiImpl extends RemoteServiceServlet implements Moc
 			List<HashMap<String, BindingSpec>> bindingSets = jsonObject.getResults().getBindings();
 			if (bindingSets.size() > 0) {
 				String uri = bindingSets.get(0).get("sameAs").getValue();
-				String drugbankID = uri.substring(drugBankUrl.length());
+				String drugbankID = uri.substring(DRUGBANK_URI_PREFIX.length());
 				proteineInfo = "http://moldb.wishartlab.com/molecules/DB" + drugbankID + "/image.png";
 			}
 		} catch (MalformedURLException e) {
@@ -75,7 +96,13 @@ public class MockupServersideApiImpl extends RemoteServiceServlet implements Moc
 		return proteineInfo;
 	}
 
-
+	/**
+	 * Wrapper for execution of query. If queries throws MalformedURLException or IOException, these are returned as query result string
+	 * 
+	 * @param queryString
+	 * @return Query result, which is either a json string, or an exception message
+	 * @throws IllegalArgumentException
+	 */
 	public String query(String queryString) throws IllegalArgumentException {
 		String queryResult = "";
 		try {
@@ -88,6 +115,14 @@ public class MockupServersideApiImpl extends RemoteServiceServlet implements Moc
 		return queryResult;
 	}
 	
+	/**
+	 * Execute query
+	 * 
+	 * @param queryString
+	 * @return
+	 * @throws MalformedURLException
+	 * @throws IOException
+	 */
 	private String queryHandler(String queryString) throws MalformedURLException, IOException {
 		String queryResult = "";
 		Store endpoint;
@@ -96,14 +131,26 @@ public class MockupServersideApiImpl extends RemoteServiceServlet implements Moc
 		queryResult = response1;
 		return queryResult;
 	}
-
-	private Store getEndpoint() throws MalformedURLException, IOException{
+	
+	/**
+	 * Retrieve endpoint 
+	 * 
+	 * @return endpoint store to perform queries on
+	 * @throws MalformedURLException
+	 */
+	private Store getEndpoint() throws MalformedURLException {
 		if (endpoint == null) {
-			endpoint = new Store("http://eculture2.cs.vu.nl:5020");
+			endpoint = new Store(ENDPOINT_LOCATION);
 		}
 		return endpoint;
 	}
-
+	
+	/**
+	 *  Parse json string into json object
+	 *  
+	 * @param jsonString
+	 * @return JsonObject
+	 */
 	private JsonObject parseJson(String jsonString) {
 		Gson gson = new Gson();
 		JsonObject jsonObject = gson.fromJson(jsonString, JsonObject.class);
