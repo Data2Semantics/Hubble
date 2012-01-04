@@ -2,12 +2,16 @@ package com.data2semantics.mockup.client;
 
 import java.util.ArrayList;
 
+import com.data2semantics.mockup.shared.JsonObject;
 import com.data2semantics.mockup.shared.Patient;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -18,7 +22,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -127,6 +130,7 @@ public class MockupInterface implements EntryPoint {
 		widgetsContainer = new FlowPanel();
 		infoVPanel.add(widgetsContainer);
 		drawProteineInfoWidget();
+		drawPdfAnnotation();
 		return infoPanel;
 	}
 	
@@ -155,13 +159,14 @@ public class MockupInterface implements EntryPoint {
 			public void onClick(ClickEvent event) {
 				queryResultArea.clear();
 				try {
-					serverSideApi.query(queryTextArea.getText(), new AsyncCallback<String>() {
+					serverSideApi.query(queryTextArea.getText(), new AsyncCallback<JsonObject>() {
 						public void onFailure(Throwable caught) {
 							queryResultArea.add(new Label(caught.getMessage()));
 						}
 
-						public void onSuccess(String queryResult) {
-							queryResultArea.add(new Label(queryResult));
+						public void onSuccess(JsonObject queryResult) {
+							HTML label = new HTML(new SafeHtmlBuilder().appendEscapedLines(queryResult.toString()).toSafeHtml());
+							queryResultArea.add(label);
 						}
 					});
 				} catch (Exception e) {
@@ -208,6 +213,28 @@ public class MockupInterface implements EntryPoint {
 		} catch (Exception e) {
 			widgetsContainer.add(new Label(e.getMessage()));
 		}
-		
+	}
+	
+	private void drawPdfAnnotation() {
+//		try {
+//			serverSideApi.getPdfAnnotation(new AsyncCallback<String>() {
+//				public void onFailure(Throwable caught) {
+//					Window.alert(caught.getMessage());
+//				}
+//
+//				public void onSuccess(String fileLocation) {
+//					//avoid adding too many (of the same) image elements
+//					if (Document.get().getElementById("pdfannotation") == null) {
+//						Image image = new Image(fileLocation);
+//						image.getElement().setId("pdfannotation");
+//						image.setWidth("200px");
+//						image.setHeight("200px");
+//						widgetsContainer.add(image);
+//					}
+//				}
+//			});
+//		} catch (Exception e) {
+//			widgetsContainer.add(new Label(e.getMessage()));
+//		}
 	}
 }

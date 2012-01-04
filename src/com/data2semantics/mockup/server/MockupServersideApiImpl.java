@@ -77,59 +77,45 @@ public class MockupServersideApiImpl extends RemoteServiceServlet implements Moc
 				"FILTER regex(str(?sameAs), \"^" + DRUGBANK_URI_PREFIX + "\", \"i\")\n" + 
 				"} LIMIT 1\n" + 
 				"";
-		String queryResult = "";
-		try {
-			queryResult = queryHandler(queryString);
-			JsonObject jsonObject = parseJson(queryResult);
-			List<HashMap<String, BindingSpec>> bindingSets = jsonObject.getResults().getBindings();
-			if (bindingSets.size() > 0) {
-				String uri = bindingSets.get(0).get("sameAs").getValue();
-				String drugbankID = uri.substring(DRUGBANK_URI_PREFIX.length());
-				proteineInfo = "http://moldb.wishartlab.com/molecules/DB" + drugbankID + "/image.png";
-			}
-		} catch (MalformedURLException e) {
-			proteineInfo = "http://www.iphone4jailbreaks.com/wp-content/uploads/2011/09/error.png";
-		} catch (IOException e) {
+		JsonObject jsonObject = query(queryString);
+		if (jsonObject.getExceptions().size() > 0) {
 			proteineInfo = "http://www.iphone4jailbreaks.com/wp-content/uploads/2011/09/error.png";
 		}
-
+		List<HashMap<String, BindingSpec>> bindingSets = jsonObject.getResults().getBindings();
+		if (bindingSets.size() > 0) {
+			String uri = bindingSets.get(0).get("sameAs").getValue();
+			String drugbankID = uri.substring(DRUGBANK_URI_PREFIX.length());
+			proteineInfo = "http://moldb.wishartlab.com/molecules/DB" + drugbankID + "/image.png";
+		}
 		return proteineInfo;
 	}
+	
+	public String getPdfAnnotation() throws IllegalArgumentException {
+		String fileLocation = "";
+		return fileLocation;
+	}
 
 	/**
-	 * Wrapper for execution of query. If queries throws MalformedURLException or IOException, these are returned as query result string
+	 * Execute query, and transform json string into own json object. If queries throws MalformedURLException or IOException, these are returned as exceptions in the returned object
 	 * 
 	 * @param queryString
-	 * @return Query result, which is either a json string, or an exception message
+	 * @return Query result in form of json object
 	 * @throws IllegalArgumentException
 	 */
-	public String query(String queryString) throws IllegalArgumentException {
-		String queryResult = "";
+	public JsonObject query(String queryString) throws IllegalArgumentException {
+		JsonObject jsonObject;
 		try {
-			queryResult = queryHandler(queryString);
+			Store endpoint = getEndpoint();
+			String queryResult = endpoint.query(queryString, Store.OutputFormat.JSON);
+			jsonObject = parseJson(queryResult);
 		} catch (MalformedURLException e) {
-			queryResult = e.getMessage();
+			jsonObject = new JsonObject();
+			jsonObject.addException(e.getMessage());
 		} catch (IOException e) {
-			queryResult = e.getMessage();
+			jsonObject = new JsonObject();
+			jsonObject.addException(e.getMessage());
 		}
-		return queryResult;
-	}
-	
-	/**
-	 * Execute query
-	 * 
-	 * @param queryString
-	 * @return
-	 * @throws MalformedURLException
-	 * @throws IOException
-	 */
-	private String queryHandler(String queryString) throws MalformedURLException, IOException {
-		String queryResult = "";
-		Store endpoint;
-		endpoint = getEndpoint();
-		String response1 = endpoint.query(queryString, Store.OutputFormat.JSON);
-		queryResult = response1;
-		return queryResult;
+		return jsonObject;
 	}
 	
 	/**
