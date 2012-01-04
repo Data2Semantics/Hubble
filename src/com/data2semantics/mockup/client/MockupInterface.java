@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import com.data2semantics.mockup.shared.JsonObject;
 import com.data2semantics.mockup.shared.Patient;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
@@ -216,25 +214,25 @@ public class MockupInterface implements EntryPoint {
 	}
 	
 	private void drawPdfAnnotation() {
-//		try {
-//			serverSideApi.getPdfAnnotation(new AsyncCallback<String>() {
-//				public void onFailure(Throwable caught) {
-//					Window.alert(caught.getMessage());
-//				}
-//
-//				public void onSuccess(String fileLocation) {
-//					//avoid adding too many (of the same) image elements
-//					if (Document.get().getElementById("pdfannotation") == null) {
-//						Image image = new Image(fileLocation);
-//						image.getElement().setId("pdfannotation");
-//						image.setWidth("200px");
-//						image.setHeight("200px");
-//						widgetsContainer.add(image);
-//					}
-//				}
-//			});
-//		} catch (Exception e) {
-//			widgetsContainer.add(new Label(e.getMessage()));
-//		}
+		try {
+			serverSideApi.getPdfAnnotation(new AsyncCallback<String>() {
+				public void onFailure(Throwable caught) {
+					Window.alert(caught.getMessage());
+				}
+
+				public void onSuccess(String fileLocation) {
+					//avoid adding too many (of the same) image elements
+					if (Document.get().getElementById("pdfannotation") == null) {
+						Image image = new Image(fileLocation);
+						image.getElement().setId("pdfannotation");
+						image.setWidth("200px");
+						image.setHeight("200px");
+						widgetsContainer.add(image);
+					}
+				}
+			});
+		} catch (Exception e) {
+			widgetsContainer.add(new Label(e.getMessage()));
+		}
 	}
 }
