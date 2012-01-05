@@ -32,7 +32,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class MockupInterface implements EntryPoint {
 	private HorizontalPanel mainPanel = new HorizontalPanel();
-	private final MockupServersideApiAsync serverSideApi = GWT.create(MockupServersideApi.class);
+	private final ServersideApiAsync serverSideApi = GWT.create(ServersideApi.class);
 	private FlexTable patientInfoTable;
 	private FlexTable patientTable;
 	private FlowPanel widgetsContainer;
@@ -139,7 +139,7 @@ public class MockupInterface implements EntryPoint {
 		infoVPanel.add(widgetsContainer);
 		drawChemicalStructureWidget();
 		drawRelevantSnippet();
-		
+		drawSimilarAdverseEvents();
 		return infoPanel;
 	}
 
@@ -154,6 +154,8 @@ public class MockupInterface implements EntryPoint {
 		namespaceList.add("PREFIX ns4: <http://www.obofoundry.org/ro/ro.owl#>");
 		namespaceList.add("PREFIX ns1: <http://purl.org/cpr/0.75#>");
 		namespaceList.add("PREFIX foaf: <http://xmlns.com/foaf/0.1/>");
+		namespaceList.add("PREFIX : <http://aers.data2semantics.org/vocab/>");
+		
 
 		DecoratorPanel queryPanel = new DecoratorPanel();
 		queryPanel.setStyleName("querypanel", true);
@@ -263,6 +265,12 @@ public class MockupInterface implements EntryPoint {
 		
 		Image image = new Image("static/pdf/test_annotation.png");
 		image.setWidth("400px");
+		image.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				Window.open("../static/pdf/neutropeniaHUP.pdf", "_blank", "");
+			}
+		});
+		image.setStyleName("imageBtn");
 		horizontalPanel.add(image);
 		
 		
@@ -302,13 +310,17 @@ public class MockupInterface implements EntryPoint {
 		annotation3.setWidget(label4);
 		label4.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				Window.open("http://linkedlifedata.com/resource/umls/id/C0746883", "_blank", "");
+				Window.open("http://eculture2.cs.vu.nl:5010/page/resource/reaction/FEBRILE_NEUTROPENIA", "_blank", "");
 			}
 		});
 		absolutePanel.add(annotation3, 0, 203);
 		
 		horizontalPanel.add(absolutePanel);
 		popup.center();
+	}
+	
+	private void drawSimilarAdverseEvents() {
+		
 	}
 	
 	private void addWidget(Widget widget, boolean clickable) {

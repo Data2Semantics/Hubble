@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.data2semantics.mockup.client.MockupServersideApi;
+import com.data2semantics.mockup.client.ServersideApi;
 import com.data2semantics.mockup.shared.JsonObject;
 import com.data2semantics.mockup.shared.Patient;
 import com.data2semantics.mockup.shared.JsonObject.BindingSpec;
@@ -17,9 +17,9 @@ import uk.co.magus.fourstore.client.Store;
 /**
  * The server side implementation of the RPC service.
  */
-@SuppressWarnings("serial")
-public class MockupServersideApiImpl extends RemoteServiceServlet implements MockupServersideApi {
+public class ServersideApiImpl extends RemoteServiceServlet implements ServersideApi {
 
+	private static final long serialVersionUID = 1L;
 	private Store endpoint;
 	private static String ENDPOINT_LOCATION = "http://eculture2.cs.vu.nl:5020";
 	private static String DRUGBANK_URI_PREFIX = "http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB";
