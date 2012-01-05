@@ -45,7 +45,7 @@ public class JsonObject implements Serializable {
 	 */
 	public static class Head implements Serializable {
 		private static final long serialVersionUID = 1L;
-		private List<String> vars;
+		private List<String> vars = new ArrayList<String>();
 		public List<String> getVars() {
 			return this.vars;
 		}
