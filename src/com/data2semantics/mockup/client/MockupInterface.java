@@ -1,6 +1,7 @@
 package com.data2semantics.mockup.client;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.data2semantics.mockup.shared.JsonObject;
 import com.data2semantics.mockup.shared.Patient;
@@ -12,17 +13,22 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DecoratorPanel;
+import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class MockupInterface implements EntryPoint {
 	private HorizontalPanel mainPanel = new HorizontalPanel();
@@ -33,23 +39,26 @@ public class MockupInterface implements EntryPoint {
 	private static String RHS_WIDTH = "700px";
 	private TextArea queryTextArea;
 	private DecoratorPanel queryResultArea;
+	private DialogBox popup;
+	private DockPanel popupDockPanel;
 	/**
 	 * Entry point method.
 	 */
 	public void onModuleLoad() {
 		RootPanel.get().add(showQueryForm());
 		populatePatientTable();
+		drawPopup();
 		mainPanel.add(patientTable);
 		// Associate the Main panel with the HTML host page.
 		RootPanel.get("mockupInterface").add(mainPanel);
-		
-		
+
+
 	}
 
 
 	private void populatePatientTable() {
 		patientTable = new FlexTable();
-		
+
 		serverSideApi.getPatients(new AsyncCallback<ArrayList<Integer>>() {
 			public void onFailure(Throwable caught) {
 				Window.alert(caught.getMessage());
@@ -62,6 +71,7 @@ public class MockupInterface implements EntryPoint {
 					image.addStyleName("imageBtn");
 					patientTable.setWidget(index, 0, image);
 					patientTable.setText(index, 1, Integer.toString(patientID));
+					patientTable.setStyleName("patientIDs", true);
 					image.addClickHandler(new ClickHandler() {
 						public void onClick(ClickEvent event) {
 							showRhs(patientID);
@@ -83,7 +93,7 @@ public class MockupInterface implements EntryPoint {
 		rhs.setWidth(RHS_WIDTH);
 		VerticalPanel container = new VerticalPanel();
 		rhs.add(container);
-		
+
 		container.add(showPatientInfo(patientID));
 		container.add(new HTML("&nbsp;"));
 		container.add(showWidgets(patientID));
@@ -97,7 +107,7 @@ public class MockupInterface implements EntryPoint {
 		VerticalPanel patientInfoVPanel = new VerticalPanel();
 		patientInfoPanel.add(patientInfoVPanel);
 		patientInfoVPanel.add(new HTML("<h3>Patient Information</h3>"));
-		
+
 		patientInfoTable = new FlexTable();
 		patientInfoTable.setStyleName("tableBorders");
 		patientInfoVPanel.add(patientInfoTable);
@@ -124,14 +134,15 @@ public class MockupInterface implements EntryPoint {
 		VerticalPanel infoVPanel = new VerticalPanel();
 		infoPanel.add(infoVPanel);
 		infoVPanel.add(new HTML("<h3>Relevant information</h3>"));
-		
+
 		widgetsContainer = new FlowPanel();
 		infoVPanel.add(widgetsContainer);
-		drawProteineInfoWidget();
-		drawPdfAnnotation();
+		drawChemicalStructureWidget();
+		drawRelevantSnippet();
+		
 		return infoPanel;
 	}
-	
+
 	private DecoratorPanel showQueryForm() {
 		ArrayList<String> namespaceList = new ArrayList<String>();
 		namespaceList.add("PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>");
@@ -143,17 +154,18 @@ public class MockupInterface implements EntryPoint {
 		namespaceList.add("PREFIX ns4: <http://www.obofoundry.org/ro/ro.owl#>");
 		namespaceList.add("PREFIX ns1: <http://purl.org/cpr/0.75#>");
 		namespaceList.add("PREFIX foaf: <http://xmlns.com/foaf/0.1/>");
-		
+
 		DecoratorPanel queryPanel = new DecoratorPanel();
+		queryPanel.setStyleName("querypanel", true);
 		VerticalPanel vQueryPanel = new VerticalPanel();
-	    queryTextArea = new TextArea();
-	    queryTextArea.setWidth("800px");
-	    queryTextArea.setHeight("400px");
-	    queryTextArea.setText(implode(namespaceList, "\n") + "\n" +
-	    		"SELECT ?x ?y ?z {?x ?y ?z} LIMIT 10");
-	    queryResultArea = new DecoratorPanel();
-	    Button submitButton = new Button("Submit Query");
-	    submitButton.addClickHandler(new ClickHandler() {
+		queryTextArea = new TextArea();
+		queryTextArea.setWidth("800px");
+		queryTextArea.setHeight("400px");
+		queryTextArea.setText(implode(namespaceList, "\n") + "\n" +
+				"SELECT ?x ?y ?z {?x ?y ?z} LIMIT 10");
+		queryResultArea = new DecoratorPanel();
+		Button submitButton = new Button("Submit Query");
+		submitButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				queryResultArea.clear();
 				try {
@@ -172,13 +184,13 @@ public class MockupInterface implements EntryPoint {
 				}
 			}
 		});
-	    queryPanel.add(vQueryPanel);
-	    vQueryPanel.add(queryTextArea);
-	    vQueryPanel.add(submitButton);
-	    vQueryPanel.add(queryResultArea);
+		queryPanel.add(vQueryPanel);
+		vQueryPanel.add(queryTextArea);
+		vQueryPanel.add(submitButton);
+		vQueryPanel.add(queryResultArea);
 		return queryPanel;
 	}
-	
+
 	private String implode(ArrayList<String> arrayList, String glue) {
 		String result = "";
 		for (String stringItem: arrayList) {
@@ -189,22 +201,22 @@ public class MockupInterface implements EntryPoint {
 		}
 		return result;
 	}
-	
-	private void drawProteineInfoWidget() {
+
+	private void drawChemicalStructureWidget() {
 		try {
-			serverSideApi.getProteineInfo(new AsyncCallback<String>() {
+			serverSideApi.getChemicalStructure(new AsyncCallback<String>() {
 				public void onFailure(Throwable caught) {
 					Window.alert(caught.getMessage());
 				}
 
-				public void onSuccess(String proteineString) {
+				public void onSuccess(String imageLocation) {
 					//avoid adding too many (of the same) image elements
-					if (Document.get().getElementById("proteineString") == null) {
-						Image image = new Image(proteineString);
-						image.getElement().setId("proteineString");
+					if (Document.get().getElementById("chemStructure") == null) {
+						Image image = new Image(imageLocation);
+						image.getElement().setId("chemStructure");
 						image.setWidth("200px");
 						image.setHeight("200px");
-						widgetsContainer.add(image);
+						addWidget(image, false);
 					}
 				}
 			});
@@ -212,27 +224,126 @@ public class MockupInterface implements EntryPoint {
 			widgetsContainer.add(new Label(e.getMessage()));
 		}
 	}
-	
-	private void drawPdfAnnotation() {
+
+	private void drawRelevantSnippet() {
 		try {
-			serverSideApi.getPdfAnnotation(new AsyncCallback<String>() {
+			serverSideApi.getRelevantSnippet(new AsyncCallback<HashMap<String, String>>() {
 				public void onFailure(Throwable caught) {
 					Window.alert(caught.getMessage());
 				}
 
-				public void onSuccess(String fileLocation) {
+				public void onSuccess(HashMap<String, String> snippetInfo) {
 					//avoid adding too many (of the same) image elements
-					if (Document.get().getElementById("pdfannotation") == null) {
-						Image image = new Image(fileLocation);
-						image.getElement().setId("pdfannotation");
-						image.setWidth("200px");
-						image.setHeight("200px");
-						widgetsContainer.add(image);
+					if (Document.get().getElementById("relevantsnippet") == null) {
+						HTML label = new HTML(snippetInfo.get("snippet"));
+						label.getElement().setId("relevantsnippet");
+						label.setStyleName("snippet", true);
+						label.setWidth("200px");
+						label.addClickHandler(new ClickHandler() {
+							public void onClick(ClickEvent event) {
+								drawPdfAnnotation();
+							}
+						});
+						addWidget(label, true);
 					}
+
 				}
 			});
 		} catch (Exception e) {
 			widgetsContainer.add(new Label(e.getMessage()));
 		}
+	}
+
+	private void drawPdfAnnotation() {
+		drawPopup();
+		popup.setText("Medical Guideline Snippet");
+		HorizontalPanel horizontalPanel = new HorizontalPanel();
+		horizontalPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+		popupDockPanel.add(horizontalPanel, DockPanel.CENTER);
+		
+		Image image = new Image("static/pdf/test_annotation.png");
+		image.setWidth("400px");
+		horizontalPanel.add(image);
+		
+		
+		//Draw annotations
+		AbsolutePanel absolutePanel = new AbsolutePanel();
+		absolutePanel.setWidth("200px");
+		absolutePanel.setHeight("500px");
+		SimplePanel annotation1 = new SimplePanel();
+		annotation1.setStyleName("pdfAnnotation");
+		annotation1.setWidth("185px");
+		Label label1 = new Label("Lorem ipsum dolor sit amet, consectetuer adipiscing elit");
+		annotation1.setWidget(label1);
+		label1.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				Window.open("http://dbpedia.org/resource/Hospital_of_the_University_of_Pennsylvania", "_blank", "");
+			}
+		});
+		absolutePanel.add(annotation1, 0, 23);
+		
+		SimplePanel annotation2 = new SimplePanel();
+		annotation2.setStylePrimaryName("pdfAnnotation");
+		annotation2.setStyleDependentName("highlight", true);
+		annotation2.setWidth("185px");
+		Label label3 = new Label("Lorem ipsum dolor sit amet, consectetuer");
+		annotation2.setWidget(label3);
+		label3.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				Window.open("../static/pdf/neutropeniaHUP.pdf", "_blank", "");
+			}
+		});
+		absolutePanel.add(annotation2, 0, 117);
+		
+		SimplePanel annotation3 = new SimplePanel();
+		annotation3.setStyleName("pdfAnnotation");
+		annotation3.setWidth("185px");
+		Label label4 = new Label("Lorem ipsum dolor sit amet, consectetuer adipiscing elit");
+		annotation3.setWidget(label4);
+		label4.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				Window.open("http://linkedlifedata.com/resource/umls/id/C0746883", "_blank", "");
+			}
+		});
+		absolutePanel.add(annotation3, 0, 203);
+		
+		horizontalPanel.add(absolutePanel);
+		popup.center();
+	}
+	
+	private void addWidget(Widget widget, boolean clickable) {
+		widget.setStylePrimaryName("widget");
+		if (clickable == true) 
+		{
+			widget.setStyleDependentName("clickable", true);
+		}
+		widgetsContainer.add(widget);
+	}
+	/**
+	 * Create the dialog box for this example.
+	 *
+	 * @return the new dialog box
+	 */
+	private void drawPopup() {
+		popup = new DialogBox();
+		// Add a close button at the bottom of the dialog
+		Button closeButton = new Button(
+				"close", new ClickHandler() {
+					public void onClick(ClickEvent event) {
+						popup.hide();
+					}
+				});
+		popupDockPanel = new DockPanel();
+		popup.add(popupDockPanel);
+		HorizontalPanel horizontalPanel = new HorizontalPanel();
+		horizontalPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+		horizontalPanel.setWidth("100%");
+		horizontalPanel.add(closeButton);
+		
+		popupDockPanel.add(horizontalPanel, DockPanel.SOUTH);
+		popup.setGlassEnabled(true);
+		popup.setModal(false);
+		popup.setAnimationEnabled(true);
+		
 	}
 }

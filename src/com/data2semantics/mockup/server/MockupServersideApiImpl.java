@@ -59,8 +59,8 @@ public class MockupServersideApiImpl extends RemoteServiceServlet implements Moc
 	 * @return Url to chemical structure image. If no valid url is found, an url to an error image is retrieved
 	 * @throws IllegalArgumentException
 	 */
-	public String getProteineInfo() throws IllegalArgumentException {
-		String proteineInfo = "";
+	public String getChemicalStructure() throws IllegalArgumentException {
+		String imageLocation = "";
 		String queryString = "" + 
 				"\n" + 
 				"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" + 
@@ -79,20 +79,27 @@ public class MockupServersideApiImpl extends RemoteServiceServlet implements Moc
 				"";
 		JsonObject jsonObject = query(queryString);
 		if (jsonObject.getExceptions().size() > 0) {
-			proteineInfo = "http://www.iphone4jailbreaks.com/wp-content/uploads/2011/09/error.png";
+			imageLocation = "http://www.iphone4jailbreaks.com/wp-content/uploads/2011/09/error.png";
 		}
 		List<HashMap<String, BindingSpec>> bindingSets = jsonObject.getResults().getBindings();
 		if (bindingSets.size() > 0) {
 			String uri = bindingSets.get(0).get("sameAs").getValue();
 			String drugbankID = uri.substring(DRUGBANK_URI_PREFIX.length());
-			proteineInfo = "http://moldb.wishartlab.com/molecules/DB" + drugbankID + "/image.png";
+			imageLocation = "http://moldb.wishartlab.com/molecules/DB" + drugbankID + "/image.png";
 		}
-		return proteineInfo;
+		return imageLocation;
 	}
 	
-	public String getPdfAnnotation() throws IllegalArgumentException {
-		String fileLocation = "";
-		return fileLocation;
+	public HashMap<String, String> getRelevantSnippet() throws IllegalArgumentException {
+		HashMap<String, String> snippetInfo = new HashMap<String, String>();
+		String snippet = "" +
+			"It is also important to stress that <strong>even a severely infected neutropenic patient may not manifest a fever.</strong>\n" + 
+			"Under these circumstances, infection may manifest with an abnormality in vital signs and/or evidence of new organ dysfunction including lactic acidosis.\n" + 
+			"";
+		String link = "http://www.google.com";
+		snippetInfo.put("snippet", snippet);
+		snippetInfo.put("link", link);
+		return snippetInfo;
 	}
 
 	/**
