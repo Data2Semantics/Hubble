@@ -2,7 +2,14 @@ h1 {
   font-size: 2em;
   font-weight: bold;
   color: #777777;
-  margin: 40px 0px 70px;
+  padding: 30px 0px 0px 0px;
+  text-align: center;
+}
+h2 {
+  font-size: 1.6em;
+  font-weight: bold;
+  color: #777777;
+  padding: 30px 0px 0px 0px;
   text-align: center;
 }
 h3 {
@@ -12,7 +19,21 @@ h3 {
   margin: 10px;
   text-align: center;
 }
-
+body, table td, select  {
+	font: normal 12px arial,helvetica,sans-serif;
+}
+.header {
+	background: transparent url(static/img/grid-18px.png) top center;
+ 	padding: 0;
+ 	background-color: #F0F0F0;
+ 	margin-bottom: 9px;
+}
+.querypanel {
+	margin: 14px;
+}
+.patientIDs {
+	margin: 0px 15px 
+}
 .imageBtn {
 	cursor: pointer;
 }
@@ -33,4 +54,35 @@ h3 {
 	font-size: 1.2em;
 	font-weight: bold;
 	color: #777777;
+}
+
+.snippet {
+	font-size: 0.8em;
+	color: #777777;
+	text-align:justify;
+	cursor: pointer;
+}
+
+.widget {
+	background-color: #dcf2f9;
+	margin: 4px;
+	padding: 5px;
+	width: auto;
+	height:auto;
+	display: inline-block;
+	vertical-align: middle;
+}
+.widget-clickable:hover {
+	background-color: #b2d8e4;
+}
+.pdfAnnotation {
+	background-color: #202020;
+	color: white;
+	padding: 4px;
+	cursor:pointer;
+	font-size: 70%;
+}
+.pdfAnnotation-highlight {
+	border: solid;
+	border-color: red;
 }
