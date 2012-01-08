@@ -3,28 +3,34 @@ package com.data2semantics.mockup.client;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.data2semantics.mockup.shared.JsonObject;
 import com.data2semantics.mockup.shared.Patient;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DecoratorPanel;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -39,15 +45,14 @@ public class MockupInterface implements EntryPoint {
 	private static String RHS_WIDTH = "700px";
 	private TextArea queryTextArea;
 	private DecoratorPanel queryResultArea;
-	private DialogBox popup;
-	private DockPanel popupDockPanel;
+	private TabLayoutPanel tabPanel;
+	private int currentTabId = 0;
 	/**
 	 * Entry point method.
 	 */
 	public void onModuleLoad() {
 		RootPanel.get().add(showQueryForm());
 		populatePatientTable();
-		drawPopup();
 		mainPanel.add(patientTable);
 		// Associate the Main panel with the HTML host page.
 		RootPanel.get("mockupInterface").add(mainPanel);
@@ -91,13 +96,25 @@ public class MockupInterface implements EntryPoint {
 		}
 		DecoratorPanel rhs = new DecoratorPanel();
 		rhs.setWidth(RHS_WIDTH);
-		VerticalPanel container = new VerticalPanel();
-		rhs.add(container);
+		VerticalPanel rhsContainer = new VerticalPanel();
+		rhs.add(rhsContainer);
 
-		container.add(showPatientInfo(patientID));
-		container.add(new HTML("&nbsp;"));
-		container.add(showWidgets(patientID));
-
+		rhsContainer.add(showPatientInfo(patientID));
+		rhsContainer.add(new HTML("&nbsp;"));
+		
+		
+		tabPanel = new TabLayoutPanel(2.5, Unit.EM);
+		tabPanel.setWidth(RHS_WIDTH);
+		tabPanel.setAnimationDuration(1000);
+		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
+			public void onSelection(SelectionEvent<Integer> event) {
+				currentTabId = event.getSelectedItem();
+			}
+		});
+		rhsContainer.add(tabPanel);
+		//fill first tab
+		drawWidgets(patientID);
+		tabPanel.selectTab(0);
 		mainPanel.add(rhs);
 	}
 
@@ -128,19 +145,13 @@ public class MockupInterface implements EntryPoint {
 		return patientInfoPanel;
 	}
 
-	private DecoratorPanel showWidgets(int patientID) {
-		DecoratorPanel infoPanel = new DecoratorPanel();
-		infoPanel.setWidth(RHS_WIDTH);
-		VerticalPanel infoVPanel = new VerticalPanel();
-		infoPanel.add(infoVPanel);
-		infoVPanel.add(new HTML("<h3>Relevant information</h3>"));
-
+	private void drawWidgets(int patientID) {
 		widgetsContainer = new FlowPanel();
-		infoVPanel.add(widgetsContainer);
 		drawChemicalStructureWidget();
 		drawRelevantSnippet();
 		drawSimilarAdverseEvents();
-		return infoPanel;
+		tabPanel.add(widgetsContainer, "Overview");
+		//return infoPanel;
 	}
 
 	private DecoratorPanel showQueryForm() {
@@ -214,6 +225,7 @@ public class MockupInterface implements EntryPoint {
 				public void onSuccess(String imageLocation) {
 					//avoid adding too many (of the same) image elements
 					if (Document.get().getElementById("chemStructure") == null) {
+						Log.debug("add chemstructure");
 						Image image = new Image(imageLocation);
 						image.getElement().setId("chemStructure");
 						image.setWidth("200px");
@@ -257,11 +269,9 @@ public class MockupInterface implements EntryPoint {
 	}
 
 	private void drawPdfAnnotation() {
-		drawPopup();
-		popup.setText("Medical Guideline Snippet");
+		VerticalPanel verticalPanel = new VerticalPanel();
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		horizontalPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
-		popupDockPanel.add(horizontalPanel, DockPanel.CENTER);
 		
 		Image image = new Image("static/pdf/test_annotation.png");
 		image.setWidth("400px");
@@ -314,13 +324,65 @@ public class MockupInterface implements EntryPoint {
 			}
 		});
 		absolutePanel.add(annotation3, 0, 203);
-		
 		horizontalPanel.add(absolutePanel);
-		popup.center();
+		verticalPanel.add(horizontalPanel);
+		
+		//Add other relevant links
+		HorizontalPanel relevantLinks = new HorizontalPanel();
+		relevantLinks.setHorizontalAlignment(HasAlignment.ALIGN_CENTER);
+		Button buttonRelevantLiterature = new Button("Show relevant literature");
+		buttonRelevantLiterature.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				drawRelevantLiterature();
+			}
+		});
+		relevantLinks.add(buttonRelevantLiterature);
+		verticalPanel.add(relevantLinks);
+		addTab(verticalPanel, "Clinical Guideline");
 	}
+
 	
 	private void drawSimilarAdverseEvents() {
 		
+	}
+	
+	private void drawRelevantLiterature() {
+		VerticalPanel verticalPanel = new VerticalPanel();
+		verticalPanel.add(new Label("blaaaat"));
+		Button buttonRelevantLiterature = new Button("Show related clinical guidelines");
+		buttonRelevantLiterature.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				drawPdfAnnotation();
+			}
+		});
+		verticalPanel.add(buttonRelevantLiterature);
+		
+		addTab(verticalPanel, "Relevant Literature");
+		
+	}
+	
+	/**
+	 * Add a tab to the TabPanel. Stores which tab is currently selected, and removes any necessary tabs
+	 * 
+	 * @param widget Widget to add
+	 * @param title Title of the tab
+	 */
+	private void addTab(Widget widget, String title) {
+		if ((currentTabId + 1) < tabPanel.getWidgetCount()) {
+			//We want to add a tab, but there are already other following tabs. 
+			//Remove these
+			for (int i = currentTabId + 1; i < tabPanel.getWidgetCount(); i++) {
+				if (tabPanel.getWidget(i) != null) {
+					tabPanel.remove(i);
+					Log.debug("Remove panel");
+				}
+			}
+		}
+		
+		tabPanel.add(widget, title);
+		int addedIndex = tabPanel.getWidgetIndex(widget);
+		tabPanel.selectTab(addedIndex);
+		currentTabId = addedIndex;
 	}
 	
 	private void addWidget(Widget widget, boolean clickable) {
@@ -330,32 +392,5 @@ public class MockupInterface implements EntryPoint {
 			widget.setStyleDependentName("clickable", true);
 		}
 		widgetsContainer.add(widget);
-	}
-	/**
-	 * Create the dialog box for this example.
-	 *
-	 * @return the new dialog box
-	 */
-	private void drawPopup() {
-		popup = new DialogBox();
-		// Add a close button at the bottom of the dialog
-		Button closeButton = new Button(
-				"close", new ClickHandler() {
-					public void onClick(ClickEvent event) {
-						popup.hide();
-					}
-				});
-		popupDockPanel = new DockPanel();
-		popup.add(popupDockPanel);
-		HorizontalPanel horizontalPanel = new HorizontalPanel();
-		horizontalPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
-		horizontalPanel.setWidth("100%");
-		horizontalPanel.add(closeButton);
-		
-		popupDockPanel.add(horizontalPanel, DockPanel.SOUTH);
-		popup.setGlassEnabled(true);
-		popup.setModal(false);
-		popup.setAnimationEnabled(true);
-		
 	}
 }

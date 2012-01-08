@@ -10,5 +10,6 @@
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/4store-client-1.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gson-2.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-log-3.1.7.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
