@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.data2semantics.mockup.client.ServersideApi;
+import com.data2semantics.mockup.client.exceptions.SparqlException;
 import com.data2semantics.mockup.shared.JsonObject;
 import com.data2semantics.mockup.shared.Patient;
 import com.data2semantics.mockup.shared.SerializiationWhitelist;
@@ -61,7 +62,7 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 	 * @return Url to chemical structure image. If no valid url is found, an url to an error image is retrieved
 	 * @throws IllegalArgumentException
 	 */
-	public String getChemicalStructure() throws IllegalArgumentException  {
+	public String getChemicalStructure() throws IllegalArgumentException,SparqlException  {
 		String imageLocation;
 		String queryString = "" + 
 				"\n" + 
@@ -89,7 +90,7 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 			String drugbankID = uri.substring(DRUGBANK_URI_PREFIX.length());
 			imageLocation = "http://moldb.wishartlab.com/molecules/DB" + drugbankID + "/image.png";
 		} else {
-			throw new IllegalArgumentException(queryString);
+			throw new SparqlException("Empty result set for chemical structure query");
 		}
 		return imageLocation;
 	}
@@ -113,23 +114,20 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 	 * @return Query result in form of json object
 	 * @throws IllegalArgumentException
 	 */
-	public JsonObject query(String queryString) throws IllegalArgumentException {
+	public JsonObject query(String queryString) throws IllegalArgumentException,SparqlException {
 		JsonObject jsonObject;
 		try {
 			Store endpoint = getEndpoint();
 			String queryResult = endpoint.query(queryString, Store.OutputFormat.JSON);
 			jsonObject = parseJson(queryResult);
 		} catch (MalformedURLException e) {
-			jsonObject = new JsonObject();
-			jsonObject.addException(e.getClass() + " " + e.getMessage());
+			throw new SparqlException(e.getMessage());
 		} catch (IOException e) {
-			jsonObject = new JsonObject();
-			jsonObject.addException(e.getClass() + " " + e.getMessage());
+			throw new SparqlException(e.getMessage());
 		}
 		return jsonObject;
 	}
 	
-	//public SerializableWhitelist junk(SerializableWhitelist l) { return null; }
 	public SerializiationWhitelist serializiationWorkaround(SerializiationWhitelist s) throws IllegalArgumentException {
 		return null;
 	}

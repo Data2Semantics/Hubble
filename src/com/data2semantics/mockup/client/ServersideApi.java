@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.data2semantics.mockup.client.exceptions.SparqlException;
 import com.data2semantics.mockup.shared.JsonObject;
 import com.data2semantics.mockup.shared.Patient;
 import com.data2semantics.mockup.shared.SerializiationWhitelist;
@@ -14,8 +15,8 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface ServersideApi extends RemoteService {
   Patient getInfo(int patientID) throws IllegalArgumentException;
   ArrayList<Integer> getPatients() throws IllegalArgumentException;
-  String getChemicalStructure() throws IllegalArgumentException,Exception;
+  String getChemicalStructure() throws IllegalArgumentException,SparqlException;
   HashMap<String, String> getRelevantSnippet() throws IllegalArgumentException;
-  JsonObject query(String query) throws IllegalArgumentException,Exception;
+  JsonObject query(String query) throws IllegalArgumentException,SparqlException;
   SerializiationWhitelist serializiationWorkaround(SerializiationWhitelist s) throws IllegalArgumentException;
 }

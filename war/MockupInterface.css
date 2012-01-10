@@ -91,6 +91,10 @@ body,table td,select {
 .widget-clickable:hover {
 	background-color: #e1ecf7;
 }
+.widget-error {
+	color: red;
+	font-weight: bold;
+}
 
 .pdfAnnotation {
 	background-color: #202020;

@@ -1,5 +1,7 @@
 package com.data2semantics.mockup.client.view.patientinfo;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -37,8 +39,8 @@ public class WidgetsContainer extends FlowPanel {
 	private void drawChemicalStructureWidget() {
 		try {
 			getView().getServerSideApi().getChemicalStructure(new AsyncCallback<String>() {
-				public void onFailure(Throwable caught) {
-					getView().onError(SafeHtmlUtils.htmlEscape(caught.getMessage()));
+				public void onFailure(Throwable e) {
+					addWidget(new HTML(SafeHtmlUtils.htmlEscape(e.getMessage())), new ArrayList<String>(Arrays.asList("error")));
 				}
 
 				public void onSuccess(String imageLocation) {
@@ -48,21 +50,20 @@ public class WidgetsContainer extends FlowPanel {
 						image.getElement().setId("chemStructure");
 						image.setWidth("200px");
 						image.setHeight("200px");
-						addWidget(image, false);
+						addWidget(image);
 					}
 				}
 			});
 		} catch (Exception e) {
-			Window.alert(e.getMessage());
-			//add(new HTML(SafeHtmlUtils.htmlEscape(e.getMessage())));
+			addWidget(new HTML(SafeHtmlUtils.htmlEscape(e.getMessage())));
 		}
 	}
 
 	private void drawRelevantSnippet() {
 		try {
 			getView().getServerSideApi().getRelevantSnippet(new AsyncCallback<HashMap<String, String>>() {
-				public void onFailure(Throwable caught) {
-					getView().onError(caught.getMessage());
+				public void onFailure(Throwable e) {
+					getView().onError(SafeHtmlUtils.htmlEscape(e.getMessage()));
 				}
 
 				public void onSuccess(HashMap<String, String> snippetInfo) {
@@ -77,13 +78,13 @@ public class WidgetsContainer extends FlowPanel {
 								getView().getTabNavigation().addTab(new GuidelineAnnotations(getView()), "Clinical Guideline");
 							}
 						});
-						addWidget(label, true);
+						addWidget(label, new ArrayList<String>(Arrays.asList("clickable")));
 					}
 
 				}
 			});
 		} catch (Exception e) {
-			add(new Label(e.getMessage()));
+			getView().onError(SafeHtmlUtils.htmlEscape(e.getMessage()));
 		}
 	}
 	
@@ -91,12 +92,14 @@ public class WidgetsContainer extends FlowPanel {
 		
 	}
 	
-	private void addWidget(Widget widget, boolean clickable) {
+	private void addWidget(Widget widget, ArrayList<String> styleNames) {
 		widget.setStylePrimaryName("widget");
-		if (clickable == true) 
-		{
-			widget.setStyleDependentName("clickable", true);
+		for (String dependentStyleName: styleNames) {
+			widget.setStyleDependentName(dependentStyleName, true);
 		}
 		add(widget);
+	}
+	private void addWidget(Widget widget) {
+		addWidget(widget, new ArrayList<String>());
 	}
 }
