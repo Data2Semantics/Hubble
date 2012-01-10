@@ -39,10 +39,11 @@ public class TabNavigation extends TabPanel {
 	 * @param title Title of the tab
 	 */
 	private void addTab(Widget widget, String title) {
-		if ((currentTabId + 1) < getWidgetCount()) {
+		int widgetCount = getWidgetCount();
+		if ((currentTabId + 1) < widgetCount) {
 			//We want to add a tab, but there are already other following tabs. 
 			//Remove these
-			for (int i = currentTabId; i < getWidgetCount(); i++) {
+			for (int i = currentTabId + 1; i < widgetCount; i++) {
 				if (getWidget(i) != null) {
 					remove(i);
 				}
