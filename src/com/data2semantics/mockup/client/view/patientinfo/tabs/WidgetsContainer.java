@@ -1,4 +1,4 @@
-package com.data2semantics.mockup.client.view.patientinfo;
+package com.data2semantics.mockup.client.view.patientinfo.tabs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -75,7 +75,7 @@ public class WidgetsContainer extends FlowPanel {
 						label.setWidth("200px");
 						label.addClickHandler(new ClickHandler() {
 							public void onClick(ClickEvent event) {
-								getView().getTabNavigation().addTab(new GuidelineAnnotations(getView()), "Clinical Guideline");
+								getView().getTabNavigation().addGuidelineAnnotations();
 							}
 						});
 						addWidget(label, new ArrayList<String>(Arrays.asList("clickable")));

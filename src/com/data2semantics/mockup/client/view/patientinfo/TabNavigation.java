@@ -2,6 +2,9 @@ package com.data2semantics.mockup.client.view.patientinfo;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.data2semantics.mockup.client.view.MockupInterfaceView;
+import com.data2semantics.mockup.client.view.patientinfo.tabs.GuidelineAnnotations;
+import com.data2semantics.mockup.client.view.patientinfo.tabs.RelevantLiterature;
+import com.data2semantics.mockup.client.view.patientinfo.tabs.WidgetsContainer;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.TabPanel;
@@ -35,14 +38,13 @@ public class TabNavigation extends TabPanel {
 	 * @param widget Widget to add
 	 * @param title Title of the tab
 	 */
-	public void addTab(Widget widget, String title) {
+	private void addTab(Widget widget, String title) {
 		if ((currentTabId + 1) < getWidgetCount()) {
 			//We want to add a tab, but there are already other following tabs. 
 			//Remove these
-			for (int i = currentTabId + 1; i < getWidgetCount(); i++) {
+			for (int i = currentTabId; i < getWidgetCount(); i++) {
 				if (getWidget(i) != null) {
 					remove(i);
-					Log.debug("Remove panel");
 				}
 			}
 		}
@@ -51,5 +53,12 @@ public class TabNavigation extends TabPanel {
 		int addedIndex = getWidgetIndex(widget);
 		selectTab(addedIndex);
 		currentTabId = addedIndex;
+	}
+	
+	public void addGuidelineAnnotations() {
+		addTab(new GuidelineAnnotations(getView()), "Guideline Annotations");
+	}
+	public void addRelevantLiterature() {
+		addTab(new RelevantLiterature(getView()), "Relevant Literature");
 	}
 }

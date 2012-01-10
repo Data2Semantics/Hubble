@@ -3,9 +3,9 @@ package com.data2semantics.mockup.client.view;
 import com.data2semantics.mockup.client.ServersideApiAsync;
 import com.data2semantics.mockup.client.ui.LoadingPanel;
 import com.data2semantics.mockup.client.ui.RoundedPanel;
-import com.data2semantics.mockup.client.view.patientinfo.GuidelineAnnotations;
 import com.data2semantics.mockup.client.view.patientinfo.PatientInfo;
 import com.data2semantics.mockup.client.view.patientinfo.TabNavigation;
+import com.data2semantics.mockup.client.view.patientinfo.tabs.GuidelineAnnotations;
 import com.data2semantics.mockup.client.view.patientlisting.PatientListing;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -31,7 +31,7 @@ public class MockupInterfaceView extends Composite {
 		roundedPanel.setStyleName("patientListing");
 		roundedPanel.setWidget(new PatientListing(this));
 		mainPanel.add(roundedPanel);
-		RootPanel.get().add(new ManualQueryForm(this));
+		//RootPanel.get().add(new ManualQueryForm(this));
 		RootPanel.get().add(loading);
 		
 		
