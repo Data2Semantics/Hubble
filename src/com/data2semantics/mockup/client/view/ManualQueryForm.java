@@ -46,20 +46,22 @@ public class ManualQueryForm extends DecoratorPanel {
 		Button submitButton = new Button("Submit Query");
 		submitButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				getView().onLoadingStart();
 				queryResultArea.clear();
 				try {
 					getView().getServerSideApi().query(queryTextArea.getText(), new AsyncCallback<JsonObject>() {
 						public void onFailure(Throwable caught) {
-							queryResultArea.add(new Label(caught.getMessage()));
+							getView().onError(caught.getMessage());
 						}
 
 						public void onSuccess(JsonObject queryResult) {
 							HTML label = new HTML(new SafeHtmlBuilder().appendEscapedLines(queryResult.toString()).toSafeHtml());
 							queryResultArea.add(label);
+							getView().onLoadingFinish();
 						}
 					});
 				} catch (Exception e) {
-					queryResultArea.add(new Label(e.getMessage()));
+					getView().onError(e.getMessage());
 				}
 			}
 		});

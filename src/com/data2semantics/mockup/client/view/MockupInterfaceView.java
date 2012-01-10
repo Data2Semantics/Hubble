@@ -1,26 +1,40 @@
 package com.data2semantics.mockup.client.view;
 
 import com.data2semantics.mockup.client.ServersideApiAsync;
+import com.data2semantics.mockup.client.ui.LoadingPanel;
+import com.data2semantics.mockup.client.ui.RoundedPanel;
+import com.data2semantics.mockup.client.view.patientinfo.GuidelineAnnotations;
 import com.data2semantics.mockup.client.view.patientinfo.PatientInfo;
 import com.data2semantics.mockup.client.view.patientinfo.TabNavigation;
 import com.data2semantics.mockup.client.view.patientlisting.PatientListing;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
 public class MockupInterfaceView extends Composite {
 	private HorizontalPanel mainPanel = new HorizontalPanel();
-	private PatientListing patientListing;
 	private PatientInfo patientInfo;
 	private ServersideApiAsync serverSideApi;
-	
-	
+	private LoadingPanel loading = new LoadingPanel();
+	private PopupPanel errorPopup;
 	public MockupInterfaceView(ServersideApiAsync serverSideApi) {
-		this.serverSideApi = serverSideApi;
-		patientListing = new PatientListing(this);
 		initWidget(mainPanel);
-		mainPanel.add(patientListing);
+		this.serverSideApi = serverSideApi;
+		RoundedPanel roundedPanel = new RoundedPanel("#f0f4f8");
+		roundedPanel.setStyleName("patientListing");
+		roundedPanel.setWidget(new PatientListing(this));
+		mainPanel.add(roundedPanel);
 		RootPanel.get().add(new ManualQueryForm(this));
+		RootPanel.get().add(loading);
+		
+		
 	}
 	
 	public ServersideApiAsync getServerSideApi() {
@@ -42,5 +56,22 @@ public class MockupInterfaceView extends Composite {
 	
 	public TabNavigation getTabNavigation() {
 		return patientInfo.getTabNavigation();
+	}
+	
+	public void onError( String error ){
+		onLoadingFinish();
+		errorPopup = new PopupPanel(true);
+		errorPopup.setStyleName( "error" );
+		errorPopup.setWidget( new HTML(error) );
+		errorPopup.show();
+		errorPopup.center();
+	}
+
+	public void onLoadingFinish() {
+		loading.loadingEnd();
+	}
+
+	public void onLoadingStart() {
+		loading.loadingBegin();
 	}
 }

@@ -7,9 +7,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class PatientDetails extends DecoratorPanel {
+public class PatientDetails extends SimplePanel {
 	private MockupInterfaceView view;
 	FlexTable patientInfoTable;
 	
@@ -18,14 +19,16 @@ public class PatientDetails extends DecoratorPanel {
 		setWidth(PatientInfo.RHS_WIDTH);
 		VerticalPanel patientInfoVPanel = new VerticalPanel();
 		add(patientInfoVPanel);
-		patientInfoVPanel.add(new HTML("<h3>Patient Information</h3>"));
+		patientInfoVPanel.getElement().getStyle().setProperty("width", "100%");
+		patientInfoVPanel.add(new HTML("<h3>Patient Information</h3><hr style=\"width:auto;\">"));
 
 		patientInfoTable = new FlexTable();
 		patientInfoTable.setStyleName("tableBorders");
 		patientInfoVPanel.add(patientInfoTable);
+		getView().onLoadingStart();
 		getView().getServerSideApi().getInfo(patientId, new AsyncCallback<Patient>() {
 			public void onFailure(Throwable caught) {
-				Window.alert(caught.getMessage());
+				getView().onError(caught.getMessage());
 			}
 
 			public void onSuccess(Patient patientInfo) {
@@ -35,6 +38,7 @@ public class PatientDetails extends DecoratorPanel {
 				patientInfoTable.setText(1, 1, patientInfo.getTemperature() + " C");
 				patientInfoTable.setText(2, 0, "White blood cell count");
 				patientInfoTable.setText(2, 1, Double.toString(patientInfo.getWBloodCellCount()));
+				getView().onLoadingFinish();
 			}
 		});
 	}

@@ -9,9 +9,11 @@ import java.util.List;
 import com.data2semantics.mockup.client.ServersideApi;
 import com.data2semantics.mockup.shared.JsonObject;
 import com.data2semantics.mockup.shared.Patient;
+import com.data2semantics.mockup.shared.SerializiationWhitelist;
 import com.data2semantics.mockup.shared.JsonObject.BindingSpec;
 import com.google.gson.Gson;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+
 import uk.co.magus.fourstore.client.Store;
 
 /**
@@ -59,8 +61,8 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 	 * @return Url to chemical structure image. If no valid url is found, an url to an error image is retrieved
 	 * @throws IllegalArgumentException
 	 */
-	public String getChemicalStructure() throws IllegalArgumentException {
-		String imageLocation = "";
+	public String getChemicalStructure() throws IllegalArgumentException  {
+		String imageLocation;
 		String queryString = "" + 
 				"\n" + 
 				"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" + 
@@ -86,6 +88,8 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 			String uri = bindingSets.get(0).get("sameAs").getValue();
 			String drugbankID = uri.substring(DRUGBANK_URI_PREFIX.length());
 			imageLocation = "http://moldb.wishartlab.com/molecules/DB" + drugbankID + "/image.png";
+		} else {
+			throw new IllegalArgumentException(queryString);
 		}
 		return imageLocation;
 	}
@@ -117,12 +121,17 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 			jsonObject = parseJson(queryResult);
 		} catch (MalformedURLException e) {
 			jsonObject = new JsonObject();
-			jsonObject.addException(e.getMessage());
+			jsonObject.addException(e.getClass() + " " + e.getMessage());
 		} catch (IOException e) {
 			jsonObject = new JsonObject();
-			jsonObject.addException(e.getMessage());
+			jsonObject.addException(e.getClass() + " " + e.getMessage());
 		}
 		return jsonObject;
+	}
+	
+	//public SerializableWhitelist junk(SerializableWhitelist l) { return null; }
+	public SerializiationWhitelist serializiationWorkaround(SerializiationWhitelist s) throws IllegalArgumentException {
+		return null;
 	}
 	
 	/**
@@ -149,4 +158,7 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 		JsonObject jsonObject = gson.fromJson(jsonString, JsonObject.class);
 		return jsonObject;
 	}
+	
+
+	
 }

@@ -1,19 +1,21 @@
 package com.data2semantics.mockup.client.view.patientinfo;
 
 import com.data2semantics.mockup.client.view.MockupInterfaceView;
-import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class PatientInfo extends DecoratorPanel{
+public class PatientInfo extends SimplePanel {
 	private MockupInterfaceView view;
 	private PatientDetails patientDetails;
 	private TabNavigation tabNavigation;
-	public static String RHS_WIDTH = "700px";
+	public static String RHS_WIDTH = "900px";
 	
 	public PatientInfo(MockupInterfaceView view, int patientId) {
 		this.view = view;
 		setWidth(PatientInfo.RHS_WIDTH);
+		setStyleName("patientInfo");
+		
 		VerticalPanel rhsContainer = new VerticalPanel();
 		add(rhsContainer);
 		

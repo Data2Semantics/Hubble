@@ -7,6 +7,7 @@ import com.data2semantics.mockup.client.view.MockupInterfaceView;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -20,9 +21,11 @@ public class WidgetsContainer extends FlowPanel {
 	
 	public WidgetsContainer(MockupInterfaceView view, int patientId) {
 		this.view = view;
+		getView().onLoadingStart();
 		drawChemicalStructureWidget();
 		drawRelevantSnippet();
 		drawSimilarAdverseEvents();
+		getView().onLoadingFinish();
 	}
 	
 	
@@ -35,13 +38,12 @@ public class WidgetsContainer extends FlowPanel {
 		try {
 			getView().getServerSideApi().getChemicalStructure(new AsyncCallback<String>() {
 				public void onFailure(Throwable caught) {
-					Window.alert(caught.getMessage());
+					getView().onError(SafeHtmlUtils.htmlEscape(caught.getMessage()));
 				}
 
 				public void onSuccess(String imageLocation) {
 					//avoid adding too many (of the same) image elements
 					if (Document.get().getElementById("chemStructure") == null) {
-						Log.debug("add chemstructure");
 						Image image = new Image(imageLocation);
 						image.getElement().setId("chemStructure");
 						image.setWidth("200px");
@@ -51,7 +53,8 @@ public class WidgetsContainer extends FlowPanel {
 				}
 			});
 		} catch (Exception e) {
-			add(new Label(e.getMessage()));
+			Window.alert(e.getMessage());
+			//add(new HTML(SafeHtmlUtils.htmlEscape(e.getMessage())));
 		}
 	}
 
@@ -59,7 +62,7 @@ public class WidgetsContainer extends FlowPanel {
 		try {
 			getView().getServerSideApi().getRelevantSnippet(new AsyncCallback<HashMap<String, String>>() {
 				public void onFailure(Throwable caught) {
-					Window.alert(caught.getMessage());
+					getView().onError(caught.getMessage());
 				}
 
 				public void onSuccess(HashMap<String, String> snippetInfo) {

@@ -14,9 +14,11 @@ public class PatientListing extends FlexTable {
 	MockupInterfaceView view;
 	public PatientListing(MockupInterfaceView view) {
 		this.view = view;
+		getView().onLoadingStart();
 		getView().getServerSideApi().getPatients(new AsyncCallback<ArrayList<Integer>>() {
 			public void onFailure(Throwable caught) {
 				Window.alert(caught.getMessage());
+				getView().onLoadingFinish();
 			}
 
 			public void onSuccess(ArrayList<Integer> patients) {
@@ -32,6 +34,7 @@ public class PatientListing extends FlexTable {
 							getView().showPatientInfo(patientID);
 						}
 					});
+					getView().onLoadingFinish();
 				}
 			}
 		});
