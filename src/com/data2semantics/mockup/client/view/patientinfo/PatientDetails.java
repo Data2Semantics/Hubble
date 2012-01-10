@@ -2,9 +2,7 @@ package com.data2semantics.mockup.client.view.patientinfo;
 
 import com.data2semantics.mockup.client.view.MockupInterfaceView;
 import com.data2semantics.mockup.shared.Patient;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;

@@ -1,6 +1,5 @@
 package com.data2semantics.mockup.client.view.patientinfo;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.data2semantics.mockup.client.view.MockupInterfaceView;
 import com.data2semantics.mockup.client.view.patientinfo.tabs.GuidelineAnnotations;
 import com.data2semantics.mockup.client.view.patientinfo.tabs.RelevantLiterature;
@@ -44,9 +43,7 @@ public class TabNavigation extends TabPanel {
 			//We want to add a tab, but there are already other following tabs. 
 			//Remove these
 			for (int i = currentTabId + 1; i < widgetCount; i++) {
-				if (getWidget(i) != null) {
-					remove(i);
-				}
+				remove(i);
 			}
 		}
 		

@@ -5,16 +5,10 @@ import com.data2semantics.mockup.client.ui.LoadingPanel;
 import com.data2semantics.mockup.client.ui.RoundedPanel;
 import com.data2semantics.mockup.client.view.patientinfo.PatientInfo;
 import com.data2semantics.mockup.client.view.patientinfo.TabNavigation;
-import com.data2semantics.mockup.client.view.patientinfo.tabs.GuidelineAnnotations;
 import com.data2semantics.mockup.client.view.patientlisting.PatientListing;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 

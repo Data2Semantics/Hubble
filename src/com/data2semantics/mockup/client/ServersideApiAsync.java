@@ -1,6 +1,5 @@
 package com.data2semantics.mockup.client;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 

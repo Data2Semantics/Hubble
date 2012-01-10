@@ -108,11 +108,11 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 	}
 
 	/**
-	 * Execute query, and transform json string into own json object. If queries throws MalformedURLException or IOException, these are returned as exceptions in the returned object
+	 * Execute query, and transform json string into own json object.
 	 * 
 	 * @param queryString
-	 * @return Query result in form of json object
-	 * @throws IllegalArgumentException
+	 * @return Query result as json object
+	 * @throws IllegalArgumentException,SparqlException
 	 */
 	public JsonObject query(String queryString) throws IllegalArgumentException,SparqlException {
 		JsonObject jsonObject;
