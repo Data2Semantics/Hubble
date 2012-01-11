@@ -1,5 +1,6 @@
 package com.data2semantics.mockup.client.view.patientinfo;
 
+
 import com.data2semantics.mockup.client.view.MockupInterfaceView;
 import com.data2semantics.mockup.client.view.patientinfo.tabs.GuidelineAnnotations;
 import com.data2semantics.mockup.client.view.patientinfo.tabs.RelevantLiterature;
@@ -38,25 +39,24 @@ public class TabNavigation extends TabPanel {
 	 * @param title Title of the tab
 	 */
 	private void addTab(Widget widget, String title) {
-		int widgetCount = getWidgetCount();
-		if ((currentTabId + 1) < widgetCount) {
+		while ((currentTabId + 1) < getWidgetCount()) {
 			//We want to add a tab, but there are already other following tabs. 
 			//Remove these
-			for (int i = currentTabId + 1; i < widgetCount; i++) {
-				remove(i);
-			}
+			remove(currentTabId + 1);
 		}
-		
 		add(widget, title);
-		int addedIndex = getWidgetIndex(widget);
-		selectTab(addedIndex);
-		currentTabId = addedIndex;
+		currentTabId++;
+		selectTab(currentTabId);
 	}
 	
 	public void addGuidelineAnnotations() {
+		getView().onLoadingStart();
 		addTab(new GuidelineAnnotations(getView()), "Guideline Annotations");
+		getView().onLoadingFinish();
 	}
 	public void addRelevantLiterature() {
+		getView().onLoadingStart();
 		addTab(new RelevantLiterature(getView()), "Relevant Literature");
+		getView().onLoadingFinish();
 	}
 }
