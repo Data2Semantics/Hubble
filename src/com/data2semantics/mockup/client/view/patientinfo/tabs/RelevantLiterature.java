@@ -14,7 +14,7 @@ public class RelevantLiterature extends VerticalPanel {
 		Button buttonRelevantLiterature = new Button("Show related clinical guidelines");
 		buttonRelevantLiterature.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				getView().getTabNavigation().addGuidelineAnnotations();
+				getView().getTabNavigation().addGuideline();
 			}
 		});
 		add(buttonRelevantLiterature);

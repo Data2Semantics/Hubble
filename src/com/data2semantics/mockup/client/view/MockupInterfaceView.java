@@ -25,10 +25,8 @@ public class MockupInterfaceView extends Composite {
 		roundedPanel.setStyleName("patientListing");
 		roundedPanel.setWidget(new PatientListing(this));
 		mainPanel.add(roundedPanel);
-		//RootPanel.get().add(new ManualQueryForm(this));
+		RootPanel.get().add(new ManualQueryForm(this));
 		RootPanel.get().add(loading);
-		
-		
 	}
 	
 	public ServersideApiAsync getServerSideApi() {

@@ -13,6 +13,7 @@ public interface ServersideApiAsync {
 	void getInfo(int patientID, AsyncCallback<Patient> callback) throws IllegalArgumentException;
 	void getPatients(AsyncCallback<ArrayList<Integer>> callback) throws IllegalArgumentException;
 	void getChemicalStructure(AsyncCallback<String> callback) throws IllegalArgumentException,SparqlException;
+	void processPdf(AsyncCallback<String> callback) throws IllegalArgumentException;
 	void getRelevantSnippet(AsyncCallback<HashMap<String, String>> callback) throws IllegalArgumentException;
 	void query(String query, AsyncCallback<JsonObject> callback) throws IllegalArgumentException,SparqlException;
 	void serializiationWorkaround(SerializiationWhitelist s, AsyncCallback<SerializiationWhitelist> callback) throws IllegalArgumentException;

@@ -9,10 +9,12 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 public class WidgetsContainer extends FlowPanel {
@@ -24,6 +26,7 @@ public class WidgetsContainer extends FlowPanel {
 		drawChemicalStructureWidget();
 		drawRelevantSnippet();
 		drawSimilarAdverseEvents();
+		//drawProcessPdf();
 		getView().onLoadingFinish();
 	}
 	
@@ -31,6 +34,27 @@ public class WidgetsContainer extends FlowPanel {
 	public MockupInterfaceView getView() {
 		return view;
 	}
+	
+	private void drawProcessPdf() {
+		try {
+			getView().getServerSideApi().processPdf(new AsyncCallback<String>() {
+				public void onFailure(Throwable e) {
+					addWidget(new HTML(SafeHtmlUtils.htmlEscape(e.getMessage())), new ArrayList<String>(Arrays.asList("error")));
+				}
+
+				public void onSuccess(String result) {
+					//Label label = new Label(result);
+					Window.open("../"+result, "_blank", "");
+					//addWidget(label);
+				}
+			});
+		} catch (Exception e) {
+			addWidget(new HTML(SafeHtmlUtils.htmlEscape(e.getMessage())));
+		}
+	}
+	
+	
+	
 	
 	
 	private void drawChemicalStructureWidget() {
@@ -72,7 +96,7 @@ public class WidgetsContainer extends FlowPanel {
 						label.setWidth("200px");
 						label.addClickHandler(new ClickHandler() {
 							public void onClick(ClickEvent event) {
-								getView().getTabNavigation().addGuidelineAnnotations();
+								drawProcessPdf();
 							}
 						});
 						addWidget(label, new ArrayList<String>(Arrays.asList("clickable")));

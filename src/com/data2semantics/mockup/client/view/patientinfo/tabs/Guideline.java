@@ -13,12 +13,19 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class GuidelineAnnotations extends VerticalPanel {
+public class Guideline extends VerticalPanel {
 	private MockupInterfaceView view;
+	private AbsolutePanel absolutePanel;
 	
-	public GuidelineAnnotations(MockupInterfaceView view) {
+	public Guideline(MockupInterfaceView view) {
 		this.view = view;
-		drawPdfAnnotation();
+		absolutePanel = new AbsolutePanel();
+		absolutePanel.setWidth("600px");
+		absolutePanel.setHeight("500px");
+		add(absolutePanel);
+		drawPdf();
+		drawPdfAnnotations();
+		drawOtherRelevantLinks();
 	}
 	
 	
@@ -26,10 +33,20 @@ public class GuidelineAnnotations extends VerticalPanel {
 		return view;
 	}
 	
-	private void drawPdfAnnotation() {
-		HorizontalPanel horizontalPanel = new HorizontalPanel();
-		horizontalPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
-		
+	private void drawOtherRelevantLinks() {
+		HorizontalPanel relevantLinks = new HorizontalPanel();
+		relevantLinks.setHorizontalAlignment(HasAlignment.ALIGN_CENTER);
+		Button buttonRelevantLiterature = new Button("Show relevant literature");
+		buttonRelevantLiterature.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				getView().getTabNavigation().addRelevantLiterature();
+			}
+		});
+		relevantLinks.add(buttonRelevantLiterature);
+		add(relevantLinks);
+	}
+	
+	private void drawPdf() {
 		Image image = new Image("static/pdf/test_annotation.png");
 		image.setWidth("400px");
 		image.addClickHandler(new ClickHandler() {
@@ -38,13 +55,12 @@ public class GuidelineAnnotations extends VerticalPanel {
 			}
 		});
 		image.setStyleName("imageBtn");
-		horizontalPanel.add(image);
+		absolutePanel.add(image, 0, 0);
+	}
+	private void drawPdfAnnotations() {
+		//absolutePanel.add(new Annotation(getView()), 20, 20);
 		
 		
-		//Draw annotations
-		AbsolutePanel absolutePanel = new AbsolutePanel();
-		absolutePanel.setWidth("200px");
-		absolutePanel.setHeight("500px");
 		SimplePanel annotation1 = new SimplePanel();
 		annotation1.setStyleName("pdfAnnotation");
 		annotation1.setWidth("185px");
@@ -55,7 +71,7 @@ public class GuidelineAnnotations extends VerticalPanel {
 				Window.open("http://dbpedia.org/resource/Hospital_of_the_University_of_Pennsylvania", "_blank", "");
 			}
 		});
-		absolutePanel.add(annotation1, 0, 23);
+		absolutePanel.add(annotation1, 390, 23);
 		
 		SimplePanel annotation2 = new SimplePanel();
 		annotation2.setStylePrimaryName("pdfAnnotation");
@@ -68,7 +84,7 @@ public class GuidelineAnnotations extends VerticalPanel {
 				Window.open("../static/pdf/neutropeniaHUP.pdf", "_blank", "");
 			}
 		});
-		absolutePanel.add(annotation2, 0, 117);
+		absolutePanel.add(annotation2, 390, 117);
 		
 		SimplePanel annotation3 = new SimplePanel();
 		annotation3.setStyleName("pdfAnnotation");
@@ -80,19 +96,8 @@ public class GuidelineAnnotations extends VerticalPanel {
 				Window.open("http://eculture2.cs.vu.nl:5010/page/resource/reaction/FEBRILE_NEUTROPENIA", "_blank", "");
 			}
 		});
-		absolutePanel.add(annotation3, 0, 203);
-		horizontalPanel.add(absolutePanel);
-		add(horizontalPanel);
-		//Add other relevant links
-		HorizontalPanel relevantLinks = new HorizontalPanel();
-		relevantLinks.setHorizontalAlignment(HasAlignment.ALIGN_CENTER);
-		Button buttonRelevantLiterature = new Button("Show relevant literature");
-		buttonRelevantLiterature.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				getView().getTabNavigation().addRelevantLiterature();
-			}
-		});
-		relevantLinks.add(buttonRelevantLiterature);
-		add(relevantLinks);
+		absolutePanel.add(annotation3, 390, 203);
 	}
+	
+	
 }

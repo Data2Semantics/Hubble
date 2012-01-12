@@ -15,6 +15,7 @@ public interface ServersideApi extends RemoteService {
   Patient getInfo(int patientID) throws IllegalArgumentException;
   ArrayList<Integer> getPatients() throws IllegalArgumentException;
   String getChemicalStructure() throws IllegalArgumentException,SparqlException;
+  String processPdf() throws IllegalArgumentException;
   HashMap<String, String> getRelevantSnippet() throws IllegalArgumentException;
   JsonObject query(String query) throws IllegalArgumentException,SparqlException;
   SerializiationWhitelist serializiationWorkaround(SerializiationWhitelist s) throws IllegalArgumentException;
