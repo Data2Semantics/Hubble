@@ -65,25 +65,20 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 	public String getChemicalStructure() throws IllegalArgumentException,SparqlException  {
 		String imageLocation;
 		String queryString = "" + 
-				"\n" + 
 				"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" + 
 				"PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n" + 
 				"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" + 
 				"PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" + 
 				"PREFIX : <http://aers.data2semantics.org/vocab/>\n" + 
 				"SELECT DISTINCT ?drugLabel ?sameAs {\n" + 
-				"<http://aers.data2semantics.org/resource/reaction/FEBRILE_NEUTROPENIA> :reaction_of ?report.\n" + 
+				"<http://aers.data2semantics.org/resource/indication/FEBRILE_NEUTROPENIA> :reaction_of ?report.\n" + 
 				"?involvement :involved_in ?report.\n" + 
 				"?involvement :drug ?drug.\n" + 
 				"?drug rdfs:label ?drugLabel.\n" + 
 				"?drug owl:sameAs ?sameAs.\n" + 
-				"FILTER regex(str(?sameAs), \"^" + DRUGBANK_URI_PREFIX + "\", \"i\")\n" + 
-				"} LIMIT 1\n" + 
-				"";
+				"FILTER regex(str(?sameAs), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" + 
+				"} LIMIT 1";
 		JsonObject jsonObject = query(queryString);
-		if (jsonObject.getExceptions().size() > 0) {
-			imageLocation = "http://www.iphone4jailbreaks.com/wp-content/uploads/2011/09/error.png";
-		}
 		List<HashMap<String, BindingSpec>> bindingSets = jsonObject.getResults().getBindings();
 		if (bindingSets.size() > 0) {
 			String uri = bindingSets.get(0).get("sameAs").getValue();
