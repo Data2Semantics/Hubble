@@ -2,7 +2,9 @@ package com.data2semantics.mockup.server;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+
 import com.data2semantics.mockup.client.exceptions.SparqlException;
+import com.data2semantics.mockup.client.helpers.Helper;
 import com.data2semantics.mockup.shared.JsonObject;
 import com.google.gson.Gson;
 
@@ -15,7 +17,7 @@ public class SparqlQuery {
 
 	private Store endpoint;
 	private static String ENDPOINT_LOCATION = "http://eculture2.cs.vu.nl:5020";
-
+	
 	/**
 	 * Execute query, and transform json string into own json object.
 	 * 
@@ -35,6 +37,13 @@ public class SparqlQuery {
 			throw new SparqlException(e.getMessage());
 		}
 		return jsonObject;
+	}
+	
+	public JsonObject query(String queryString, boolean prependDefaultPrefixes) throws IllegalArgumentException,SparqlException {
+		if (prependDefaultPrefixes) {
+			queryString = Helper.getSparqlPrefixesAsString() + "\n" + queryString;
+		}
+		return query(queryString);
 	}
 	
 	/**

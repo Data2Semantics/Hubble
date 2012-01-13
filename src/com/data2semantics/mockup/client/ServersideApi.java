@@ -12,8 +12,8 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 @RemoteServiceRelativePath("patientinfo") //needs to be same as servlet path definition in web.xml
 public interface ServersideApi extends RemoteService {
-  Patient getInfo(int patientID) throws IllegalArgumentException;
-  ArrayList<Integer> getPatients() throws IllegalArgumentException;
+  Patient getInfo(String patientID) throws IllegalArgumentException;
+  ArrayList<String> getPatients() throws IllegalArgumentException;
   String getChemicalStructure() throws IllegalArgumentException,SparqlException;
   String processPdf() throws IllegalArgumentException;
   HashMap<String, String> getRelevantSnippet() throws IllegalArgumentException;

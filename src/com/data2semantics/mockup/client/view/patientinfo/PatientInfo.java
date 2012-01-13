@@ -11,7 +11,7 @@ public class PatientInfo extends SimplePanel {
 	private TabNavigation tabNavigation;
 	public static String RHS_WIDTH = "900px";
 	
-	public PatientInfo(MockupInterfaceView view, int patientId) {
+	public PatientInfo(MockupInterfaceView view, String patientId) {
 		this.view = view;
 		setWidth(PatientInfo.RHS_WIDTH);
 		setStyleName("patientInfo");

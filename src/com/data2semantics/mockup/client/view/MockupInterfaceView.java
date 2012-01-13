@@ -37,7 +37,7 @@ public class MockupInterfaceView extends Composite {
 		this.serverSideApi = serverSideApi;
 	}
 
-	public void showPatientInfo(int patientID) {
+	public void showPatientInfo(String patientID) {
 		//Cleanup any other already shown info
 		if (mainPanel.getWidgetCount() > 1) {
 			mainPanel.remove(1);

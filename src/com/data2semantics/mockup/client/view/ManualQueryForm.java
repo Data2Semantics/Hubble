@@ -3,6 +3,7 @@ package com.data2semantics.mockup.client.view;
 import java.util.ArrayList;
 
 import com.data2semantics.mockup.client.helpers.Helper;
+import com.data2semantics.mockup.server.SparqlQuery;
 import com.data2semantics.mockup.shared.JsonObject;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
@@ -55,22 +56,11 @@ public class ManualQueryForm extends VerticalPanel {
 	private DecoratorPanel drawForm() {
 		DecoratorPanel formPanel = new DecoratorPanel();
 		VerticalPanel vQueryPanel = new VerticalPanel();
-		ArrayList<String> namespaceList = new ArrayList<String>();
-		namespaceList.add("PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>");
-		namespaceList.add("PREFIX skos: <http://www.w3.org/2004/02/skos/core#>");
-		namespaceList.add("PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>");
-		namespaceList.add("PREFIX owl: <http://www.w3.org/2002/07/owl#>");
-		namespaceList.add("PREFIX r4: <http://aers.data2semantics.org/vocab/>");
-		namespaceList.add("PREFIX ns3: <tag:eric@w3.org:2009/tmo/translator#>");
-		namespaceList.add("PREFIX ns4: <http://www.obofoundry.org/ro/ro.owl#>");
-		namespaceList.add("PREFIX ns1: <http://purl.org/cpr/0.75#>");
-		namespaceList.add("PREFIX foaf: <http://xmlns.com/foaf/0.1/>");
-		namespaceList.add("PREFIX : <http://aers.data2semantics.org/vocab/>");
 		
 		queryTextArea = new TextArea();
 		queryTextArea.setWidth("800px");
 		queryTextArea.setHeight("400px");
-		queryTextArea.setText(Helper.implode(namespaceList, "\n") + "\n" +
+		queryTextArea.setText(Helper.getSparqlPrefixesAsString() + "\n" +
 				"SELECT ?x ?y ?z {?x ?y ?z} LIMIT 10");
 		queryResultArea = new DecoratorPanel();
 		Button submitButton = new Button("Submit Query");

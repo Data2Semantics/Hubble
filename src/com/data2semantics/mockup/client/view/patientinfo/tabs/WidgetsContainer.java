@@ -14,13 +14,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 public class WidgetsContainer extends FlowPanel {
 	private MockupInterfaceView view;
 	
-	public WidgetsContainer(MockupInterfaceView view, int patientId) {
+	public WidgetsContainer(MockupInterfaceView view, String patientId) {
 		this.view = view;
 		getView().onLoadingStart();
 		drawChemicalStructureWidget();

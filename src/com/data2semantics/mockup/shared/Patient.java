@@ -6,18 +6,18 @@ public class Patient implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private int patientID;
+	private String patientID;
 	private double temperature;
 	private double wBloodCellCount;
 	
 	public Patient() {};
-	public Patient(int patientID, double temperature, double wBloodCellCount) {
+	public Patient(String patientID, double temperature, double wBloodCellCount) {
 		this.patientID = patientID;
 		this.temperature = temperature;
 		this.wBloodCellCount = wBloodCellCount;
 	}
 	
-	public int getPatientID()
+	public String getPatientID()
 	{
 		return this.patientID;
 	}

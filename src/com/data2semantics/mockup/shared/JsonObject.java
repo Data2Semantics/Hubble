@@ -22,6 +22,16 @@ public class JsonObject implements Serializable {
 	public Results getResults() {
 		return this.results;
 	}
+	
+	public ArrayList<String> getResultsOfVariable(String var) {
+		ArrayList<String> results = new ArrayList<String>();
+		List<HashMap<String, BindingSpec>> bindingSets = getResults().getBindings();
+		for (HashMap<String, BindingSpec> binding: bindingSets) {
+			
+			results.add(binding.get(var).getValue());
+		}
+		return results;
+	}
 	public List<String> getWarnings() {
 		return this.warnings;
 	}

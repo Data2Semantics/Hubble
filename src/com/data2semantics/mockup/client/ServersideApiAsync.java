@@ -10,8 +10,8 @@ import com.data2semantics.mockup.shared.SerializiationWhitelist;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface ServersideApiAsync {
-	void getInfo(int patientID, AsyncCallback<Patient> callback) throws IllegalArgumentException;
-	void getPatients(AsyncCallback<ArrayList<Integer>> callback) throws IllegalArgumentException;
+	void getInfo(String patientID, AsyncCallback<Patient> callback) throws IllegalArgumentException;
+	void getPatients(AsyncCallback<ArrayList<String>> callback) throws IllegalArgumentException;
 	void getChemicalStructure(AsyncCallback<String> callback) throws IllegalArgumentException,SparqlException;
 	void processPdf(AsyncCallback<String> callback) throws IllegalArgumentException;
 	void getRelevantSnippet(AsyncCallback<HashMap<String, String>> callback) throws IllegalArgumentException;

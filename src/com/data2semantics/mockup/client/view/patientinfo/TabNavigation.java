@@ -14,7 +14,7 @@ public class TabNavigation extends TabPanel {
 	private MockupInterfaceView view;
 	private int currentTabId = -1;
 	
-	public TabNavigation(MockupInterfaceView view, int patientId) {
+	public TabNavigation(MockupInterfaceView view, String patientId) {
 		this.view = view;
 		setWidth(PatientInfo.RHS_WIDTH);
 		addSelectionHandler(new SelectionHandler<Integer>() {
@@ -58,7 +58,7 @@ public class TabNavigation extends TabPanel {
 		addTab(new RelevantLiterature(getView()), "Relevant Literature");
 		getView().onLoadingFinish();
 	}
-	public void addWidgets(int patientId) {
+	public void addWidgets(String patientId) {
 		getView().onLoadingStart();
 		addTab(new WidgetsContainer(view, patientId),  "Overview");
 		getView().onLoadingFinish();

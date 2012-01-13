@@ -18,6 +18,7 @@ import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationTextMarkup;
 
 import com.data2semantics.mockup.client.ServersideApi;
 import com.data2semantics.mockup.client.exceptions.SparqlException;
+import com.data2semantics.mockup.client.helpers.Helper;
 import com.data2semantics.mockup.shared.JsonObject;
 import com.data2semantics.mockup.shared.Patient;
 import com.data2semantics.mockup.shared.SerializiationWhitelist;
@@ -41,7 +42,7 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 	 * @return Patient
 	 * @throws IllegalArgumentException
 	 */
-	public Patient getInfo(int patientID) throws IllegalArgumentException {
+	public Patient getInfo(String patientID) throws IllegalArgumentException {
 		Patient patientInfo = new Patient(patientID, 38.3, 2.0);
 		return patientInfo;
 	}
@@ -51,13 +52,20 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 	 * 
 	 * @return List of patient Id's
 	 * @throws IllegalArgumentException
+	 * @throws SparqlException 
 	 */
-	public ArrayList<Integer> getPatients() throws IllegalArgumentException {
-		ArrayList<Integer> patientList = new ArrayList<Integer>();
-		int numberOfRecords = 10;
-		for (int i = 0; i < numberOfRecords; i++) {
-			int patientID = (int)(Math.random() * 10000);
-			patientList.add(patientID);
+	public ArrayList<String> getPatients() throws IllegalArgumentException {
+		ArrayList<String> patientList = new ArrayList<String>();
+		try {
+			String variable = "patientID";
+			String query = "SELECT DISTINCT ?" + variable + " FROM <http://patient> {\n" + 
+					"	?patient rdf:type patient:Patient.\n" + 
+					"	?patient rdfs:label ?patientID.\n" + 
+					"}";
+			JsonObject queryResult = sparqlQuery.query(query, true);
+			patientList = queryResult.getResultsOfVariable(variable);
+		} catch (SparqlException e) {
+			patientList.add(e.getMessage());
 		}
 		return patientList;
 
@@ -72,11 +80,6 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 	public String getChemicalStructure() throws IllegalArgumentException,SparqlException  {
 		String imageLocation;
 		String queryString = "" + 
-				"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" + 
-				"PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n" + 
-				"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" + 
-				"PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" + 
-				"PREFIX : <http://aers.data2semantics.org/vocab/>\n" + 
 				"SELECT DISTINCT ?drugLabel ?sameAs {\n" + 
 				"<http://aers.data2semantics.org/resource/indication/FEBRILE_NEUTROPENIA> :reaction_of ?report.\n" + 
 				"?involvement :involved_in ?report.\n" + 
@@ -85,7 +88,7 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 				"?drug owl:sameAs ?sameAs.\n" + 
 				"FILTER regex(str(?sameAs), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" + 
 				"} LIMIT 1";
-		JsonObject jsonObject = query(queryString);
+		JsonObject jsonObject = sparqlQuery.query(queryString, true);
 		List<HashMap<String, BindingSpec>> bindingSets = jsonObject.getResults().getBindings();
 		if (bindingSets.size() > 0) {
 			String uri = bindingSets.get(0).get("sameAs").getValue();

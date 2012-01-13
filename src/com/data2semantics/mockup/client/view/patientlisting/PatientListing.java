@@ -15,19 +15,19 @@ public class PatientListing extends FlexTable {
 	public PatientListing(MockupInterfaceView view) {
 		this.view = view;
 		getView().onLoadingStart();
-		getView().getServerSideApi().getPatients(new AsyncCallback<ArrayList<Integer>>() {
+		getView().getServerSideApi().getPatients(new AsyncCallback<ArrayList<String>>() {
 			public void onFailure(Throwable caught) {
 				Window.alert(caught.getMessage());
 				getView().onLoadingFinish();
 			}
 
-			public void onSuccess(ArrayList<Integer> patients) {
+			public void onSuccess(ArrayList<String> patients) {
 				for (int index = 0; index < patients.size(); index++) {
-					final int patientID = patients.get(index);
+					final String patientID = patients.get(index);
 					Image image = new Image("static/icons/fugue/magnifier--arrow.png");
 					image.addStyleName("imageBtn");
 					setWidget(index, 0, image);
-					setText(index, 1, Integer.toString(patientID));
+					setText(index, 1, patientID);
 					setStyleName("patientIDs", true);
 					image.addClickHandler(new ClickHandler() {
 						public void onClick(ClickEvent event) {
