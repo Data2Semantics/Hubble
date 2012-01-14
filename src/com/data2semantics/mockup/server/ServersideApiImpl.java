@@ -19,10 +19,10 @@ import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationTextMarkup;
 import com.data2semantics.mockup.client.ServersideApi;
 import com.data2semantics.mockup.client.exceptions.SparqlException;
 import com.data2semantics.mockup.client.helpers.Helper;
-import com.data2semantics.mockup.shared.JsonObject;
+import com.data2semantics.mockup.shared.SparqlObject;
+import com.data2semantics.mockup.shared.SparqlObject.Value;
 import com.data2semantics.mockup.shared.Patient;
 import com.data2semantics.mockup.shared.SerializiationWhitelist;
-import com.data2semantics.mockup.shared.JsonObject.BindingSpec;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 
@@ -41,14 +41,15 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 	 * @param patientID ID of patient
 	 * @return Patient
 	 * @throws IllegalArgumentException
+	 * @throws SparqlException 
 	 */
-	public Patient getInfo(String patientID) throws IllegalArgumentException {
-		Patient patientInfo = new Patient(patientID, 38.3, 2.0);
-		return patientInfo;
+	public Patient getInfo(String patientId) throws IllegalArgumentException, SparqlException {
+		PatientLoader patientLoader = new PatientLoader(patientId);
+		return patientLoader.getPatientObject();
 	}
 	
 	/**
-	 * Get patients (currently just a set of random numbers)
+	 * Get patients
 	 * 
 	 * @return List of patient Id's
 	 * @throws IllegalArgumentException
@@ -58,11 +59,12 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 		ArrayList<String> patientList = new ArrayList<String>();
 		try {
 			String variable = "patientID";
-			String query = "SELECT DISTINCT ?" + variable + " FROM <http://patient> {\n" + 
-					"	?patient rdf:type patient:Patient.\n" + 
-					"	?patient rdfs:label ?patientID.\n" + 
+			String query = Helper.getSparqlPrefixesAsString() + "\n" +
+					"SELECT DISTINCT ?" + variable + " FROM <http://patient> {\n" + 
+					"?patient rdf:type patient:Patient.\n" + 
+					"?patient rdfs:label ?patientID.\n" + 
 					"}";
-			JsonObject queryResult = sparqlQuery.query(query, true);
+			SparqlObject queryResult = sparqlQuery.query(query);
 			patientList = queryResult.getResultsOfVariable(variable);
 		} catch (SparqlException e) {
 			patientList.add(e.getMessage());
@@ -79,7 +81,7 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 	 */
 	public String getChemicalStructure() throws IllegalArgumentException,SparqlException  {
 		String imageLocation;
-		String queryString = "" + 
+		String queryString = Helper.getSparqlPrefixesAsString() + "\n" + 
 				"SELECT DISTINCT ?drugLabel ?sameAs {\n" + 
 				"<http://aers.data2semantics.org/resource/indication/FEBRILE_NEUTROPENIA> :reaction_of ?report.\n" + 
 				"?involvement :involved_in ?report.\n" + 
@@ -88,10 +90,10 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 				"?drug owl:sameAs ?sameAs.\n" + 
 				"FILTER regex(str(?sameAs), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" + 
 				"} LIMIT 1";
-		JsonObject jsonObject = sparqlQuery.query(queryString, true);
-		List<HashMap<String, BindingSpec>> bindingSets = jsonObject.getResults().getBindings();
-		if (bindingSets.size() > 0) {
-			String uri = bindingSets.get(0).get("sameAs").getValue();
+		SparqlObject sparqlObject = sparqlQuery.query(queryString);
+		List<HashMap<String, Value>> rows = sparqlObject.getResult().getRows();
+		if (rows.size() > 0) {
+			String uri = rows.get(0).get("sameAs").getValue();
 			String drugbankID = uri.substring(DRUGBANK_URI_PREFIX.length());
 			imageLocation = "http://moldb.wishartlab.com/molecules/DB" + drugbankID + "/image.png";
 		} else {
@@ -205,7 +207,7 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 		
 		return "neutropeniaHUP_done.pdf";
 	}
-	public JsonObject query(String queryString) throws IllegalArgumentException,SparqlException {
+	public SparqlObject query(String queryString) throws IllegalArgumentException,SparqlException {
 		return sparqlQuery.query(queryString);
 	}
 }

@@ -7,26 +7,39 @@ public class Patient implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private String patientID;
-	private double temperature;
-	private double wBloodCellCount;
+	private int age;
+	private String comment;
+	private String status;
 	
 	public Patient() {};
-	public Patient(String patientID, double temperature, double wBloodCellCount) {
+	public Patient(String patientID) {
 		this.patientID = patientID;
-		this.temperature = temperature;
-		this.wBloodCellCount = wBloodCellCount;
 	}
 	
+	public void setPatientID(String patientID) {
+		this.patientID = patientID;
+	}
 	public String getPatientID()
 	{
 		return this.patientID;
 	}
-	public double getTemperature()
-	{
-		return this.temperature;
+	public int getAge() {
+		return age;
 	}
-	public double getWBloodCellCount()
-	{
-		return this.wBloodCellCount;
+	public void setAge(int age) {
+		this.age = age;
 	}
+	public String getComment() {
+		return comment;
+	}
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
 }

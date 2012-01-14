@@ -4,11 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class JsonObject implements Serializable {
+public class SparqlObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Head head = new Head();
-	private Results results = new Results();
+	private Rows results = new Rows();
 	private List<String> warnings = new ArrayList<String>();
 	private List<String> exceptions = new ArrayList<String>();
 
@@ -19,19 +20,24 @@ public class JsonObject implements Serializable {
 	public Head getHead() {
 		return this.head;
 	}
-	public Results getResults() {
+	public Rows getResult() {
 		return this.results;
 	}
 	
+	public List<HashMap<String, Value>> getRows() {
+		return getResult().getRows();
+	}
 	public ArrayList<String> getResultsOfVariable(String var) {
 		ArrayList<String> results = new ArrayList<String>();
-		List<HashMap<String, BindingSpec>> bindingSets = getResults().getBindings();
-		for (HashMap<String, BindingSpec> binding: bindingSets) {
+		List<HashMap<String, Value>> bindingSets = getResult().getRows();
+		for (HashMap<String, Value> binding: bindingSets) {
 			
 			results.add(binding.get(var).getValue());
 		}
 		return results;
 	}
+	
+	
 	public List<String> getWarnings() {
 		return this.warnings;
 	}
@@ -66,10 +72,10 @@ public class JsonObject implements Serializable {
 			return result;
 		}
 	}
-	public static class Results implements Serializable { 
+	public static class Rows implements Serializable { 
 		private static final long serialVersionUID = 1L;
-		List<HashMap<String, BindingSpec>> bindings = new ArrayList<HashMap<String, BindingSpec>>();
-		public List<HashMap<String, BindingSpec>> getBindings() {
+		List<HashMap<String, Value>> bindings = new ArrayList<HashMap<String, Value>>();
+		public List<HashMap<String, Value>> getRows() {
 			return this.bindings;
 		}
 		public String toString() {
@@ -79,21 +85,35 @@ public class JsonObject implements Serializable {
 			return result;
 		}
 	}
-	public static class BindingSpec implements Serializable {
+	
+	public static class Value implements Serializable {
 		private static final long serialVersionUID = 1L;
 		private String type;
 		private String value;
 		private String datatype;
-		
+		/**
+		 * Get type of value (literal or URI)
+		 * @return
+		 */
 		public String getType() {
 			return this.type;
 		}
+		
+		/**
+		 * Get actual value
+		 * @return
+		 */
 		public String getValue() {
 			return this.value;
 		}
+		/**
+		 * Get data type (integer, string, etc)
+		 * @return
+		 */
 		public String getDataType() {
 			return this.datatype;
 		}
+		
 		public String toString() {
 			String result = "";
 			if (this.type != null) result += this.type;

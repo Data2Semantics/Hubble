@@ -2,10 +2,14 @@ package com.data2semantics.mockup.server;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.data2semantics.mockup.client.exceptions.SparqlException;
 import com.data2semantics.mockup.client.helpers.Helper;
-import com.data2semantics.mockup.shared.JsonObject;
+import com.data2semantics.mockup.shared.SparqlObject;
+import com.data2semantics.mockup.shared.SparqlObject.Value;
 import com.google.gson.Gson;
 
 import uk.co.magus.fourstore.client.Store;
@@ -25,8 +29,8 @@ public class SparqlQuery {
 	 * @return Query result as json object
 	 * @throws IllegalArgumentException,SparqlException
 	 */
-	public JsonObject query(String queryString) throws IllegalArgumentException,SparqlException {
-		JsonObject jsonObject;
+	public SparqlObject query(String queryString) throws IllegalArgumentException,SparqlException {
+		SparqlObject jsonObject;
 		try {
 			Store endpoint = getEndpoint();
 			String queryResult = endpoint.query(queryString, Store.OutputFormat.JSON);
@@ -39,12 +43,19 @@ public class SparqlQuery {
 		return jsonObject;
 	}
 	
-	public JsonObject query(String queryString, boolean prependDefaultPrefixes) throws IllegalArgumentException,SparqlException {
-		if (prependDefaultPrefixes) {
-			queryString = Helper.getSparqlPrefixesAsString() + "\n" + queryString;
-		}
-		return query(queryString);
-	}
+//	public HashMap<String, String> getOne(String query) throws IllegalArgumentException, SparqlException {
+//		JsonObject queryResult = query(query);
+//		HashMap<String, String> result = new HashMap<String, String>();
+//		List<HashMap<String, BindingSpec>> bindingSets = queryResult.getResults().getBindings();
+//		if (bindingSets.size() > 0) {
+//			//just get 1
+//			HashMap<String, BindingSpec> binding = bindingSets.get(0);
+//			for (Map.Entry<String, BindingSpec> entry : binding.entrySet()) {
+//			    result.put(entry.getKey(), entry.getValue().getValue());
+//			}
+//		}
+//		return result;
+//	}
 	
 	/**
 	 * Retrieve endpoint 
@@ -65,9 +76,9 @@ public class SparqlQuery {
 	 * @param jsonString
 	 * @return JsonObject
 	 */
-	private JsonObject parseJson(String jsonString) {
+	private SparqlObject parseJson(String jsonString) {
 		Gson gson = new Gson();
-		JsonObject jsonObject = gson.fromJson(jsonString, JsonObject.class);
+		SparqlObject jsonObject = gson.fromJson(jsonString, SparqlObject.class);
 		return jsonObject;
 	}
 	
