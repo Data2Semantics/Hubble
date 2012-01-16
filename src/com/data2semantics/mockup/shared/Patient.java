@@ -56,6 +56,9 @@ public class Patient implements Serializable {
 	public void addIndication(String uri, Indication indication) {
 		this.indications.put(uri, indication);
 	}
+	public Indication getIndication(String uri) {
+		return this.indications.get(uri);
+	}
 	
 	
 	

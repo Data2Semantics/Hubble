@@ -5,11 +5,17 @@ import java.util.Map;
 import com.data2semantics.mockup.client.view.MockupInterfaceView;
 import com.data2semantics.mockup.shared.Patient;
 import com.data2semantics.mockup.shared.Patient.Indication;
+import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class PatientDetails extends SimplePanel {
 	private MockupInterfaceView view;
@@ -56,8 +62,17 @@ public class PatientDetails extends SimplePanel {
 		addRowToTable("Age", Integer.toString(patientInfo.getAge()));
 		for (Map.Entry<String, Indication> entry : patientInfo.getIndications().entrySet()) {
 			Indication indication = entry.getValue();
-			String uri = entry.getKey();
-			addRowToTable("Indication", uri);
+			Label label = new Label();
+			label.setText(indication.getLabel());
+			label.setTitle(indication.getDefinition());
+			label.getElement().getStyle().setCursor(Cursor.POINTER);
+			final String uri = entry.getKey();
+			label.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					Window.open(uri, "_blank", "");
+				}
+			});
+			addRowToTable("Indication", label);
 		}
 	}
 	
@@ -65,5 +80,10 @@ public class PatientDetails extends SimplePanel {
 		int rowCount = patientInfoTable.getRowCount();
 		patientInfoTable.setText(rowCount, 0, key);
 		patientInfoTable.setText(rowCount, 1, value);
+	}
+	private void addRowToTable(String key, Widget value) {
+		int rowCount = patientInfoTable.getRowCount();
+		patientInfoTable.setText(rowCount, 0, key);
+		patientInfoTable.setWidget(rowCount, 1, value);
 	}
 }

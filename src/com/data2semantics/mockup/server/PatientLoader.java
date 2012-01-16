@@ -1,5 +1,6 @@
 package com.data2semantics.mockup.server;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -7,10 +8,6 @@ import com.data2semantics.mockup.client.exceptions.SparqlException;
 import com.data2semantics.mockup.client.helpers.Helper;
 import com.data2semantics.mockup.shared.Patient;
 import com.data2semantics.mockup.shared.Patient.Indication;
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -24,7 +21,7 @@ public class PatientLoader {
 		patientObject = new Patient(patientId);
 		ResultSet sparqlResult = queryPatientData();
 		parseIntoPatientObject(sparqlResult);
-		//loadLinkedLifeData();
+		loadLinkedLifeData();
 	}
 	
 	public Patient getPatientObject() {
@@ -70,9 +67,9 @@ public class PatientLoader {
 	private ResultSet queryPatientData() throws IllegalArgumentException, SparqlException {
 		String queryString = Helper.getSparqlPrefixesAsString() + "\n" +
 			"SELECT DISTINCT " +
-				"?age " +
-				"?comment " +
-				"(str(?statusUri) AS ?status) " +
+				"?age \n" +
+				"?comment \n" +
+				"(str(?statusUri) AS ?status) \n" +
 				"?measurementUri \n" +
 				"?indicationUri \n" +
 				"?recentTreatmentUri \n" +
@@ -97,27 +94,30 @@ public class PatientLoader {
 	}
 	private void loadIndicationData() throws IllegalArgumentException, SparqlException {
 		if (patientObject.getIndications().size() > 0) {
-			String queryString = Helper.getSparqlPrefixesAsString() + "\n" +
-					"SELECT ?uri ?label ?definition \n" +
-					"{SERVICE <http://linkedlifedata.com/sparql/> {\n";
+			ArrayList<String> unionPatterns = new ArrayList<String>();
 			for (Map.Entry<String, Indication> entry : patientObject.getIndications().entrySet()) {
 				String uri = entry.getKey();
-				queryString += "" +
-					"UNION {\n" +
+				unionPatterns.add(
+					"{\n" +
 						"BIND(\"" + uri + "\" AS ?uri).\n" +
 						"<" + uri + ">" + " skos-xl:prefLabel ?prefLabel.\n" +
 						"?prefLabel skos-xl:literalForm ?label.\n" +
 						"<" + uri + ">" + " skos:definition ?definition.\n" +
-					"}}}\n";
+					"}\n"
+				);
 			}
-			//System.out.println(queryString);
-			//SparqlObject result = lldEndpoint.query("SELECT ?x ?y ?z {?x ?y ?z} LIMIT 10");
-			Query query = QueryFactory.create("SELECT ?x ?y ?z {?x ?y ?z} LIMIT 10");
-			QueryExecution qexec = QueryExecutionFactory.sparqlService("http://linkedlifedata.com/sparql", query);
-			ResultSet results = qexec.execSelect();
-			System.out.println(results.next().getLiteral("x"));
-//			List<HashMap<String, Value>> rows = result.getRows();
-			
+			String queryString = Helper.getSparqlPrefixesAsString() + "\n" +
+					"SELECT ?uri ?label ?definition \n" +
+					"{\n" +
+						Helper.implode(unionPatterns, " UNION \n") + 
+					"}";
+			ResultSet result = Endpoint.query(Endpoint.LINKED_LIFE_DATA, queryString);
+			while (result.hasNext()) {
+				QuerySolution solution = result.next();
+				Indication indication = patientObject.getIndication(solution.get("uri").toString());
+				indication.setLabel(solution.get("label").asLiteral().getString());
+				indication.setDefinition(solution.get("definition").asLiteral().getString());
+			}
 		}
 	}
 	
