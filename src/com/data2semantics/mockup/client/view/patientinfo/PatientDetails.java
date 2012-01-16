@@ -1,10 +1,10 @@
 package com.data2semantics.mockup.client.view.patientinfo;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import com.data2semantics.mockup.client.view.MockupInterfaceView;
 import com.data2semantics.mockup.shared.Patient;
-import com.data2semantics.mockup.shared.SparqlObject;
+import com.data2semantics.mockup.shared.Patient.Indication;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -34,12 +34,9 @@ public class PatientDetails extends SimplePanel {
 				}
 
 				public void onSuccess(Patient patientInfo) {
-					patientInfoTable.setText(0, 0, "Patient ID");
-					patientInfoTable.setText(0, 1, patientInfo.getPatientID());
-					patientInfoTable.setText(1, 0, "Comment");
-					patientInfoTable.setText(1, 1, patientInfo.getComment());
-					patientInfoTable.setText(2, 0, "Age");
-					patientInfoTable.setText(2, 1, Integer.toString(patientInfo.getAge()));
+					drawInfoIntoTable(patientInfo);
+					
+					
 					getView().onLoadingFinish();
 				}
 			});
@@ -51,5 +48,22 @@ public class PatientDetails extends SimplePanel {
 	
 	public MockupInterfaceView getView() {
 		return view;
+	}
+	
+	private void drawInfoIntoTable(Patient patientInfo) {
+		addRowToTable("Patient ID", patientInfo.getPatientID());
+		addRowToTable("Comment", patientInfo.getComment());
+		addRowToTable("Age", Integer.toString(patientInfo.getAge()));
+		for (Map.Entry<String, Indication> entry : patientInfo.getIndications().entrySet()) {
+			Indication indication = entry.getValue();
+			String uri = entry.getKey();
+			addRowToTable("Indication", uri);
+		}
+	}
+	
+	private void addRowToTable(String key, String value) {
+		int rowCount = patientInfoTable.getRowCount();
+		patientInfoTable.setText(rowCount, 0, key);
+		patientInfoTable.setText(rowCount, 1, value);
 	}
 }

@@ -26,6 +26,7 @@ public class Helper {
 		namespaceList.add("PREFIX ns1: <http://purl.org/cpr/0.75#>");
 		namespaceList.add("PREFIX foaf: <http://xmlns.com/foaf/0.1/>");
 		namespaceList.add("PREFIX patient: <http://www.data2semantics.org/ontology/patient/>");
+		namespaceList.add("PREFIX skos-xl: <http://www.w3.org/2008/05/skos-xl#>");
 		namespaceList.add("PREFIX : <http://aers.data2semantics.org/vocab/>");
 		return namespaceList;
 	}

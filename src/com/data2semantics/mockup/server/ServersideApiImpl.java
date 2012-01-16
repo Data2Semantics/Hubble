@@ -5,7 +5,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageNode;
@@ -14,16 +13,13 @@ import org.apache.pdfbox.pdmodel.graphics.color.PDGamma;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotation;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationLink;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationTextMarkup;
-
-
 import com.data2semantics.mockup.client.ServersideApi;
 import com.data2semantics.mockup.client.exceptions.SparqlException;
 import com.data2semantics.mockup.client.helpers.Helper;
-import com.data2semantics.mockup.shared.SparqlObject;
-import com.data2semantics.mockup.shared.SparqlObject.Value;
 import com.data2semantics.mockup.shared.Patient;
 import com.data2semantics.mockup.shared.SerializiationWhitelist;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.hp.hpl.jena.query.ResultSet;
 
 
 /**
@@ -33,7 +29,6 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 
 	private static final long serialVersionUID = 1L;
 	private static String DRUGBANK_URI_PREFIX = "http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB";
-	private SparqlQuery sparqlQuery = new SparqlQuery();
 	
 	/**
 	 * Get info for a given patient. Currently static values. Should evantually load this data from patient data records
@@ -48,6 +43,7 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 		return patientLoader.getPatientObject();
 	}
 	
+	
 	/**
 	 * Get patients
 	 * 
@@ -57,17 +53,15 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 	 */
 	public ArrayList<String> getPatients() throws IllegalArgumentException {
 		ArrayList<String> patientList = new ArrayList<String>();
-		try {
-			String variable = "patientID";
-			String query = Helper.getSparqlPrefixesAsString() + "\n" +
-					"SELECT DISTINCT ?" + variable + " FROM <http://patient> {\n" + 
-					"?patient rdf:type patient:Patient.\n" + 
-					"?patient rdfs:label ?patientID.\n" + 
-					"}";
-			SparqlObject queryResult = sparqlQuery.query(query);
-			patientList = queryResult.getResultsOfVariable(variable);
-		} catch (SparqlException e) {
-			patientList.add(e.getMessage());
+		String variable = "patientID";
+		String queryString = Helper.getSparqlPrefixesAsString() + "\n" +
+				"SELECT DISTINCT ?" + variable + " FROM <http://patient> {\n" + 
+				"?patient rdf:type patient:Patient.\n" + 
+				"?patient rdfs:label ?patientID.\n" + 
+				"}";
+		ResultSet result = Endpoint.query(Endpoint.ECULTURE2, queryString);
+		while (result.hasNext()) {
+			patientList.add(result.next().get(variable).asLiteral().getString());
 		}
 		return patientList;
 
@@ -80,9 +74,9 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 	 * @throws IllegalArgumentException
 	 */
 	public String getChemicalStructure() throws IllegalArgumentException,SparqlException  {
-		String imageLocation;
+		String imageLocation = "";
 		String queryString = Helper.getSparqlPrefixesAsString() + "\n" + 
-				"SELECT DISTINCT ?drugLabel ?sameAs {\n" + 
+				"SELECT DISTINCT ?sameAs {\n" + 
 				"<http://aers.data2semantics.org/resource/indication/FEBRILE_NEUTROPENIA> :reaction_of ?report.\n" + 
 				"?involvement :involved_in ?report.\n" + 
 				"?involvement :drug ?drug.\n" + 
@@ -90,15 +84,16 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 				"?drug owl:sameAs ?sameAs.\n" + 
 				"FILTER regex(str(?sameAs), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" + 
 				"} LIMIT 1";
-		SparqlObject sparqlObject = sparqlQuery.query(queryString);
-		List<HashMap<String, Value>> rows = sparqlObject.getResult().getRows();
-		if (rows.size() > 0) {
-			String uri = rows.get(0).get("sameAs").getValue();
-			String drugbankID = uri.substring(DRUGBANK_URI_PREFIX.length());
-			imageLocation = "http://moldb.wishartlab.com/molecules/DB" + drugbankID + "/image.png";
-		} else {
+		ResultSet result = Endpoint.query(Endpoint.ECULTURE2, queryString);
+		
+		if (!result.hasNext()) {
 			throw new SparqlException("Empty result set for chemical structure query");
 		}
+		//Only 1 chem structure, so 1 solution of interest
+		String uri = result.next().get("sameAs").toString();
+		String drugbankID = uri.substring(DRUGBANK_URI_PREFIX.length());
+		imageLocation = "http://moldb.wishartlab.com/molecules/DB" + drugbankID + "/image.png";
+		
 		return imageLocation;
 	}
 	
@@ -198,7 +193,7 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 	        linkMark.setRectangle(position);
 	        annotations.add(linkMark);
 	        
-			doc.save("neutropeniaHUP_done.pdf");
+			doc.save("pdfCache/neutropeniaHUP_done.pdf");
 			doc.close();
 			result = "succes";
 		} catch (Exception e) {
@@ -207,7 +202,7 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 		
 		return "neutropeniaHUP_done.pdf";
 	}
-	public SparqlObject query(String queryString) throws IllegalArgumentException,SparqlException {
-		return sparqlQuery.query(queryString);
+	public String query(String queryString) throws IllegalArgumentException,SparqlException {
+		return Endpoint.queryGetString(Endpoint.ECULTURE2, queryString);
 	}
 }

@@ -1,10 +1,6 @@
 package com.data2semantics.mockup.client.view;
 
-import java.util.ArrayList;
-
 import com.data2semantics.mockup.client.helpers.Helper;
-import com.data2semantics.mockup.server.SparqlQuery;
-import com.data2semantics.mockup.shared.SparqlObject;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -69,13 +65,13 @@ public class ManualQueryForm extends VerticalPanel {
 				getView().onLoadingStart();
 				queryResultArea.clear();
 				try {
-					getView().getServerSideApi().query(queryTextArea.getText(), new AsyncCallback<SparqlObject>() {
+					getView().getServerSideApi().query(queryTextArea.getText(), new AsyncCallback<String>() {
 						public void onFailure(Throwable caught) {
 							getView().onError(caught.getMessage());
 						}
 
-						public void onSuccess(SparqlObject queryResult) {
-							HTML label = new HTML(new SafeHtmlBuilder().appendEscapedLines(queryResult.toString()).toSafeHtml());
+						public void onSuccess(String queryResult) {
+							HTML label = new HTML(new SafeHtmlBuilder().appendEscapedLines(queryResult).toSafeHtml());
 							queryResultArea.add(label);
 							getView().onLoadingFinish();
 						}
