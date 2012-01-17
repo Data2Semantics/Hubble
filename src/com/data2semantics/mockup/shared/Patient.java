@@ -12,6 +12,7 @@ public class Patient implements Serializable {
 	private String comment;
 	private String status;
 	private HashMap<String, Indication> indications = new HashMap<String, Indication>();
+	private HashMap<String, Measurement> measurements = new HashMap<String, Measurement>();
 	
 	public Patient() {};
 	public Patient(String patientID) {
@@ -50,14 +51,20 @@ public class Patient implements Serializable {
 	public HashMap<String, Indication> getIndications() {
 		return indications;
 	}
-	public void setIndications(HashMap<String, Indication> indications) {
-		this.indications = indications;
-	}
 	public void addIndication(String uri, Indication indication) {
 		this.indications.put(uri, indication);
 	}
 	public Indication getIndication(String uri) {
 		return this.indications.get(uri);
+	}
+	public HashMap<String, Measurement> getMeasurements() {
+		return this.measurements;
+	}
+	public void addMeasurement(String uri, Measurement measurement) {
+		this.measurements.put(uri, measurement);
+	}
+	public Measurement getMeasurement(String uri) {
+		return this.measurements.get(uri);
 	}
 	
 	
@@ -82,6 +89,17 @@ public class Patient implements Serializable {
 		}
 		public void setDefinition(String definition) {
 			this.definition = definition;
+		}
+	}
+	public static class Measurement implements Serializable {
+		private static final long serialVersionUID = 1L;
+		private String label;
+		public Measurement() {}
+		public String getLabel() {
+			return label;
+		}
+		public void setLabel(String label) {
+			this.label = label;
 		}
 	}
 }

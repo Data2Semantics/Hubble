@@ -1,5 +1,10 @@
 package com.data2semantics.mockup.client.view;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
+import org.mortbay.log.Log;
+
 import com.data2semantics.mockup.client.ServersideApiAsync;
 import com.data2semantics.mockup.client.ui.LoadingPanel;
 import com.data2semantics.mockup.client.ui.RoundedPanel;
@@ -58,7 +63,7 @@ public class MockupInterfaceView extends Composite {
 		errorPopup.show();
 		errorPopup.center();
 	}
-
+	
 	public void onLoadingFinish() {
 		loading.loadingEnd();
 	}

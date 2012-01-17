@@ -2,9 +2,12 @@ package com.data2semantics.mockup.client.view.patientinfo;
 
 import java.util.Map;
 
+import org.mortbay.log.Log;
+
 import com.data2semantics.mockup.client.view.MockupInterfaceView;
 import com.data2semantics.mockup.shared.Patient;
 import com.data2semantics.mockup.shared.Patient.Indication;
+import com.data2semantics.mockup.shared.Patient.Measurement;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -60,6 +63,11 @@ public class PatientDetails extends SimplePanel {
 		addRowToTable("Patient ID", patientInfo.getPatientID());
 		addRowToTable("Comment", patientInfo.getComment());
 		addRowToTable("Age", Integer.toString(patientInfo.getAge()));
+		drawIndications(patientInfo);
+		drawMeasurements(patientInfo);
+		
+	}
+	private void drawIndications(Patient patientInfo) {
 		for (Map.Entry<String, Indication> entry : patientInfo.getIndications().entrySet()) {
 			Indication indication = entry.getValue();
 			Label label = new Label();
@@ -76,6 +84,23 @@ public class PatientDetails extends SimplePanel {
 		}
 	}
 	
+	private void drawMeasurements(Patient patientInfo) {
+		for (Map.Entry<String, Measurement> entry : patientInfo.getMeasurements().entrySet()) {
+			Measurement measurement = entry.getValue();
+			if (measurement.getLabel().length() > 0) {
+				Label label = new Label();
+				label.setText(measurement.getLabel());
+				label.getElement().getStyle().setCursor(Cursor.POINTER);
+				final String uri = entry.getKey();
+				label.addClickHandler(new ClickHandler() {
+					public void onClick(ClickEvent event) {
+						Window.open(uri, "_blank", "");
+					}
+				});
+				addRowToTable("Measurement", label);
+			}
+		}
+	}
 	private void addRowToTable(String key, String value) {
 		int rowCount = patientInfoTable.getRowCount();
 		patientInfoTable.setText(rowCount, 0, key);
