@@ -6,6 +6,5 @@ war/WEB-INF/classes/*
 war/WEB-INF/deploy/*
 .settings/*
 war/pdfs/cache/*
-war/pdfs/srcDocs/guidelines/*.pdf
-war/pdfs/srcDocs/literature/*.pdf
+war/pdfs/srcDocs/*.pdf
 

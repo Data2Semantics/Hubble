@@ -17,12 +17,16 @@ import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationTextMarkup;
 import com.data2semantics.mockup.client.exceptions.SparqlException;
 
 public class PdfAnnotator {
+	public static String PDF_SRC_DIR = "pdfs/srcDocs/";
+	public static String PDF_CACHE_DIR = "pdfs/cache/";
 	
-	public PdfAnnotator() throws IllegalArgumentException, SparqlException {
-
+	private String srcFile;
+	
+	public PdfAnnotator(String srcFile) throws IllegalArgumentException, SparqlException {
+		this.srcFile = srcFile;
 		String result;
 		
-		File fileTest = new File("pdfs/srcDocs/guidelines/neutropeniaHUP.pdf");
+		File fileTest = new File(PDF_SRC_DIR + srcFile);
 		StringWriter writer = new StringWriter();
 		PDDocument doc;
 		try {
@@ -99,7 +103,7 @@ public class PdfAnnotator {
 	        linkMark.setRectangle(position);
 	        annotations.add(linkMark);
 	        
-			doc.save("pdfs/cache/neutropeniaHUP_done.pdf");
+			doc.save(PDF_CACHE_DIR + "neutropeniaHUP.pdf");
 			doc.close();
 			result = "succes";
 		} catch (Exception e) {
@@ -110,7 +114,7 @@ public class PdfAnnotator {
 	}
 	
 	public String getAnnotatedPdf() {
-		return "pdfs/cache/neutropeniaHUP_done.pdf";
+		return PDF_CACHE_DIR + srcFile;
 	}
 	
 }

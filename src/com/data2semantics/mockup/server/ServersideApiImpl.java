@@ -103,7 +103,7 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 	}
 	
 	public String processPdf() throws IllegalArgumentException, SparqlException {
-		PdfAnnotator pdfAnnotator = new PdfAnnotator();
+		PdfAnnotator pdfAnnotator = new PdfAnnotator("neutropeniaHUP.pdf");
 		return pdfAnnotator.getAnnotatedPdf();
 	}
 	public String query(String queryString) throws IllegalArgumentException,SparqlException {
