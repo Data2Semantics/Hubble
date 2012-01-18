@@ -5,13 +5,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.mortbay.log.Log;
-
 import com.data2semantics.mockup.client.exceptions.SparqlException;
 import com.data2semantics.mockup.client.helpers.Helper;
 import com.data2semantics.mockup.shared.Patient;
 import com.data2semantics.mockup.shared.Patient.Indication;
 import com.data2semantics.mockup.shared.Patient.Measurement;
+import com.data2semantics.mockup.shared.Patient.Treatment;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -26,8 +25,9 @@ public class PatientLoader {
 		patientObject = new Patient(patientId);
 		ResultSet sparqlResult = queryPatientData();
 		parseIntoPatientObject(sparqlResult);
-		//int size = patientObject.getIndications().size();
 		loadLinkedLifeData();
+		
+
 	}
 	
 	public Patient getPatientObject() {
@@ -61,27 +61,48 @@ public class PatientLoader {
 	private void parseValue(String varName, QuerySolution solution) {
 		try {
 			RDFNode rdfNode = solution.get(varName);
-			if (varName.equals("age")) {
+			
+			/**
+			 * This is a uri. Create new object if it doesnt exist yet
+			 */
+			if (varName.equals("indication") && patientObject.getIndication(rdfNode.toString()) == null) {
+				patientObject.addIndication(rdfNode.toString(), new Indication());
+				
+			} else if (varName.equals("measurement") && patientObject.getMeasurement(rdfNode.toString()) == null) {
+				patientObject.addMeasurement(rdfNode.toString(), new Measurement());
+			} else if (varName.equals("previousIndication") && patientObject.getPreviousIndication(rdfNode.toString()) == null) {
+				patientObject.addPreviousIndication(rdfNode.toString(), new Indication());
+			} else if (varName.equals("recentTreatment") && patientObject.getRecentTreatment(rdfNode.toString()) == null) {
+				patientObject.addRecentTreatment(rdfNode.toString(), new Treatment());
+			} 
+			/**
+			 * These are values (not uri's). Set them in the patient object
+			 */
+			else if (varName.equals("age")) {
 				patientObject.setAge( rdfNode.asLiteral().getInt());
 			} else if (varName.equals("comment")) {
 				patientObject.setComment(rdfNode.asLiteral().getString());
 			} else if (varName.equals("status")) {
 				patientObject.setStatus(rdfNode.asLiteral().getString());
-			} else if (varName.equals("indication") && !patientObject.getIndications().containsKey(rdfNode.toString())) {
-				patientObject.addIndication(rdfNode.toString(), new Indication());
 			} else if (varName.equals("indication_definition")) {
 				String uri = solution.get("indication_uri").toString();
 				patientObject.getIndication(uri).setDefinition(rdfNode.asLiteral().getString());
 			} else if (varName.equals("indication_label")) {
 				String uri = solution.get("indication_uri").toString();
 				patientObject.getIndication(uri).setLabel(rdfNode.asLiteral().getString());
-			} else if (varName.equals("measurement") && !patientObject.getMeasurements().containsKey(rdfNode.toString())) {
-				patientObject.addMeasurement(rdfNode.toString(), new Measurement());
 			} else if (varName.equals("measurement_label")) {
 				String uri = solution.get("measurement_uri").toString();
 				patientObject.getMeasurement(uri).setLabel(rdfNode.asLiteral().getString());
-			}
-			
+			} else if (varName.equals("previousIndication_definition")) {
+				String uri = solution.get("previousIndication_uri").toString();
+				patientObject.getPreviousIndication(uri).setDefinition(rdfNode.asLiteral().getString());
+			} else if (varName.equals("previousIndication_label")) {
+				String uri = solution.get("previousIndication_uri").toString();
+				patientObject.getPreviousIndication(uri).setLabel(rdfNode.asLiteral().getString());
+			} else if (varName.equals("recentTreatment_label")) {
+				String uri = solution.get("recentTreatment").toString();
+				patientObject.getRecentTreatment(uri).setLabel(rdfNode.asLiteral().getString());
+			} 
 		} catch (NullPointerException e) {
 			System.out.println("Nullpointer exception for var " + varName + " and rdfNode " + solution.get(varName).toString());
 			e.printStackTrace();
@@ -98,19 +119,22 @@ public class PatientLoader {
 				"?measurement \n" +
 				"?indication \n" +
 				"?recentTreatment \n" +
+				"?recentTreatment_label \n" +
 				"?previousIndication \n" +
-			"FROM <http://patient> {\n" + 
+			"{\n" + 
 				"?patient rdfs:label '" + patientId + "'@en.\n" + 
 				"?patient patient:hasAge ?age.\n" + 
 				"?patient rdfs:comment ?comment.\n" + 
 				"OPTIONAL{?patient patient:hasStatus ?status_uri}.\n" + 
 				"OPTIONAL{?patient patient:hasMeasurement ?measurement}.\n" + 
 				"OPTIONAL{?patient patient:hasIndication ?indication}.\n" + 
-				"OPTIONAL{?patient patient:hadRecentTreatment ?recentTreatment}.\n" + 
+				//Workaround to get 'hadRecentTreatment' from our own 4store. This SHOULD BE in the lld rdf, but isnt :(
+				"OPTIONAL{?patient patient:hadRecentTreatment ?recentTreatment.\n" +
+					"?recentTreatment rdfs:label ?recentTreatment_label\n" +
+				"}.\n" + 
 				"OPTIONAL{?patient patient:hadPreviousIndication ?previousIndication}.\n" + 
 			"}\n" + 
 			"";
-		System.out.println(queryString);
 		return Endpoint.query(Endpoint.ECULTURE2, queryString);
 	}
 	
@@ -122,7 +146,6 @@ public class PatientLoader {
 	 */
 	private void loadLinkedLifeData() throws IllegalArgumentException, SparqlException {
 		String queryString = getLinkedLifeDataQuery();
-		System.out.println(queryString);
 		ResultSet result = Endpoint.query(Endpoint.LINKED_LIFE_DATA, queryString);
 		while (result.hasNext()) {
 			QuerySolution solution = result.next();
@@ -135,6 +158,7 @@ public class PatientLoader {
 		
 	}
 	
+	
 	/**
 	 * Create query for linked life data. 
 	 * Size of query is dependent on number of measurements/indications/etc of a patient
@@ -145,7 +169,7 @@ public class PatientLoader {
 		unions.put("variables", new ArrayList<String>());
 		loadIndicationUnionPatterns();
 		loadMeasurementsUnionPatterns();
-		
+		loadPreviousIndicationUnionPatterns();
 		
 		String queryString = Helper.getSparqlPrefixesAsString() + "\n" +
 				"SELECT ?" + Helper.implode(unions.get("variables"), " ?") + " \n" +
@@ -165,8 +189,8 @@ public class PatientLoader {
 				unions.get("patterns").add(
 					"{\n" +
 						"BIND(\"" + uri + "\" AS ?measurement_uri).\n" +
-						"<" + uri + ">" + " skos-xl:prefLabel ?prefLabel.\n" +
-						"?prefLabel skos-xl:literalForm ?measurement_label.\n" +
+						"<" + uri + ">" + " skos-xl:prefLabel ?measurement_prefLabel.\n" +
+						"?measurement_prefLabel skos-xl:literalForm ?measurement_label.\n" +
 					"}\n"
 				);
 			}
@@ -182,13 +206,30 @@ public class PatientLoader {
 				unions.get("patterns").add(
 					"{\n" +
 						"BIND(\"" + uri + "\" AS ?indication_uri).\n" +
-						"<" + uri + ">" + " skos-xl:prefLabel ?prefLabel.\n" +
-						"?prefLabel skos-xl:literalForm ?indication_label.\n" +
+						"<" + uri + ">" + " skos-xl:prefLabel ?indication_prefLabel.\n" +
+						"?indication_prefLabel skos-xl:literalForm ?indication_label.\n" +
 						"<" + uri + ">" + " skos:definition ?indication_definition.\n" +
 					"}\n"
 				);
 			}
 		}
 	}
-	
+	private void loadPreviousIndicationUnionPatterns() {
+		if (patientObject.getPreviousIndications().size() > 0) {
+			unions.get("variables").add("previousIndication_uri");
+			unions.get("variables").add("previousIndication_label");
+			unions.get("variables").add("previousIndication_definition");
+			for (Map.Entry<String, Indication> entry : patientObject.getPreviousIndications().entrySet()) {
+				String uri = entry.getKey();
+				unions.get("patterns").add(
+					"{\n" +
+						"BIND(\"" + uri + "\" AS ?previousIndication_uri).\n" +
+						"<" + uri + ">" + " skos-xl:prefLabel ?previousIndication_prefLabel.\n" +
+						"?previousIndication_prefLabel skos-xl:literalForm ?previousIndication_label.\n" +
+						"<" + uri + ">" + " skos:definition ?previousIndication_definition.\n" +
+					"}\n"
+				);
+			}
+		}
+	}
 }

@@ -11,8 +11,13 @@ public class Patient implements Serializable {
 	private int age;
 	private String comment;
 	private String status;
+	/**
+	 * For these hashmaps, use URI as key
+	 */
 	private HashMap<String, Indication> indications = new HashMap<String, Indication>();
+	private HashMap<String, Indication> previousIndications = new HashMap<String, Indication>();
 	private HashMap<String, Measurement> measurements = new HashMap<String, Measurement>();
+	private HashMap<String, Treatment> recentTreatments = new HashMap<String, Treatment>();
 	
 	public Patient() {};
 	public Patient(String patientID) {
@@ -66,7 +71,24 @@ public class Patient implements Serializable {
 	public Measurement getMeasurement(String uri) {
 		return this.measurements.get(uri);
 	}
-	
+	public HashMap<String, Indication> getPreviousIndications() {
+		return previousIndications;
+	}
+	public void addPreviousIndication(String uri, Indication indication) {
+		this.previousIndications.put(uri, indication);
+	}
+	public Indication getPreviousIndication(String uri) {
+		return this.previousIndications.get(uri);
+	}
+	public HashMap<String, Treatment> getRecentTreatments() {
+		return recentTreatments;
+	}
+	public void addRecentTreatment(String uri, Treatment treatment) {
+		this.recentTreatments.put(uri, treatment);
+	}
+	public Treatment getRecentTreatment(String uri) {
+		return this.recentTreatments.get(uri);
+	}
 	
 	
 	
@@ -95,6 +117,17 @@ public class Patient implements Serializable {
 		private static final long serialVersionUID = 1L;
 		private String label;
 		public Measurement() {}
+		public String getLabel() {
+			return label;
+		}
+		public void setLabel(String label) {
+			this.label = label;
+		}
+	}
+	public static class Treatment implements Serializable {
+		private static final long serialVersionUID = 1L;
+		private String label;
+		public Treatment() {}
 		public String getLabel() {
 			return label;
 		}

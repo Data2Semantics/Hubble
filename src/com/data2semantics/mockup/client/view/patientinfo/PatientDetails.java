@@ -2,12 +2,11 @@ package com.data2semantics.mockup.client.view.patientinfo;
 
 import java.util.Map;
 
-import org.mortbay.log.Log;
-
 import com.data2semantics.mockup.client.view.MockupInterfaceView;
 import com.data2semantics.mockup.shared.Patient;
 import com.data2semantics.mockup.shared.Patient.Indication;
 import com.data2semantics.mockup.shared.Patient.Measurement;
+import com.data2semantics.mockup.shared.Patient.Treatment;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -44,8 +43,6 @@ public class PatientDetails extends SimplePanel {
 
 				public void onSuccess(Patient patientInfo) {
 					drawInfoIntoTable(patientInfo);
-					
-					
 					getView().onLoadingFinish();
 				}
 			});
@@ -64,7 +61,9 @@ public class PatientDetails extends SimplePanel {
 		addRowToTable("Comment", patientInfo.getComment());
 		addRowToTable("Age", Integer.toString(patientInfo.getAge()));
 		drawIndications(patientInfo);
+		drawPreviousIndications(patientInfo);
 		drawMeasurements(patientInfo);
+		drawRecentTreatments(patientInfo);
 		
 	}
 	private void drawIndications(Patient patientInfo) {
@@ -83,11 +82,26 @@ public class PatientDetails extends SimplePanel {
 			addRowToTable("Indication", label);
 		}
 	}
-	
+	private void drawPreviousIndications(Patient patientInfo) {
+		for (Map.Entry<String, Indication> entry : patientInfo.getPreviousIndications().entrySet()) {
+			Indication indication = entry.getValue();
+			Label label = new Label();
+			label.setText(indication.getLabel());
+			label.setTitle(indication.getDefinition());
+			label.getElement().getStyle().setCursor(Cursor.POINTER);
+			final String uri = entry.getKey();
+			label.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					Window.open(uri, "_blank", "");
+				}
+			});
+			addRowToTable("Previous Indication", label);
+		}
+	}
 	private void drawMeasurements(Patient patientInfo) {
 		for (Map.Entry<String, Measurement> entry : patientInfo.getMeasurements().entrySet()) {
 			Measurement measurement = entry.getValue();
-			if (measurement.getLabel().length() > 0) {
+			if (measurement.getLabel() != null) {
 				Label label = new Label();
 				label.setText(measurement.getLabel());
 				label.getElement().getStyle().setCursor(Cursor.POINTER);
@@ -98,6 +112,23 @@ public class PatientDetails extends SimplePanel {
 					}
 				});
 				addRowToTable("Measurement", label);
+			}
+		}
+	}
+	private void drawRecentTreatments(Patient patientInfo) {
+		for (Map.Entry<String, Treatment> entry : patientInfo.getRecentTreatments().entrySet()) {
+			Treatment measurement = entry.getValue();
+			if (measurement.getLabel() != null) {
+				final String uri = entry.getKey();
+				Label label = new Label();
+				label.setText(entry.getValue().getLabel());
+				label.getElement().getStyle().setCursor(Cursor.POINTER);
+				label.addClickHandler(new ClickHandler() {
+					public void onClick(ClickEvent event) {
+						Window.open(uri, "_blank", "");
+					}
+				});
+				addRowToTable("Recent Treatment", label);
 			}
 		}
 	}
