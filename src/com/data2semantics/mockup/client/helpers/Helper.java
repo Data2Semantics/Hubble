@@ -26,8 +26,20 @@ public class Helper {
 		namespaceList.add("PREFIX ns1: <http://purl.org/cpr/0.75#>");
 		namespaceList.add("PREFIX foaf: <http://xmlns.com/foaf/0.1/>");
 		namespaceList.add("PREFIX patient: <http://www.data2semantics.org/ontology/patient/>");
-		namespaceList.add("PREFIX skos-xl: <http://www.w3.org/2008/05/skos-xl#>");
+		namespaceList.add("PREFIX skos-xl: <http://www.w3.org/2008/05/skos-xl#>"); //used in lld
 		namespaceList.add("PREFIX : <http://aers.data2semantics.org/vocab/>");
+		
+		/**
+		 * PDF annotation ontology
+		 */
+		namespaceList.add("PREFIX ao: <http://purl.org/ao/core#>");
+		namespaceList.add("PREFIX aot: <http://purl.org/ao/types#>");
+		namespaceList.add("PREFIX aos: <http://purl.org/ao/selectors#>");
+		namespaceList.add("PREFIX aof: <http://purl.org/ao/foaf#>");
+		namespaceList.add("PREFIX aoa: <http://purl.org/ao/annotea#>");
+		namespaceList.add("PREFIX pav: <http://purl.org/pav#>");
+		namespaceList.add("PREFIX ann: <http://www.w3.org/2000/10/annotation-ns#>");
+		namespaceList.add("PREFIX pro: <http://purl.obolibrary.org/obo#>");
 		return namespaceList;
 	}
 	

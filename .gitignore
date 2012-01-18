@@ -7,4 +7,5 @@ war/WEB-INF/deploy/*
 .settings/*
 war/pdfs/cache/*
 war/pdfs/srcDocs/*.pdf
+test-classes/*
 

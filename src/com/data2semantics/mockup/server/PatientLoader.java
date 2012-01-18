@@ -146,6 +146,7 @@ public class PatientLoader {
 	 */
 	private void loadLinkedLifeData() throws IllegalArgumentException, SparqlException {
 		String queryString = getLinkedLifeDataQuery();
+		System.out.println(queryString);
 		ResultSet result = Endpoint.query(Endpoint.LINKED_LIFE_DATA, queryString);
 		while (result.hasNext()) {
 			QuerySolution solution = result.next();
