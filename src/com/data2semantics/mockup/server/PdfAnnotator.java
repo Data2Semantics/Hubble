@@ -1,8 +1,8 @@
 package com.data2semantics.mockup.server;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -10,7 +10,6 @@ import org.apache.pdfbox.pdmodel.PDPageNode;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.color.PDGamma;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotation;
-import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationLink;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationTextMarkup;
 
 import com.data2semantics.mockup.client.helpers.Helper;
@@ -91,50 +90,11 @@ public class PdfAnnotator {
 			PDPageNode rootPage = doc.getDocumentCatalog().getPages();
 			List<PDPage> pages = new ArrayList<PDPage>();
 	        rootPage.getAllKids(pages);
-	        
-	        
-	        PDGamma yellow = new PDGamma();
-			yellow.setR(1);
-			yellow.setG(1);
 			
 			for (Annotation annotationObject: annotations) {
-				//for now, get first page
-				//PDPage currentPage = pages.get(annotationObject.getPageNumber());
-				PDPage currentPage = pages.get(0);
-		        @SuppressWarnings("unchecked")
-				List<PDAnnotation> annotations = currentPage.getAnnotations();
-		        PDRectangle mediaBox = currentPage.getMediaBox();
-		        System.out.println(" Width : "+mediaBox.getWidth());
-		        System.out.println(" Height : "+mediaBox.getHeight());
-		        System.out.println(" Upper right : "+mediaBox.getUpperRightX()+","+mediaBox.getUpperRightY());
-		        System.out.println(" Lower left  : "+mediaBox.getLowerLeftX()+","+mediaBox.getLowerLeftY());
-		         
-				PDAnnotationTextMarkup txtMark = new PDAnnotationTextMarkup(PDAnnotationTextMarkup.SUB_TYPE_HIGHLIGHT);
-		        txtMark.setColour(yellow); 
-		        txtMark.setConstantOpacity((float)0.2);   // Make the highlight 20% transparent
-		       
-
-		 		String init = "(72,280)";
-		 		String end = "(356,544)";
-		        PDRectangle position = getPosition(init, end, (int)mediaBox.getHeight());
-		        float[] quads = new float[8];
-
-		        quads[0] = position.getLowerLeftX();  // x1
-		        quads[1] = position.getUpperRightY()-2; // y1
-		        quads[2] = position.getUpperRightX(); // x2
-		        quads[3] = quads[1]; // y2
-		        quads[4] = quads[0];  // x3
-		        quads[5] = position.getLowerLeftY()-2; // y3
-		        quads[6] = quads[2]; // x4
-		        quads[7] = quads[5]; // y5
-
-		        txtMark.setQuadPoints(quads);
-		        txtMark.setContents(annotationObject.getTopic());
-		        txtMark.setRectangle(position);
-		        annotations.add(txtMark);
-		        break;
+				drawAnnotation(annotationObject, pages);
+				break;
 			}
-			
 	        
 			doc.save(PDF_CACHE_DIR + srcFileName);
 			doc.close();
@@ -142,14 +102,55 @@ public class PdfAnnotator {
 			new IllegalArgumentException(e.getMessage());
 		}
 	}
-	 private PDRectangle getPosition(String init, String end, int pageHeight) { 
-		 init = init.substring(1, -1);
-		 end = end.substring(1, -1);
-		 int initX = Integer.parseInt(init.split("-")[0]);
-		 int initY = Integer.parseInt(init.split("-")[1]);
-		 int endX = Integer.parseInt(end.split("-")[0]);
-		 int endY = Integer.parseInt(end.split("-")[1]);
+	
+	private void drawAnnotation(Annotation annotationObject, List<PDPage> pages) throws IOException {
+        PDGamma yellow = new PDGamma();
+		yellow.setR(1);
+		yellow.setG(1);
+		
+		//for now, get first page
+		//PDPage currentPage = pages.get(annotationObject.getPageNumber());
+		PDPage currentPage = pages.get(0);
+        @SuppressWarnings("unchecked")
+		List<PDAnnotation> annotations = currentPage.getAnnotations();
+        PDRectangle mediaBox = currentPage.getMediaBox();
+        System.out.println(" Width : "+mediaBox.getWidth());
+        System.out.println(" Height : "+mediaBox.getHeight());
+        System.out.println(" Upper right : "+mediaBox.getUpperRightX()+","+mediaBox.getUpperRightY());
+        System.out.println(" Lower left  : "+mediaBox.getLowerLeftX()+","+mediaBox.getLowerLeftY());
+         
+		PDAnnotationTextMarkup txtMark = new PDAnnotationTextMarkup(PDAnnotationTextMarkup.SUB_TYPE_HIGHLIGHT);
+        txtMark.setColour(yellow); 
+        txtMark.setConstantOpacity((float)0.2);   // Make the highlight 20% transparent
+       
+        
+        PDRectangle position = getPosition(annotationObject.getInit(), annotationObject.getEnd(), (int)mediaBox.getHeight());
+        float[] quads = new float[8];
+
+        quads[0] = position.getLowerLeftX();  // x1
+        quads[1] = position.getUpperRightY()-2; // y1
+        quads[2] = position.getUpperRightX(); // x2
+        quads[3] = quads[1]; // y2
+        quads[4] = quads[0];  // x3
+        quads[5] = position.getLowerLeftY()-2; // y3
+        quads[6] = quads[2]; // x4
+        quads[7] = quads[5]; // y5
+
+        txtMark.setQuadPoints(quads);
+        txtMark.setContents(annotationObject.getTopic());
+        txtMark.setRectangle(position);
+        annotations.add(txtMark);
+        
+	}
+	 private PDRectangle getPosition(String init, String end, int pageHeight) {
 		 
+		init = init.substring(1, init.length()-1);
+		end = end.substring(1, end.length()-1);
+		int initX = Integer.parseInt(init.split(",")[0]);
+		int initY = Integer.parseInt(init.split(",")[1]);
+		int endX = Integer.parseInt(end.split(",")[0]);
+		int endY = Integer.parseInt(end.split(",")[1]);
+	 
 		PDRectangle position = new PDRectangle();
 		position.setLowerLeftX(initX);
 		position.setLowerLeftY(pageHeight - endY);
