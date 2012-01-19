@@ -5,9 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.data2semantics.mockup.client.exceptions.SparqlException;
-import com.google.gwt.junit.client.GWTTestCase;
-
 public class PdfAnnotatorTest {
 	private PdfAnnotator pdfAnnotator;
 	private static String SRC_DOCUMENT = "neutropeniaHUP.pdf";

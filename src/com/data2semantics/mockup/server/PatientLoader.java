@@ -111,7 +111,7 @@ public class PatientLoader {
 	
 	
 	private ResultSet queryPatientData() throws IllegalArgumentException, SparqlException {
-		String queryString = Helper.getSparqlPrefixesAsString() + "\n" +
+		String queryString = Helper.getSparqlPrefixesAsString("aers") + "\n" +
 			"SELECT DISTINCT " +
 				"?age \n" +
 				"?comment \n" +
@@ -172,7 +172,7 @@ public class PatientLoader {
 		loadMeasurementsUnionPatterns();
 		loadPreviousIndicationUnionPatterns();
 		
-		String queryString = Helper.getSparqlPrefixesAsString() + "\n" +
+		String queryString = Helper.getSparqlPrefixesAsString("lld") + "\n" +
 				"SELECT ?" + Helper.implode(unions.get("variables"), " ?") + " \n" +
 				"{\n" +
 					Helper.implode(unions.get("patterns"), " UNION \n") + 

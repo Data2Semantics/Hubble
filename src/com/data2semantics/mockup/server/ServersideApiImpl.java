@@ -43,7 +43,7 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 	public ArrayList<String> getPatients() throws IllegalArgumentException {
 		ArrayList<String> patientList = new ArrayList<String>();
 		String variable = "patientID";
-		String queryString = Helper.getSparqlPrefixesAsString() + "\n" +
+		String queryString = Helper.getSparqlPrefixesAsString("aers") + "\n" +
 				"SELECT DISTINCT ?" + variable + " FROM <http://patient> {\n" + 
 				"?patient rdf:type patient:Patient.\n" + 
 				"?patient rdfs:label ?patientID.\n" + 
@@ -64,7 +64,7 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 	 */
 	public String getChemicalStructure() throws IllegalArgumentException,SparqlException  {
 		String imageLocation = "";
-		String queryString = Helper.getSparqlPrefixesAsString() + "\n" + 
+		String queryString = Helper.getSparqlPrefixesAsString("aers") + "\n" + 
 				"SELECT DISTINCT ?sameAs {\n" + 
 				"<http://aers.data2semantics.org/resource/indication/FEBRILE_NEUTROPENIA> :reaction_of ?report.\n" + 
 				"?involvement :involved_in ?report.\n" + 

@@ -56,7 +56,7 @@ public class ManualQueryForm extends VerticalPanel {
 		queryTextArea = new TextArea();
 		queryTextArea.setWidth("800px");
 		queryTextArea.setHeight("400px");
-		queryTextArea.setText(Helper.getSparqlPrefixesAsString() + "\n" +
+		queryTextArea.setText(Helper.getSparqlPrefixesAsString("aers") + "\n" +
 				"SELECT ?x ?y ?z {?x ?y ?z} LIMIT 10");
 		queryResultArea = new DecoratorPanel();
 		Button submitButton = new Button("Submit Query");

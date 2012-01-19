@@ -1,5 +1,7 @@
 package com.data2semantics.mockup.server.models;
 
+import java.util.HashMap;
+
 
 public class Annotation {
 	private String srcFile;
@@ -51,5 +53,4 @@ public class Annotation {
 	public void setPageNumber(int pageNumber) {
 		this.pageNumber = pageNumber;
 	}
-	
 }
