@@ -1,4 +1,4 @@
-package com.data2semantics.mockup.server;
+package com.data2semantics.mockup.server.loaders;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.data2semantics.mockup.client.exceptions.SparqlException;
 import com.data2semantics.mockup.client.helpers.Helper;
+import com.data2semantics.mockup.server.Endpoint;
 import com.data2semantics.mockup.shared.models.Patient;
 import com.data2semantics.mockup.shared.models.Drug;
 import com.data2semantics.mockup.shared.models.Indication;

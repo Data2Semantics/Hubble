@@ -6,13 +6,15 @@ import java.util.HashMap;
 import com.data2semantics.mockup.client.ServersideApi;
 import com.data2semantics.mockup.client.exceptions.SparqlException;
 import com.data2semantics.mockup.client.helpers.Helper;
+import com.data2semantics.mockup.server.loaders.AdverseEventLoader;
+import com.data2semantics.mockup.server.loaders.PatientLoader;
+import com.data2semantics.mockup.server.loaders.SnippetLoader;
 import com.data2semantics.mockup.shared.models.AdverseEvent;
 import com.data2semantics.mockup.shared.models.Patient;
 import com.data2semantics.mockup.shared.models.Snippet;
 import com.data2semantics.mockup.shared.models.Indication;
 import com.data2semantics.mockup.shared.SerializiationWhitelist;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 
 
@@ -22,7 +24,6 @@ import com.hp.hpl.jena.query.ResultSet;
 public class ServersideApiImpl extends RemoteServiceServlet implements ServersideApi {
 
 	private static final long serialVersionUID = 1L;
-	private static String DRUGBANK_URI_PREFIX = "http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB";
 	
 	/**
 	 * Get info for a given patient. Currently static values. Should evantually load this data from patient data records
@@ -102,7 +103,7 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 //		snippetInfo.put("snippet", snippet);
 //		snippetInfo.put("link", link);
 		
-		RelevantSnippets snippetsObject = new RelevantSnippets(patientId);
+		SnippetLoader snippetsObject = new SnippetLoader(patientId);
 		HashMap<String, Snippet> snippetInfo = snippetsObject.getSnippets();
 		
 		return snippetInfo;
@@ -121,44 +122,7 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 	}
 	
 	public HashMap<String, AdverseEvent> getRelevantAdverseEvents(Indication indication) {
-		HashMap<String, AdverseEvent> adverseEvents = new HashMap<String, AdverseEvent>();
-		String queryString = Helper.getSparqlPrefixesAsString("aers") + "\n" + 
-			"SELECT DISTINCT * {\n" + 
-				"<" + indication.getUri() + "> owl:sameAs ?sameAs.\n" + 
-				"?sameAs :reaction_of ?report.\n" +
-				"?report :age ?age;\n" +
-					":event_date ?eventDate;" +
-					":gender ?gender;" +
-					":manufacturer ?manufacturer;" +
-					":involved_in ?involvement.\n" + 
-				"?involvement :drug ?drug.\n" +
-				"?drug rdfs:label ?drugLabel;\n" +
-					"owl:sameAs ?drugBankUri.\n" + 
-				"FILTER regex(str(?drugBankUri), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" + 
-			"}\n" + 
-			"";
-		System.out.println(queryString);
-		ResultSet resultSet = Endpoint.query(Endpoint.ECULTURE2, queryString);
-		while (resultSet.hasNext()) {
-			QuerySolution solution = resultSet.next();
-			String reportUri = solution.get("report").toString();
-			AdverseEvent adverseEvent;
-			if (adverseEvents.containsKey(reportUri)) {
-				adverseEvent = adverseEvents.get(reportUri);
-			} else {
-				adverseEvent = new AdverseEvent();
-				adverseEvent.setUri(reportUri);
-			}
-			adverseEvent.setAge(Integer.parseInt(solution.get("age").visitWith(new QuerySolutionVisitor()).toString()));
-			adverseEvent.setEventDate(solution.get("eventDate").visitWith(new QuerySolutionVisitor()).toString());
-			adverseEvent.setGender(solution.get("gender").visitWith(new QuerySolutionVisitor()).toString());
-			adverseEvent.setManufacturer(solution.get("manufacturer").visitWith(new QuerySolutionVisitor()).toString());
-			
-			
-			
-			adverseEvents.put(reportUri, adverseEvent);
-			
-		}
-		return adverseEvents;
+		AdverseEventLoader adverseEventLoader = new AdverseEventLoader();
+		return adverseEventLoader.getRelevantAdverseEvents(indication);
 	}
 }

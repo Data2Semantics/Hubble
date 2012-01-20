@@ -1,17 +1,18 @@
-package com.data2semantics.mockup.server;
+package com.data2semantics.mockup.server.loaders;
 
 import java.util.HashMap;
 
 import com.data2semantics.mockup.client.exceptions.SparqlException;
 import com.data2semantics.mockup.client.helpers.Helper;
+import com.data2semantics.mockup.server.Endpoint;
 import com.data2semantics.mockup.shared.models.Snippet;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 
-public class RelevantSnippets {
+public class SnippetLoader {
 	String patientId;
 	
-	public RelevantSnippets(String patientId) throws IllegalArgumentException, SparqlException {
+	public SnippetLoader(String patientId) throws IllegalArgumentException, SparqlException {
 		this.patientId = patientId;
 	}
 	

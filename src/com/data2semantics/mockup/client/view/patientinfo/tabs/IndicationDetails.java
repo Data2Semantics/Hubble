@@ -1,6 +1,5 @@
 package com.data2semantics.mockup.client.view.patientinfo.tabs;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.data2semantics.mockup.client.view.MockupInterfaceView;
