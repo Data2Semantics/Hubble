@@ -10,7 +10,10 @@ public class Snippet implements Serializable {
 	private String postfix;
 	private String onDocument;
 	private String topic;
+	private String topicUri;
 	private String selectorUri;
+	private String createdOn;
+	private String createdBy;
 	public String getExact() {
 		return exact;
 	}
@@ -46,6 +49,24 @@ public class Snippet implements Serializable {
 	}
 	public void setSelectorUri(String selectorUri) {
 		this.selectorUri = selectorUri;
+	}
+	public String getCreatedOn() {
+		return createdOn;
+	}
+	public void setCreatedOn(String createdOn) {
+		this.createdOn = createdOn;
+	}
+	public String getCreatedBy() {
+		return createdBy;
+	}
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+	public String getTopicUri() {
+		return topicUri;
+	}
+	public void setTopicUri(String topicUri) {
+		this.topicUri = topicUri;
 	}
 	
 }

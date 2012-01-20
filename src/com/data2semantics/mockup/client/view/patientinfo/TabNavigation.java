@@ -2,9 +2,9 @@ package com.data2semantics.mockup.client.view.patientinfo;
 
 
 import com.data2semantics.mockup.client.view.MockupInterfaceView;
-import com.data2semantics.mockup.client.view.patientinfo.tabs.Guideline;
-import com.data2semantics.mockup.client.view.patientinfo.tabs.RelevantLiterature;
+import com.data2semantics.mockup.client.view.patientinfo.tabs.SnippetDetails;
 import com.data2semantics.mockup.client.view.patientinfo.tabs.WidgetsContainer;
+import com.data2semantics.mockup.shared.Snippet;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.TabPanel;
@@ -48,14 +48,9 @@ public class TabNavigation extends TabPanel {
 		selectTab(currentTabId);
 	}
 	
-	public void addGuideline() {
+	public void addSnippetDetails(Snippet snippet) {
 		getView().onLoadingStart();
-		addTab(new Guideline(getView()), "Guideline Annotations");
-		getView().onLoadingFinish();
-	}
-	public void addRelevantLiterature() {
-		getView().onLoadingStart();
-		addTab(new RelevantLiterature(getView()), "Relevant Literature");
+		addTab(new SnippetDetails(getView(), snippet), "Snippet: " + snippet.getTopic());
 		getView().onLoadingFinish();
 	}
 	public void addWidgets(String patientId) {
@@ -63,4 +58,5 @@ public class TabNavigation extends TabPanel {
 		addTab(new WidgetsContainer(view, patientId),  "Overview");
 		getView().onLoadingFinish();
 	}
+	
 }

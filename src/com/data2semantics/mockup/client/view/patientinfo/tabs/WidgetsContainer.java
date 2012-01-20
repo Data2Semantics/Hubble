@@ -11,7 +11,6 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -36,23 +35,7 @@ public class WidgetsContainer extends FlowPanel {
 		return view;
 	}
 	
-	private void getAnnotatedPdf(String document, String topic) {
-		try {
-			getView().getServerSideApi().getAnnotatedPdf(document, topic, new AsyncCallback<String>() {
-				public void onFailure(Throwable e) {
-					addWidget(new HTML(SafeHtmlUtils.htmlEscape(e.getMessage())), new ArrayList<String>(Arrays.asList("error")));
-				}
-
-				public void onSuccess(String result) {
-					//Label label = new Label(result);
-					Window.open("../"+result, "_blank", "");
-					//addWidget(label);
-				}
-			});
-		} catch (Exception e) {
-			addWidget(new HTML(SafeHtmlUtils.htmlEscape(e.getMessage())));
-		}
-	}
+	
 	
 	
 	
@@ -82,18 +65,16 @@ public class WidgetsContainer extends FlowPanel {
 	}
 
 	private void drawRelevantSnippet(final Snippet snippet) {
-		//if (Document.get().getElementById(snippetId) == null) {
-			HTML label = new HTML(snippet.getPrefix() + " " + snippet.getExact() + " " + snippet.getPostfix());
-			//label.getElement().setId(snippetId);
-			label.setStyleName("snippet", true);
-			label.setWidth("200px");
-			label.addClickHandler(new ClickHandler() {
-				public void onClick(ClickEvent event) {
-					getAnnotatedPdf(snippet.getOnDocument(), snippet.getTopic());
-				}
-			});
-			addWidget(label, new ArrayList<String>(Arrays.asList("clickable")));
-		//}
+		HTML label = new HTML(snippet.getPrefix() + " " + snippet.getExact() + " " + snippet.getPostfix());
+		//label.getElement().setId(snippetId);
+		label.setStyleName("snippet", true);
+		label.setWidth("200px");
+		label.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				getView().getTabNavigation().addSnippetDetails(snippet);
+			}
+		});
+		addWidget(label, new ArrayList<String>(Arrays.asList("clickable")));
 	}
 	
 	private void drawRelevantSnippets() {
