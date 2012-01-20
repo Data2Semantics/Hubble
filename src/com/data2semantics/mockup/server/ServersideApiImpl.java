@@ -7,6 +7,7 @@ import com.data2semantics.mockup.client.exceptions.SparqlException;
 import com.data2semantics.mockup.client.helpers.Helper;
 import com.data2semantics.mockup.shared.Patient;
 import com.data2semantics.mockup.shared.SerializiationWhitelist;
+import com.data2semantics.mockup.shared.Snippet;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.hp.hpl.jena.query.ResultSet;
 
@@ -86,15 +87,20 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 		return imageLocation;
 	}
 	
-	public HashMap<String, String> getRelevantSnippet() throws IllegalArgumentException {
-		HashMap<String, String> snippetInfo = new HashMap<String, String>();
-		String snippet = "" +
-			"It is also important to stress that <strong>even a severely infected neutropenic patient may not manifest a fever.</strong>\n" + 
-			"Under these circumstances, infection may manifest with an abnormality in vital signs and/or evidence of new organ dysfunction including lactic acidosis.\n" + 
-			"";
-		String link = "http://www.google.com";
-		snippetInfo.put("snippet", snippet);
-		snippetInfo.put("link", link);
+	
+	public HashMap<String, Snippet> getRelevantSnippets(String patientId) throws IllegalArgumentException, SparqlException {
+//		HashMap<String, String> snippetInfo = new HashMap<String, String>();
+//		String snippet = "" +
+//			"It is also important to stress that <strong>even a severely infected neutropenic patient may not manifest a fever.</strong>\n" + 
+//			"Under these circumstances, infection may manifest with an abnormality in vital signs and/or evidence of new organ dysfunction including lactic acidosis.\n" + 
+//			"";
+//		String link = "http://www.google.com";
+//		snippetInfo.put("snippet", snippet);
+//		snippetInfo.put("link", link);
+		
+		RelevantSnippets snippetsObject = new RelevantSnippets(patientId);
+		HashMap<String, Snippet> snippetInfo = snippetsObject.getSnippets();
+		
 		return snippetInfo;
 	}
 	
@@ -102,9 +108,9 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 		return null;
 	}
 	
-	public String processPdf() throws IllegalArgumentException, SparqlException {
-		PdfAnnotator pdfAnnotator = new PdfAnnotator("neutropeniaHUP.pdf");
-		return pdfAnnotator.getAnnotatedPdf();
+	public String getAnnotatedPdf(String document, String topic) throws IllegalArgumentException, SparqlException {
+		PdfAnnotator pdfAnnotator = new PdfAnnotator(document);
+		return pdfAnnotator.getAnnotatedPdfForTopic(topic);
 	}
 	public String query(String queryString) throws IllegalArgumentException,SparqlException {
 		return Endpoint.queryGetString(Endpoint.ECULTURE2, queryString);

@@ -3,8 +3,10 @@ package com.data2semantics.mockup.client.view.patientinfo.tabs;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 import com.data2semantics.mockup.client.view.MockupInterfaceView;
+import com.data2semantics.mockup.shared.Snippet;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -18,14 +20,14 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class WidgetsContainer extends FlowPanel {
 	private MockupInterfaceView view;
+	private String patientId;
 	
 	public WidgetsContainer(MockupInterfaceView view, String patientId) {
 		this.view = view;
+		this.patientId = patientId;
 		getView().onLoadingStart();
-		drawChemicalStructureWidget();
-		drawRelevantSnippet();
-		drawSimilarAdverseEvents();
-		//drawProcessPdf();
+		//drawChemicalStructureWidget();
+		drawRelevantSnippets();
 		getView().onLoadingFinish();
 	}
 	
@@ -34,9 +36,9 @@ public class WidgetsContainer extends FlowPanel {
 		return view;
 	}
 	
-	private void drawProcessPdf() {
+	private void getAnnotatedPdf(String document, String topic) {
 		try {
-			getView().getServerSideApi().processPdf(new AsyncCallback<String>() {
+			getView().getServerSideApi().getAnnotatedPdf(document, topic, new AsyncCallback<String>() {
 				public void onFailure(Throwable e) {
 					addWidget(new HTML(SafeHtmlUtils.htmlEscape(e.getMessage())), new ArrayList<String>(Arrays.asList("error")));
 				}
@@ -79,37 +81,38 @@ public class WidgetsContainer extends FlowPanel {
 		}
 	}
 
-	private void drawRelevantSnippet() {
+	private void drawRelevantSnippet(final Snippet snippet) {
+		//if (Document.get().getElementById(snippetId) == null) {
+			HTML label = new HTML(snippet.getPrefix() + " " + snippet.getExact() + " " + snippet.getPostfix());
+			//label.getElement().setId(snippetId);
+			label.setStyleName("snippet", true);
+			label.setWidth("200px");
+			label.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					getAnnotatedPdf(snippet.getOnDocument(), snippet.getTopic());
+				}
+			});
+			addWidget(label, new ArrayList<String>(Arrays.asList("clickable")));
+		//}
+	}
+	
+	private void drawRelevantSnippets() {
 		try {
-			getView().getServerSideApi().getRelevantSnippet(new AsyncCallback<HashMap<String, String>>() {
+			getView().getServerSideApi().getRelevantSnippets(patientId, new AsyncCallback<HashMap<String, Snippet>>() {
 				public void onFailure(Throwable e) {
-					getView().onError(SafeHtmlUtils.htmlEscape(e.getMessage()));
+					addWidget(new HTML(SafeHtmlUtils.htmlEscape(e.getMessage())), new ArrayList<String>(Arrays.asList("error")));
 				}
 
-				public void onSuccess(HashMap<String, String> snippetInfo) {
+				public void onSuccess(HashMap<String, Snippet> snippets) {
 					//avoid adding too many (of the same) image elements
-					if (Document.get().getElementById("relevantsnippet") == null) {
-						HTML label = new HTML(snippetInfo.get("snippet"));
-						label.getElement().setId("relevantsnippet");
-						label.setStyleName("snippet", true);
-						label.setWidth("200px");
-						label.addClickHandler(new ClickHandler() {
-							public void onClick(ClickEvent event) {
-								drawProcessPdf();
-							}
-						});
-						addWidget(label, new ArrayList<String>(Arrays.asList("clickable")));
+					for (Map.Entry<String, Snippet> entry : snippets.entrySet()) {
+						drawRelevantSnippet(entry.getValue());
 					}
-
 				}
 			});
 		} catch (Exception e) {
-			getView().onError(SafeHtmlUtils.htmlEscape(e.getMessage()));
+			addWidget(new HTML(SafeHtmlUtils.htmlEscape(e.getMessage())));
 		}
-	}
-	
-	private void drawSimilarAdverseEvents() {
-		
 	}
 	
 	private void addWidget(Widget widget, ArrayList<String> styleNames) {

@@ -15,11 +15,16 @@
 			<attribute name="javadoc_location" value="jar:file:/home/lrd900/code/libraries/Jena-2.6.4/jena-2.6.4-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/arq-2.8.7.jar" sourcepath="/home/lrd900/code/libraries/Jena-2.6.4/lib-src/arq-2.8.7-sources.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/slf4j-api-1.5.8.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/slf4j-log4j12-1.5.8.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/log4j-1.2.13.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/iri-0.8.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/junit4-10"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/arq-2.8.8.jar" sourcepath="/home/lrd900/.m2/repository/com/hp/hpl/jena/arq/2.8.8/arq-2.8.8-sources.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/icu4j-3.4.4.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/log4j-1.2.14.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/lucene-core-2.3.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/stax-api-1.0.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/wstx-asl-3.2.9.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/xercesImpl-2.7.1.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

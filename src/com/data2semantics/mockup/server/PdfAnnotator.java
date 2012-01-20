@@ -33,6 +33,42 @@ public class PdfAnnotator {
 		return PDF_CACHE_DIR + srcFileName;
 	}
 	
+	/**
+	 * Only show annotations for a certain topic
+	 * 
+	 * @param topicOfAnnotation
+	 * @return
+	 */
+	public String getAnnotatedPdfForTopic(String topic) {
+		getAnnotationsForTopic(topic);
+		annotateFile();
+		return PDF_CACHE_DIR + srcFileName;
+	}
+	
+	private void getAnnotationsForTopic(String topic) {
+		String queryString = Helper.getSparqlPrefixesAsString("annotations") + "\n" +
+			"SELECT DISTINCT ?init ?end ?createdOn ?createdBy ?topic ?qualifier {\n" + 
+				"BIND(\"<" + topic + ">\" AS ?topic)." +
+				"?qualifier rdf:type aot:Qualifier;\n" + 
+					"ao:hasTopic <" + topic + ">;\n" + 
+					"ao:context ?textSelector;\n" + 
+					"pav:createdOn ?createdOn;\n" + 
+					"pav:createdBy ?createdBy.\n" + 
+				"[] rdf:type aos:InitEndCornerSelector;\n" + 
+					"ao:onSourceDocument <http://www.data2semantics.org/example/sourceDocs/neutropeniaHUP.pdf>;\n" + 
+					"aos:init ?init;\n" + 
+					"aos:end ?end.\n" + 
+				"?textSelector rdf:type aos:PrefixPostfixSelector;\n" + 
+					"ao:onSourceDocument <http://www.data2semantics.org/example/sourceDocs/neutropeniaHUP.pdf> .\n" + 
+			"}\n";
+		ResultSet results = Endpoint.query(Endpoint.ECULTURE2, queryString);
+		while (results.hasNext()) {
+			QuerySolution solution = results.next();
+			Annotation annotation = getQueryResultAsAnnotation(solution);
+			annotation.setTopic(topic);
+			annotations.add(annotation);
+		}
+	}
 	
 	private void getAnnotations() {
 		String queryString = Helper.getSparqlPrefixesAsString("annotations") + "\n" +
@@ -51,19 +87,26 @@ public class PdfAnnotator {
 			"}\n";
 		ResultSet results = Endpoint.query(Endpoint.ECULTURE2, queryString);
 		while (results.hasNext()) {
-			Annotation annotation = new Annotation();
 			QuerySolution solution = results.next();
-			int pageNumber = getPageNumberFromUri(solution.get("qualifier").toString());
-			annotation.setPageNumber(pageNumber);
-
-			
-			annotation.setCreatedBy(solution.get("createdBy").toString());
-			annotation.setCreatedOn(solution.get("createdOn").asLiteral().getString());
-			annotation.setTopic(solution.get("topic").toString());
-			annotation.setInit(solution.get("init").asLiteral().getString());
-			annotation.setEnd(solution.get("end").asLiteral().getString());
-			annotations.add(annotation);
+			annotations.add(getQueryResultAsAnnotation(solution));
 		}
+	}
+	
+	private Annotation getQueryResultAsAnnotation(QuerySolution solution) {
+		Annotation annotation = new Annotation();
+		int pageNumber = getPageNumberFromUri(solution.get("qualifier").toString());
+		annotation.setPageNumber(pageNumber);
+		annotation.setCreatedBy(solution.get("createdBy").toString());
+		annotation.setCreatedOn(solution.get("createdOn").asLiteral().getString());
+		
+		//topic is not always set (in case getAnnotationsForTopic is used)
+		if (solution.get("topic") != null) {
+			annotation.setTopic(solution.get("topic").toString());
+		}
+		
+		annotation.setInit(solution.get("init").asLiteral().getString());
+		annotation.setEnd(solution.get("end").asLiteral().getString());
+		return annotation;
 	}
 	
 	/**

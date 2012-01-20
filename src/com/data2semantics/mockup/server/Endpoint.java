@@ -29,6 +29,7 @@ public class Endpoint {
 		ResultSet results = queryExecution.execSelect();
 		return results;
 	}
+
 	
 	public static void queryPrintResult(String endpoint, String queryString) {
 		ResultSet results = Endpoint.query(endpoint, queryString);
@@ -39,4 +40,10 @@ public class Endpoint {
 		ResultSet results = Endpoint.query(endpoint, queryString);
 		return ResultSetFormatter.asText(results);
 	}
+	
+	public static QuerySolutionVisitor getVisitor() {
+		return new QuerySolutionVisitor();
+	}
+	
+
 }

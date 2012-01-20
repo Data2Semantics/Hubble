@@ -1,7 +1,5 @@
 package com.data2semantics.mockup.server.models;
 
-import java.util.HashMap;
-
 
 public class Annotation {
 	private String srcFile;
