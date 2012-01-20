@@ -1,4 +1,4 @@
-package com.data2semantics.mockup.shared;
+package com.data2semantics.mockup.shared.models;
 
 import java.io.Serializable;
 

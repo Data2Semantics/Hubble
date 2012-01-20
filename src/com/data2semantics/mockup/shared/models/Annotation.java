@@ -1,4 +1,4 @@
-package com.data2semantics.mockup.server.models;
+package com.data2semantics.mockup.shared.models;
 
 
 public class Annotation {

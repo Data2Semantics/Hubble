@@ -13,7 +13,7 @@ import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotation;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationTextMarkup;
 
 import com.data2semantics.mockup.client.helpers.Helper;
-import com.data2semantics.mockup.server.models.Annotation;
+import com.data2semantics.mockup.shared.models.Annotation;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 

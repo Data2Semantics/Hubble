@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.data2semantics.mockup.client.exceptions.SparqlException;
-import com.data2semantics.mockup.shared.AdverseEvent;
-import com.data2semantics.mockup.shared.Patient;
-import com.data2semantics.mockup.shared.Patient.Indication;
+import com.data2semantics.mockup.shared.models.AdverseEvent;
+import com.data2semantics.mockup.shared.models.Patient;
+import com.data2semantics.mockup.shared.models.Snippet;
+import com.data2semantics.mockup.shared.models.Patient.Indication;
 import com.data2semantics.mockup.shared.SerializiationWhitelist;
-import com.data2semantics.mockup.shared.Snippet;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 

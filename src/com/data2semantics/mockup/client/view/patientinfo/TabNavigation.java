@@ -2,11 +2,13 @@ package com.data2semantics.mockup.client.view.patientinfo;
 
 
 import com.data2semantics.mockup.client.view.MockupInterfaceView;
+import com.data2semantics.mockup.client.view.patientinfo.tabs.DrugDetails;
 import com.data2semantics.mockup.client.view.patientinfo.tabs.IndicationDetails;
 import com.data2semantics.mockup.client.view.patientinfo.tabs.SnippetDetails;
 import com.data2semantics.mockup.client.view.patientinfo.tabs.WidgetsContainer;
-import com.data2semantics.mockup.shared.Patient.Indication;
-import com.data2semantics.mockup.shared.Snippet;
+import com.data2semantics.mockup.shared.models.Snippet;
+import com.data2semantics.mockup.shared.models.Patient.Drug;
+import com.data2semantics.mockup.shared.models.Patient.Indication;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.TabPanel;
@@ -66,5 +68,9 @@ public class TabNavigation extends TabPanel {
 		addTab(new IndicationDetails(view, indication),  indication.getLabel());
 		getView().onLoadingFinish();
 	}
-	
+	public void addDrugDetails(Drug drug) {
+		getView().onLoadingStart();
+		addTab(new DrugDetails(view, drug),  drug.getLabel());
+		getView().onLoadingFinish();
+	}
 }

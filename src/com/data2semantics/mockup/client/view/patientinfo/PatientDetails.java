@@ -3,12 +3,14 @@ package com.data2semantics.mockup.client.view.patientinfo;
 import java.util.Map;
 
 import com.data2semantics.mockup.client.view.MockupInterfaceView;
-import com.data2semantics.mockup.shared.Patient;
-import com.data2semantics.mockup.shared.Patient.Drug;
-import com.data2semantics.mockup.shared.Patient.Indication;
-import com.data2semantics.mockup.shared.Patient.Measurement;
-import com.data2semantics.mockup.shared.Patient.Treatment;
+import com.data2semantics.mockup.shared.models.Patient;
+import com.data2semantics.mockup.shared.models.Patient.Drug;
+import com.data2semantics.mockup.shared.models.Patient.Indication;
+import com.data2semantics.mockup.shared.models.Patient.Measurement;
+import com.data2semantics.mockup.shared.models.Patient.Treatment;
 import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.dom.client.Style.FontStyle;
+import com.google.gwt.dom.client.Style.TextDecoration;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -75,6 +77,7 @@ public class PatientDetails extends SimplePanel {
 			label.setText(indication.getLabel());
 			label.setTitle(indication.getDefinition());
 			label.getElement().getStyle().setCursor(Cursor.POINTER);
+			label.getElement().getStyle().setTextDecoration(TextDecoration.UNDERLINE);
 			//final String uri = entry.getKey();
 			label.addClickHandler(new ClickHandler() {
 				public void onClick(ClickEvent event) {
@@ -92,6 +95,7 @@ public class PatientDetails extends SimplePanel {
 			label.setText(indication.getLabel());
 			label.setTitle(indication.getDefinition());
 			label.getElement().getStyle().setCursor(Cursor.POINTER);
+			label.getElement().getStyle().setTextDecoration(TextDecoration.UNDERLINE);
 			//final String uri = entry.getKey();
 			label.addClickHandler(new ClickHandler() {
 				public void onClick(ClickEvent event) {
@@ -109,6 +113,7 @@ public class PatientDetails extends SimplePanel {
 				Label label = new Label();
 				label.setText(measurement.getLabel());
 				label.getElement().getStyle().setCursor(Cursor.POINTER);
+				label.getElement().getStyle().setTextDecoration(TextDecoration.UNDERLINE);
 				final String uri = entry.getKey();
 				label.addClickHandler(new ClickHandler() {
 					public void onClick(ClickEvent event) {
@@ -127,6 +132,7 @@ public class PatientDetails extends SimplePanel {
 				Label label = new Label();
 				label.setText(entry.getValue().getLabel());
 				label.getElement().getStyle().setCursor(Cursor.POINTER);
+				label.getElement().getStyle().setTextDecoration(TextDecoration.UNDERLINE);
 				label.addClickHandler(new ClickHandler() {
 					public void onClick(ClickEvent event) {
 						Window.open(uri, "_blank", "");
@@ -139,15 +145,16 @@ public class PatientDetails extends SimplePanel {
 	
 	private void drawDrugs(Patient patientInfo) {
 		for (Map.Entry<String, Drug> entry : patientInfo.getDrugs().entrySet()) {
-			Drug drug = entry.getValue();
+			final Drug drug = entry.getValue();
 			if (drug.getLabel() != null) {
 				final String uri = entry.getKey();
 				Label label = new Label();
 				label.setText(entry.getValue().getLabel());
 				label.getElement().getStyle().setCursor(Cursor.POINTER);
+				label.getElement().getStyle().setTextDecoration(TextDecoration.UNDERLINE);
 				label.addClickHandler(new ClickHandler() {
 					public void onClick(ClickEvent event) {
-						Window.open(uri, "_blank", "");
+						getView().getTabNavigation().addDrugDetails(drug);
 					}
 				});
 				addRowToTable("Drug", label);

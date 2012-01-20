@@ -7,11 +7,11 @@ import java.util.Map;
 
 import com.data2semantics.mockup.client.exceptions.SparqlException;
 import com.data2semantics.mockup.client.helpers.Helper;
-import com.data2semantics.mockup.shared.Patient;
-import com.data2semantics.mockup.shared.Patient.Drug;
-import com.data2semantics.mockup.shared.Patient.Indication;
-import com.data2semantics.mockup.shared.Patient.Measurement;
-import com.data2semantics.mockup.shared.Patient.Treatment;
+import com.data2semantics.mockup.shared.models.Patient;
+import com.data2semantics.mockup.shared.models.Patient.Drug;
+import com.data2semantics.mockup.shared.models.Patient.Indication;
+import com.data2semantics.mockup.shared.models.Patient.Measurement;
+import com.data2semantics.mockup.shared.models.Patient.Treatment;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.RDFNode;

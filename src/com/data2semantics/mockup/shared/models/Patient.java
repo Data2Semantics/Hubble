@@ -1,9 +1,8 @@
-package com.data2semantics.mockup.shared;
+package com.data2semantics.mockup.shared.models;
 
 import java.io.Serializable;
 import java.util.HashMap;
 
-import com.data2semantics.mockup.shared.AdverseEvent.Drug;
 
 public class Patient implements Serializable {
 	

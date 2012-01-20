@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import com.data2semantics.mockup.client.exceptions.SparqlException;
 import com.data2semantics.mockup.client.helpers.Helper;
-import com.data2semantics.mockup.shared.Snippet;
+import com.data2semantics.mockup.shared.models.Snippet;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 
