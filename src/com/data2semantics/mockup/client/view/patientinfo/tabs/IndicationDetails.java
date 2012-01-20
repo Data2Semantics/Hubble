@@ -7,7 +7,7 @@ import com.data2semantics.mockup.client.view.MockupInterfaceView;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.data2semantics.mockup.shared.models.AdverseEvent;
-import com.data2semantics.mockup.shared.models.Patient.Indication;
+import com.data2semantics.mockup.shared.models.Indication;
 
 public class IndicationDetails extends VerticalPanel {
 	private MockupInterfaceView view;

@@ -4,10 +4,10 @@ import java.util.Map;
 
 import com.data2semantics.mockup.client.view.MockupInterfaceView;
 import com.data2semantics.mockup.shared.models.Patient;
-import com.data2semantics.mockup.shared.models.Patient.Drug;
-import com.data2semantics.mockup.shared.models.Patient.Indication;
-import com.data2semantics.mockup.shared.models.Patient.Measurement;
-import com.data2semantics.mockup.shared.models.Patient.Treatment;
+import com.data2semantics.mockup.shared.models.Drug;
+import com.data2semantics.mockup.shared.models.Indication;
+import com.data2semantics.mockup.shared.models.Measurement;
+import com.data2semantics.mockup.shared.models.Treatment;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.FontStyle;
 import com.google.gwt.dom.client.Style.TextDecoration;

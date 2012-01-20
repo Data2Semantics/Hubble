@@ -3,6 +3,8 @@ package com.data2semantics.mockup.shared.models;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import com.data2semantics.mockup.shared.models.Drug;
+
 public class AdverseEvent implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -12,25 +14,6 @@ public class AdverseEvent implements Serializable {
 	private String gender;
 	private String manufacturer;
 	private HashMap<String, Drug> drugs;
-	
-	
-	public static class Drug implements Serializable {
-		private static final long serialVersionUID = 1L;
-		private String uri;
-		private String drugbankId;
-		public String getUri() {
-			return uri;
-		}
-		public void setUri(String uri) {
-			this.uri = uri;
-		}
-		public String getDrugbankId() {
-			return drugbankId;
-		}
-		public void setDrugbankId(String drugbankId) {
-			this.drugbankId = drugbankId;
-		}
-	}
 
 
 	public String getEventDate() {
