@@ -2,13 +2,17 @@ package com.data2semantics.mockup.server;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import com.data2semantics.mockup.client.ServersideApi;
 import com.data2semantics.mockup.client.exceptions.SparqlException;
 import com.data2semantics.mockup.client.helpers.Helper;
+import com.data2semantics.mockup.shared.AdverseEvent;
 import com.data2semantics.mockup.shared.Patient;
+import com.data2semantics.mockup.shared.Patient.Indication;
 import com.data2semantics.mockup.shared.SerializiationWhitelist;
 import com.data2semantics.mockup.shared.Snippet;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 
 
@@ -81,7 +85,7 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 		}
 		//Only 1 chem structure, so 1 solution of interest
 		String uri = result.next().get("sameAs").toString();
-		String drugbankID = uri.substring(DRUGBANK_URI_PREFIX.length());
+		String drugbankID = uri.substring("http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB".length());
 		imageLocation = "http://moldb.wishartlab.com/molecules/DB" + drugbankID + "/image.png";
 		
 		return imageLocation;
@@ -114,5 +118,47 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 	}
 	public String query(String queryString) throws IllegalArgumentException,SparqlException {
 		return Endpoint.queryGetString(Endpoint.ECULTURE2, queryString);
+	}
+	
+	public HashMap<String, AdverseEvent> getRelevantAdverseEvents(Indication indication) {
+		HashMap<String, AdverseEvent> adverseEvents = new HashMap<String, AdverseEvent>();
+		String queryString = Helper.getSparqlPrefixesAsString("aers") + "\n" + 
+			"SELECT DISTINCT * {\n" + 
+				"<" + indication.getUri() + "> owl:sameAs ?sameAs.\n" + 
+				"?sameAs :reaction_of ?report.\n" +
+				"?report :age ?age;\n" +
+					":event_date ?eventDate;" +
+					":gender ?gender;" +
+					":manufacturer ?manufacturer;" +
+					":involved_in ?involvement.\n" + 
+				"?involvement :drug ?drug.\n" +
+				"?drug rdfs:label ?drugLabel;\n" +
+					"owl:sameAs ?drugBankUri.\n" + 
+				"FILTER regex(str(?drugBankUri), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" + 
+			"}\n" + 
+			"";
+		System.out.println(queryString);
+		ResultSet resultSet = Endpoint.query(Endpoint.ECULTURE2, queryString);
+		while (resultSet.hasNext()) {
+			QuerySolution solution = resultSet.next();
+			String reportUri = solution.get("report").toString();
+			AdverseEvent adverseEvent;
+			if (adverseEvents.containsKey(reportUri)) {
+				adverseEvent = adverseEvents.get(reportUri);
+			} else {
+				adverseEvent = new AdverseEvent();
+				adverseEvent.setUri(reportUri);
+			}
+			adverseEvent.setAge(Integer.parseInt(solution.get("age").visitWith(new QuerySolutionVisitor()).toString()));
+			adverseEvent.setEventDate(solution.get("eventDate").visitWith(new QuerySolutionVisitor()).toString());
+			adverseEvent.setGender(solution.get("gender").visitWith(new QuerySolutionVisitor()).toString());
+			adverseEvent.setManufacturer(solution.get("manufacturer").visitWith(new QuerySolutionVisitor()).toString());
+			
+			
+			
+			adverseEvents.put(reportUri, adverseEvent);
+			
+		}
+		return adverseEvents;
 	}
 }

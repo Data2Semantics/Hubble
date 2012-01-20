@@ -8,6 +8,7 @@ import java.util.Map;
 import com.data2semantics.mockup.client.exceptions.SparqlException;
 import com.data2semantics.mockup.client.helpers.Helper;
 import com.data2semantics.mockup.shared.Patient;
+import com.data2semantics.mockup.shared.Patient.Drug;
 import com.data2semantics.mockup.shared.Patient.Indication;
 import com.data2semantics.mockup.shared.Patient.Measurement;
 import com.data2semantics.mockup.shared.Patient.Treatment;
@@ -66,15 +67,27 @@ public class PatientLoader {
 			 * This is a uri. Create new object if it doesnt exist yet
 			 */
 			if (varName.equals("indication") && patientObject.getIndication(rdfNode.toString()) == null) {
-				patientObject.addIndication(rdfNode.toString(), new Indication());
-				
+				Indication indication = new Indication();
+				indication.setUri(rdfNode.toString());
+				patientObject.addIndication(rdfNode.toString(), indication);
 			} else if (varName.equals("measurement") && patientObject.getMeasurement(rdfNode.toString()) == null) {
+				Measurement measurement = new Measurement();
+				measurement.setUri(rdfNode.toString());
 				patientObject.addMeasurement(rdfNode.toString(), new Measurement());
 			} else if (varName.equals("previousIndication") && patientObject.getPreviousIndication(rdfNode.toString()) == null) {
-				patientObject.addPreviousIndication(rdfNode.toString(), new Indication());
+				Indication indication = new Indication();
+				indication.setUri(rdfNode.toString());
+				patientObject.addPreviousIndication(rdfNode.toString(), indication);
 			} else if (varName.equals("recentTreatment") && patientObject.getRecentTreatment(rdfNode.toString()) == null) {
-				patientObject.addRecentTreatment(rdfNode.toString(), new Treatment());
+				Treatment treatment = new Treatment();
+				treatment.setUri(rdfNode.toString());
+				patientObject.addRecentTreatment(rdfNode.toString(), treatment);
+			} else if (varName.equals("drug") && patientObject.getDrug(rdfNode.toString()) == null) {
+				Drug drug = new Drug();
+				drug.setUri(rdfNode.toString());
+				patientObject.addDrug(rdfNode.toString(), drug);
 			} 
+			
 			/**
 			 * These are values (not uri's). Set them in the patient object
 			 */
@@ -102,7 +115,17 @@ public class PatientLoader {
 			} else if (varName.equals("recentTreatment_label")) {
 				String uri = solution.get("recentTreatment").toString();
 				patientObject.getRecentTreatment(uri).setLabel(rdfNode.asLiteral().getString());
-			} 
+			} else if (varName.equals("drug_label")) {
+				String uri = solution.get("drug").toString();
+				patientObject.getDrug(uri).setLabel(rdfNode.asLiteral().getString());
+			} else if (varName.equals("drug_sameAs")) {
+				String uri = solution.get("drug").toString();
+				//Only 1 chem structure, so 1 solution of interest
+				String sameAs = rdfNode.toString();
+				String drugbankID = sameAs.substring("http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB".length());
+				String imageLocation = "http://moldb.wishartlab.com/molecules/DB" + drugbankID + "/image.png";
+				patientObject.getDrug(uri).setImgLocation(imageLocation);
+			}
 		} catch (NullPointerException e) {
 			System.out.println("Nullpointer exception for var " + varName + " and rdfNode " + solution.get(varName).toString());
 			e.printStackTrace();
@@ -121,10 +144,18 @@ public class PatientLoader {
 				"?recentTreatment \n" +
 				"?recentTreatment_label \n" +
 				"?previousIndication \n" +
+				"?drug \n" +
+				"?drug_label \n" +
+				"?drug_sameAs \n" +
 			"{\n" + 
 				"?patient rdfs:label '" + patientId + "'@en.\n" + 
 				"?patient patient:hasAge ?age.\n" + 
 				"?patient rdfs:comment ?comment.\n" + 
+				"OPTIONAL{?patient patient:usesMedication ?drug." +
+					"?drug rdfs:label ?drug_label;" +
+						"owl:sameAs ?drug_sameAs." +
+					"FILTER regex(str(?drug_sameAs), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" + 
+				"}.\n" + 
 				"OPTIONAL{?patient patient:hasStatus ?status_uri}.\n" + 
 				"OPTIONAL{?patient patient:hasMeasurement ?measurement}.\n" + 
 				"OPTIONAL{?patient patient:hasIndication ?indication}.\n" + 
@@ -135,6 +166,7 @@ public class PatientLoader {
 				"OPTIONAL{?patient patient:hadPreviousIndication ?previousIndication}.\n" + 
 			"}\n" + 
 			"";
+		System.out.println(queryString);
 		return Endpoint.query(Endpoint.ECULTURE2, queryString);
 	}
 	

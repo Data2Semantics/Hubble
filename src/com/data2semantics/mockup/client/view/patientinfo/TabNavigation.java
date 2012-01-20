@@ -2,8 +2,10 @@ package com.data2semantics.mockup.client.view.patientinfo;
 
 
 import com.data2semantics.mockup.client.view.MockupInterfaceView;
+import com.data2semantics.mockup.client.view.patientinfo.tabs.IndicationDetails;
 import com.data2semantics.mockup.client.view.patientinfo.tabs.SnippetDetails;
 import com.data2semantics.mockup.client.view.patientinfo.tabs.WidgetsContainer;
+import com.data2semantics.mockup.shared.Patient.Indication;
 import com.data2semantics.mockup.shared.Snippet;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
@@ -50,12 +52,18 @@ public class TabNavigation extends TabPanel {
 	
 	public void addSnippetDetails(Snippet snippet) {
 		getView().onLoadingStart();
-		addTab(new SnippetDetails(getView(), snippet), "Snippet: " + snippet.getTopic());
+//		addTab(new SnippetDetails(getView(), snippet), "Snippet: " + snippet.getTopic());
+		addTab(new SnippetDetails(getView(), snippet), "Snippet");
 		getView().onLoadingFinish();
 	}
 	public void addWidgets(String patientId) {
 		getView().onLoadingStart();
 		addTab(new WidgetsContainer(view, patientId),  "Overview");
+		getView().onLoadingFinish();
+	}
+	public void addIndicationDetails(Indication indication) {
+		getView().onLoadingStart();
+		addTab(new IndicationDetails(view, indication),  indication.getLabel());
 		getView().onLoadingFinish();
 	}
 	

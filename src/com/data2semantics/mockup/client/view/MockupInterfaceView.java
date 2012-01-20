@@ -38,12 +38,14 @@ public class MockupInterfaceView extends Composite {
 	}
 
 	public void showPatientInfo(String patientID) {
+		onLoadingStart();
 		//Cleanup any other already shown info
 		if (mainPanel.getWidgetCount() > 1) {
 			mainPanel.remove(1);
 		}
 		patientInfo = new PatientInfo(this, patientID);
 		mainPanel.add(patientInfo);
+		onLoadingFinish();
 	}
 	
 	public TabNavigation getTabNavigation() {

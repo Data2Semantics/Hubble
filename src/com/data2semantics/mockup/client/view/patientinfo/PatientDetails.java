@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.data2semantics.mockup.client.view.MockupInterfaceView;
 import com.data2semantics.mockup.shared.Patient;
+import com.data2semantics.mockup.shared.Patient.Drug;
 import com.data2semantics.mockup.shared.Patient.Indication;
 import com.data2semantics.mockup.shared.Patient.Measurement;
 import com.data2semantics.mockup.shared.Patient.Treatment;
@@ -62,21 +63,23 @@ public class PatientDetails extends SimplePanel {
 		addRowToTable("Age", Integer.toString(patientInfo.getAge()));
 		drawIndications(patientInfo);
 		drawPreviousIndications(patientInfo);
+		drawDrugs(patientInfo);
 		drawMeasurements(patientInfo);
 		drawRecentTreatments(patientInfo);
 		
 	}
 	private void drawIndications(Patient patientInfo) {
 		for (Map.Entry<String, Indication> entry : patientInfo.getIndications().entrySet()) {
-			Indication indication = entry.getValue();
+			final Indication indication = entry.getValue();
 			Label label = new Label();
 			label.setText(indication.getLabel());
 			label.setTitle(indication.getDefinition());
 			label.getElement().getStyle().setCursor(Cursor.POINTER);
-			final String uri = entry.getKey();
+			//final String uri = entry.getKey();
 			label.addClickHandler(new ClickHandler() {
 				public void onClick(ClickEvent event) {
-					Window.open(uri, "_blank", "");
+					getView().getTabNavigation().addIndicationDetails(indication);
+					//Window.open(uri, "_blank", "");
 				}
 			});
 			addRowToTable("Indication", label);
@@ -84,15 +87,16 @@ public class PatientDetails extends SimplePanel {
 	}
 	private void drawPreviousIndications(Patient patientInfo) {
 		for (Map.Entry<String, Indication> entry : patientInfo.getPreviousIndications().entrySet()) {
-			Indication indication = entry.getValue();
+			final Indication indication = entry.getValue();
 			Label label = new Label();
 			label.setText(indication.getLabel());
 			label.setTitle(indication.getDefinition());
 			label.getElement().getStyle().setCursor(Cursor.POINTER);
-			final String uri = entry.getKey();
+			//final String uri = entry.getKey();
 			label.addClickHandler(new ClickHandler() {
 				public void onClick(ClickEvent event) {
-					Window.open(uri, "_blank", "");
+					//Window.open(uri, "_blank", "");
+					getView().getTabNavigation().addIndicationDetails(indication);
 				}
 			});
 			addRowToTable("Previous Indication", label);
@@ -129,6 +133,24 @@ public class PatientDetails extends SimplePanel {
 					}
 				});
 				addRowToTable("Recent Treatment", label);
+			}
+		}
+	}
+	
+	private void drawDrugs(Patient patientInfo) {
+		for (Map.Entry<String, Drug> entry : patientInfo.getDrugs().entrySet()) {
+			Drug drug = entry.getValue();
+			if (drug.getLabel() != null) {
+				final String uri = entry.getKey();
+				Label label = new Label();
+				label.setText(entry.getValue().getLabel());
+				label.getElement().getStyle().setCursor(Cursor.POINTER);
+				label.addClickHandler(new ClickHandler() {
+					public void onClick(ClickEvent event) {
+						Window.open(uri, "_blank", "");
+					}
+				});
+				addRowToTable("Drug", label);
 			}
 		}
 	}

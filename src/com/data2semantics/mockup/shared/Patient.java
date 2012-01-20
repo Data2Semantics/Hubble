@@ -3,6 +3,8 @@ package com.data2semantics.mockup.shared;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import com.data2semantics.mockup.shared.AdverseEvent.Drug;
+
 public class Patient implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -11,6 +13,7 @@ public class Patient implements Serializable {
 	private int age;
 	private String comment;
 	private String status;
+	
 	/**
 	 * For these hashmaps, use URI as key
 	 */
@@ -18,6 +21,7 @@ public class Patient implements Serializable {
 	private HashMap<String, Indication> previousIndications = new HashMap<String, Indication>();
 	private HashMap<String, Measurement> measurements = new HashMap<String, Measurement>();
 	private HashMap<String, Treatment> recentTreatments = new HashMap<String, Treatment>();
+	private HashMap<String, Drug> drugs = new HashMap<String, Drug>();
 	
 	public Patient() {};
 	public Patient(String patientID) {
@@ -89,6 +93,15 @@ public class Patient implements Serializable {
 	public Treatment getRecentTreatment(String uri) {
 		return this.recentTreatments.get(uri);
 	}
+	public HashMap<String, Drug> getDrugs() {
+		return drugs;
+	}
+	public void addDrug(String uri, Drug drug) {
+		this.drugs.put(uri, drug);
+	}
+	public Drug getDrug(String uri) {
+		return this.drugs.get(uri);
+	}
 	
 	
 	
@@ -98,6 +111,7 @@ public class Patient implements Serializable {
 	public static class Indication implements Serializable {
 		private static final long serialVersionUID = 1L;
 		private String label;
+		private String uri;
 		private String definition;
 		public Indication() {}
 		public String getLabel() {
@@ -112,10 +126,17 @@ public class Patient implements Serializable {
 		public void setDefinition(String definition) {
 			this.definition = definition;
 		}
+		public String getUri() {
+			return uri;
+		}
+		public void setUri(String uri) {
+			this.uri = uri;
+		}
 	}
 	public static class Measurement implements Serializable {
 		private static final long serialVersionUID = 1L;
 		private String label;
+		private String uri;
 		public Measurement() {}
 		public String getLabel() {
 			return label;
@@ -123,16 +144,60 @@ public class Patient implements Serializable {
 		public void setLabel(String label) {
 			this.label = label;
 		}
+		public String getUri() {
+			return uri;
+		}
+		public void setUri(String uri) {
+			this.uri = uri;
+		}
 	}
 	public static class Treatment implements Serializable {
 		private static final long serialVersionUID = 1L;
 		private String label;
+		private String uri;
 		public Treatment() {}
 		public String getLabel() {
 			return label;
 		}
 		public void setLabel(String label) {
 			this.label = label;
+		}
+		public String getUri() {
+			return uri;
+		}
+		public void setUri(String uri) {
+			this.uri = uri;
+		}
+	}
+	public static class Drug implements Serializable {
+		private static final long serialVersionUID = 1L;
+		private String label;
+		private String uri;
+		private String drugbankId;
+		private String imgLocation;
+		public String getUri() {
+			return uri;
+		}
+		public void setUri(String uri) {
+			this.uri = uri;
+		}
+		public String getDrugbankId() {
+			return drugbankId;
+		}
+		public void setDrugbankId(String drugbankId) {
+			this.drugbankId = drugbankId;
+		}
+		public String getLabel() {
+			return label;
+		}
+		public void setLabel(String label) {
+			this.label = label;
+		}
+		public String getImgLocation() {
+			return imgLocation;
+		}
+		public void setImgLocation(String imgLocation) {
+			this.imgLocation = imgLocation;
 		}
 	}
 }

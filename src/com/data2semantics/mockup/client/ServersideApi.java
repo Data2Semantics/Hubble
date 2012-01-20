@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.data2semantics.mockup.client.exceptions.SparqlException;
+import com.data2semantics.mockup.shared.AdverseEvent;
 import com.data2semantics.mockup.shared.Patient;
+import com.data2semantics.mockup.shared.Patient.Indication;
 import com.data2semantics.mockup.shared.SerializiationWhitelist;
 import com.data2semantics.mockup.shared.Snippet;
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -19,4 +21,5 @@ public interface ServersideApi extends RemoteService {
   String query(String query) throws IllegalArgumentException,SparqlException;
   SerializiationWhitelist serializiationWorkaround(SerializiationWhitelist s) throws IllegalArgumentException;
   HashMap<String, Snippet> getRelevantSnippets(String patientId) throws IllegalArgumentException,SparqlException;
+  HashMap<String, AdverseEvent> getRelevantAdverseEvents(Indication indication) throws IllegalArgumentException,SparqlException;
 }
