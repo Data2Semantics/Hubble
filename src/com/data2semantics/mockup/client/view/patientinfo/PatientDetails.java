@@ -9,7 +9,6 @@ import com.data2semantics.mockup.shared.models.Indication;
 import com.data2semantics.mockup.shared.models.Measurement;
 import com.data2semantics.mockup.shared.models.Treatment;
 import com.google.gwt.dom.client.Style.Cursor;
-import com.google.gwt.dom.client.Style.FontStyle;
 import com.google.gwt.dom.client.Style.TextDecoration;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -147,7 +146,6 @@ public class PatientDetails extends SimplePanel {
 		for (Map.Entry<String, Drug> entry : patientInfo.getDrugs().entrySet()) {
 			final Drug drug = entry.getValue();
 			if (drug.getLabel() != null) {
-				final String uri = entry.getKey();
 				Label label = new Label();
 				label.setText(entry.getValue().getLabel());
 				label.getElement().getStyle().setCursor(Cursor.POINTER);

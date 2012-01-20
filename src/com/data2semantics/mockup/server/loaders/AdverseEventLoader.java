@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import com.data2semantics.mockup.client.helpers.Helper;
 import com.data2semantics.mockup.server.Endpoint;
-import com.data2semantics.mockup.server.QuerySolutionVisitor;
+import com.data2semantics.mockup.server.QSolutionHelper;
 import com.data2semantics.mockup.shared.models.AdverseEvent;
 import com.data2semantics.mockup.shared.models.Indication;
 import com.hp.hpl.jena.query.QuerySolution;
@@ -43,12 +43,10 @@ public class AdverseEventLoader {
 				adverseEvent = new AdverseEvent();
 				adverseEvent.setUri(reportUri);
 			}
-			adverseEvent.setAge(Integer.parseInt(solution.get("age").visitWith(new QuerySolutionVisitor()).toString()));
-			adverseEvent.setEventDate(solution.get("eventDate").visitWith(new QuerySolutionVisitor()).toString());
-			adverseEvent.setGender(solution.get("gender").visitWith(new QuerySolutionVisitor()).toString());
-			adverseEvent.setManufacturer(solution.get("manufacturer").visitWith(new QuerySolutionVisitor()).toString());
-			
-			
+			adverseEvent.setAge(QSolutionHelper.getInt(solution, "age"));
+			adverseEvent.setEventDate(QSolutionHelper.getString(solution, "eventDate"));
+			adverseEvent.setGender(QSolutionHelper.getString(solution, "gender"));
+			adverseEvent.setManufacturer(QSolutionHelper.getString(solution, "manufacturer"));
 			
 			adverseEvents.put(reportUri, adverseEvent);
 			

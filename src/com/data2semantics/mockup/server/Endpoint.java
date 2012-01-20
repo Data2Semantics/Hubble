@@ -41,9 +41,10 @@ public class Endpoint {
 		return ResultSetFormatter.asText(results);
 	}
 	
-	public static QuerySolutionVisitor getVisitor() {
-		return new QuerySolutionVisitor();
+	public static QSolutionHelper getVisitor() {
+		return new QSolutionHelper();
 	}
+	
 	
 
 }

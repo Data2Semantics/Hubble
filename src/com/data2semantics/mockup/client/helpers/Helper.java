@@ -22,9 +22,6 @@ public class Helper {
 		namespaceList.add("PREFIX owl: <http://www.w3.org/2002/07/owl#>");
 		namespaceList.add("PREFIX foaf: <http://xmlns.com/foaf/0.1/>");
 		
-		
-		
-		
 		if (prefixTypes.equals("aers")) {
 			namespaceList.add("PREFIX r4: <http://aers.data2semantics.org/vocab/>");
 			namespaceList.add("PREFIX ns3: <tag:eric@w3.org:2009/tmo/translator#>");

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.data2semantics.mockup.client.exceptions.SparqlException;
 import com.data2semantics.mockup.client.helpers.Helper;
 import com.data2semantics.mockup.server.Endpoint;
+import com.data2semantics.mockup.server.QSolutionHelper;
 import com.data2semantics.mockup.shared.models.Snippet;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
@@ -24,12 +25,13 @@ public class SnippetLoader {
 			QuerySolution solution = queryResult.next();
 			Snippet snippet = new Snippet();
 			snippet.setOnDocument(getNameFromUri("onDocument", solution));
-			snippet.setExact(solution.get("exact").visitWith(Endpoint.getVisitor()).toString());
-			snippet.setPrefix(solution.get("prefix").visitWith(Endpoint.getVisitor()).toString());
-			snippet.setPostfix(solution.get("postfix").visitWith(Endpoint.getVisitor()).toString());
-			snippet.setTopicUri(solution.get("topic").toString());
+			
+			snippet.setExact(QSolutionHelper.getString(solution, "exact"));
+			snippet.setPrefix(QSolutionHelper.getString(solution, "prefix"));
+			snippet.setPostfix(QSolutionHelper.getString(solution, "postfix"));
+			snippet.setTopicUri(QSolutionHelper.getString(solution, "topic"));
+			snippet.setCreatedOn(QSolutionHelper.getString(solution, "createdOn"));
 			snippet.setTopic(getNameFromUri("topic", solution));
-			snippet.setCreatedOn(solution.get("createdOn").visitWith(Endpoint.getVisitor()).toString());
 			snippet.setCreatedBy(getNameFromUri("createdBy", solution));
 			
 			//SelectorUri is set as key in hashmap
@@ -44,7 +46,7 @@ public class SnippetLoader {
 	}
 	
 	private String getNameFromUri(String variable, QuerySolution solution) {
-		String[] splitBySlash = solution.get(variable).visitWith(Endpoint.getVisitor()).toString().split("/");
+		String[] splitBySlash = QSolutionHelper.getString(solution,  variable).split("/");
 		String name = splitBySlash[splitBySlash.length-1];
 		String[] splitByHashTag = name.split("#");
 		name = splitByHashTag[splitByHashTag.length-1];
