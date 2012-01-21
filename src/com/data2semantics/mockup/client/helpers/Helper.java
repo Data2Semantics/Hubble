@@ -49,6 +49,10 @@ public class Helper {
 		return Helper.implode(getSparqlPrefixes(prefixTypes), "\n");
 	}
 	
+	/**
+	 * The first letter of every word is upper cased (similar to the php ucWords function)
+	 * Could also use apache commons lang library, but because this is also used clientSide, a custom function is used
+	 */
 	public static String ucWords(String string) {
 		  char[] chars = string.toLowerCase().toCharArray();
 		  boolean found = false;
