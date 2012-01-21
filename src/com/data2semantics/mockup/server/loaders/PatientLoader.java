@@ -8,6 +8,7 @@ import java.util.Map;
 import com.data2semantics.mockup.client.exceptions.SparqlException;
 import com.data2semantics.mockup.client.helpers.Helper;
 import com.data2semantics.mockup.server.Endpoint;
+import com.data2semantics.mockup.server.RdfNodeHelper;
 import com.data2semantics.mockup.shared.models.Patient;
 import com.data2semantics.mockup.shared.models.Drug;
 import com.data2semantics.mockup.shared.models.Indication;
@@ -93,32 +94,32 @@ public class PatientLoader {
 			 * These are values (not uri's). Set them in the patient object
 			 */
 			else if (varName.equals("age")) {
-				patientObject.setAge( rdfNode.asLiteral().getInt());
+				patientObject.setAge(RdfNodeHelper.getInt(rdfNode));
 			} else if (varName.equals("comment")) {
-				patientObject.setComment(rdfNode.asLiteral().getString());
+				patientObject.setComment(RdfNodeHelper.getString(rdfNode));
 			} else if (varName.equals("status")) {
-				patientObject.setStatus(rdfNode.asLiteral().getString());
+				patientObject.setStatus(RdfNodeHelper.getString(rdfNode));
 			} else if (varName.equals("indication_definition")) {
 				String uri = solution.get("indication_uri").toString();
-				patientObject.getIndication(uri).setDefinition(rdfNode.asLiteral().getString());
+				patientObject.getIndication(uri).setDefinition(RdfNodeHelper.getString(rdfNode));
 			} else if (varName.equals("indication_label")) {
 				String uri = solution.get("indication_uri").toString();
-				patientObject.getIndication(uri).setLabel(rdfNode.asLiteral().getString());
+				patientObject.getIndication(uri).setLabel(RdfNodeHelper.getString(rdfNode));
 			} else if (varName.equals("measurement_label")) {
 				String uri = solution.get("measurement_uri").toString();
-				patientObject.getMeasurement(uri).setLabel(rdfNode.asLiteral().getString());
+				patientObject.getMeasurement(uri).setLabel(RdfNodeHelper.getString(rdfNode));
 			} else if (varName.equals("previousIndication_definition")) {
 				String uri = solution.get("previousIndication_uri").toString();
-				patientObject.getPreviousIndication(uri).setDefinition(rdfNode.asLiteral().getString());
+				patientObject.getPreviousIndication(uri).setDefinition(RdfNodeHelper.getString(rdfNode));
 			} else if (varName.equals("previousIndication_label")) {
 				String uri = solution.get("previousIndication_uri").toString();
-				patientObject.getPreviousIndication(uri).setLabel(rdfNode.asLiteral().getString());
+				patientObject.getPreviousIndication(uri).setLabel(RdfNodeHelper.getString(rdfNode));
 			} else if (varName.equals("recentTreatment_label")) {
 				String uri = solution.get("recentTreatment").toString();
-				patientObject.getRecentTreatment(uri).setLabel(rdfNode.asLiteral().getString());
+				patientObject.getRecentTreatment(uri).setLabel(RdfNodeHelper.getString(rdfNode));
 			} else if (varName.equals("drug_label")) {
 				String uri = solution.get("drug").toString();
-				patientObject.getDrug(uri).setLabel(rdfNode.asLiteral().getString());
+				patientObject.getDrug(uri).setLabel(RdfNodeHelper.getString(rdfNode));
 			} else if (varName.equals("drug_sameAs")) {
 				String uri = solution.get("drug").toString();
 				//Only 1 chem structure, so 1 solution of interest

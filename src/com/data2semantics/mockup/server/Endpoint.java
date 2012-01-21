@@ -41,8 +41,8 @@ public class Endpoint {
 		return ResultSetFormatter.asText(results);
 	}
 	
-	public static QSolutionHelper getVisitor() {
-		return new QSolutionHelper();
+	public static RdfNodeHelper getVisitor() {
+		return new RdfNodeHelper();
 	}
 	
 	

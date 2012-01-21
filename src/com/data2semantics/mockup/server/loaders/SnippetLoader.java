@@ -5,7 +5,7 @@ import java.util.HashMap;
 import com.data2semantics.mockup.client.exceptions.SparqlException;
 import com.data2semantics.mockup.client.helpers.Helper;
 import com.data2semantics.mockup.server.Endpoint;
-import com.data2semantics.mockup.server.QSolutionHelper;
+import com.data2semantics.mockup.server.RdfNodeHelper;
 import com.data2semantics.mockup.shared.models.Snippet;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
@@ -26,11 +26,11 @@ public class SnippetLoader {
 			Snippet snippet = new Snippet();
 			snippet.setOnDocument(getNameFromUri("onDocument", solution));
 			
-			snippet.setExact(QSolutionHelper.getString(solution, "exact"));
-			snippet.setPrefix(QSolutionHelper.getString(solution, "prefix"));
-			snippet.setPostfix(QSolutionHelper.getString(solution, "postfix"));
-			snippet.setTopicUri(QSolutionHelper.getString(solution, "topic"));
-			snippet.setCreatedOn(QSolutionHelper.getString(solution, "createdOn"));
+			snippet.setExact(RdfNodeHelper.getString(solution, "exact"));
+			snippet.setPrefix(RdfNodeHelper.getString(solution, "prefix"));
+			snippet.setPostfix(RdfNodeHelper.getString(solution, "postfix"));
+			snippet.setTopicUri(RdfNodeHelper.getString(solution, "topic"));
+			snippet.setCreatedOn(RdfNodeHelper.getString(solution, "createdOn"));
 			snippet.setTopic(getNameFromUri("topic", solution));
 			snippet.setCreatedBy(getNameFromUri("createdBy", solution));
 			
@@ -46,7 +46,7 @@ public class SnippetLoader {
 	}
 	
 	private String getNameFromUri(String variable, QuerySolution solution) {
-		String[] splitBySlash = QSolutionHelper.getString(solution,  variable).split("/");
+		String[] splitBySlash = RdfNodeHelper.getString(solution,  variable).split("/");
 		String name = splitBySlash[splitBySlash.length-1];
 		String[] splitByHashTag = name.split("#");
 		name = splitByHashTag[splitByHashTag.length-1];
