@@ -8,6 +8,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -19,6 +20,7 @@ public class DrugDetails extends VerticalPanel {
 		this.view = view;
 		this.drug = drug;
 		drawDrugImage();
+		drawRelevantAdverseEvents();
 		drawButtons();
 	}
 	
@@ -36,8 +38,20 @@ public class DrugDetails extends VerticalPanel {
 			add(image);
 		}
 	}
+	public MockupInterfaceView getView() {
+		return view;
+	}
 	
 	private void drawButtons() {
+		HorizontalPanel panel = new HorizontalPanel();
+		add(panel);
+		
+		panel.add(drawMoreInfoButton());
+
+	}
+
+	
+	private Button drawMoreInfoButton() {
 		Button showPdf = new Button("More info");
 		showPdf.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -45,12 +59,12 @@ public class DrugDetails extends VerticalPanel {
 			}
 		});
 		showPdf.getElement().getStyle().setMargin(5, Unit.PX);
-		add(showPdf);
-	}
-	public MockupInterfaceView getView() {
-		return view;
+		return showPdf;
 	}
 	
+	private void drawRelevantAdverseEvents() {
+		
+	}
 	
 	
 }

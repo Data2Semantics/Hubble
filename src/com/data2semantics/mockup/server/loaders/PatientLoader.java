@@ -122,17 +122,10 @@ public class PatientLoader {
 				patientObject.getDrug(uri).setLabel(RdfNodeHelper.getString(rdfNode));
 			} else if (varName.equals("drug_sameAs")) {
 				String uri = solution.get("drug").toString();
-				//Only 1 chem structure, so 1 solution of interest
 				String sameAs = rdfNode.toString();
 				String drugbankID = sameAs.substring(Drug.DRUGBANK_PREFIX.length());
 				String imageLocation = Drug.IMGLOCATION_PREFIX + drugbankID + Drug.IMGLOCATION_POSTFIX;
-				System.out.println("before imgloc" + imageLocation);
-				System.out.println("uri: "+ uri);
-				Drug drug = patientObject.getDrug(uri);
-				drug.setImgLocation(imageLocation);
-				patientObject.addDrug(uri, drug);
-				System.out.println("after using patient object: " + patientObject.getDrug(uri).getImgLocation());
-				System.out.println("after using drug object: " + drug.getImgLocation());
+				patientObject.getDrug(uri).setImgLocation(imageLocation);
 			}
 		} catch (NullPointerException e) {
 			System.out.println("Nullpointer exception for var " + varName + " and rdfNode " + solution.get(varName).toString());

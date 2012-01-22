@@ -66,4 +66,12 @@ public class Helper {
 		  }
 		  return String.valueOf(chars);
 	}
+	
+	public static String getNameFromUri(String uri) {
+		String[] splitBySlash = uri.split("/");
+		String name = splitBySlash[splitBySlash.length-1];//last item
+		String[] splitByHashTag = name.split("#");
+		name = splitByHashTag[splitByHashTag.length-1];//last item
+		return name;
+	}
 }

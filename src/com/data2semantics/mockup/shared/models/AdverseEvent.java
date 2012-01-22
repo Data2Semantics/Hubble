@@ -13,7 +13,8 @@ public class AdverseEvent implements Serializable {
 	private int age;
 	private String gender;
 	private String manufacturer;
-	private HashMap<String, Drug> drugs;
+	private String manufacturerUri;
+	private HashMap<String, Drug> drugs = new HashMap<String, Drug>();
 
 
 	public String getEventDate() {
@@ -40,8 +41,19 @@ public class AdverseEvent implements Serializable {
 	public void setDrugs(HashMap<String, Drug> drugs) {
 		this.drugs = drugs;
 	}
+	public Drug getDrug(String uri) {
+		Drug drug;
+		if (this.drugs.containsKey(uri)) {
+			drug = this.drugs.get(uri);
+		} else {
+			drug = new Drug();
+			drug.setUri(uri);
+			this.drugs.put(uri, drug);
+		}
+		return drug;
+	}
 	public int getAge() {
-		return age;
+		return this.age;
 	}
 	public void setAge(int age) {
 		this.age = age;
@@ -51,6 +63,12 @@ public class AdverseEvent implements Serializable {
 	}
 	public void setUri(String uri) {
 		this.uri = uri;
+	}
+	public String getManufacturerUri() {
+		return manufacturerUri;
+	}
+	public void setManufacturerUri(String manufacturerUri) {
+		this.manufacturerUri = manufacturerUri;
 	}
 	
 }

@@ -10,6 +10,7 @@ import com.data2semantics.mockup.server.loaders.AdverseEventLoader;
 import com.data2semantics.mockup.server.loaders.PatientLoader;
 import com.data2semantics.mockup.server.loaders.SnippetLoader;
 import com.data2semantics.mockup.shared.models.AdverseEvent;
+import com.data2semantics.mockup.shared.models.Drug;
 import com.data2semantics.mockup.shared.models.Patient;
 import com.data2semantics.mockup.shared.models.Snippet;
 import com.data2semantics.mockup.shared.models.Indication;
@@ -124,5 +125,9 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 	public HashMap<String, AdverseEvent> getRelevantAdverseEvents(Indication indication) {
 		AdverseEventLoader adverseEventLoader = new AdverseEventLoader();
 		return adverseEventLoader.getRelevantAdverseEvents(indication);
+	}
+	public HashMap<String, AdverseEvent> getRelevantAdverseEvents(Drug drug) {
+		AdverseEventLoader adverseEventLoader = new AdverseEventLoader();
+		return adverseEventLoader.getRelevantAdverseEvents(drug);
 	}
 }

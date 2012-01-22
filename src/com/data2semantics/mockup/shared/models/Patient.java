@@ -3,9 +3,6 @@ package com.data2semantics.mockup.shared.models;
 import java.io.Serializable;
 import java.util.HashMap;
 
-import com.data2semantics.mockup.client.helpers.Helper;
-
-
 public class Patient implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

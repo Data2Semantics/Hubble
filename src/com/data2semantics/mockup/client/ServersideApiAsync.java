@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.data2semantics.mockup.client.exceptions.SparqlException;
 import com.data2semantics.mockup.shared.models.AdverseEvent;
+import com.data2semantics.mockup.shared.models.Drug;
 import com.data2semantics.mockup.shared.models.Patient;
 import com.data2semantics.mockup.shared.models.Snippet;
 import com.data2semantics.mockup.shared.models.Indication;
@@ -20,4 +21,5 @@ public interface ServersideApiAsync {
 	void serializiationWorkaround(SerializiationWhitelist s, AsyncCallback<SerializiationWhitelist> callback) throws IllegalArgumentException;
 	void getRelevantSnippets(String patientId, AsyncCallback<HashMap<String, Snippet>> callback) throws IllegalArgumentException,SparqlException;
 	void getRelevantAdverseEvents(Indication indication, AsyncCallback<HashMap<String, AdverseEvent>> callback) throws IllegalArgumentException,SparqlException;
+	void getRelevantAdverseEvents(Drug drug, AsyncCallback<HashMap<String, AdverseEvent>> callback) throws IllegalArgumentException,SparqlException;
 }

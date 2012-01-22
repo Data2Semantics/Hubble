@@ -24,15 +24,15 @@ public class SnippetLoader {
 		while (queryResult.hasNext()) {
 			QuerySolution solution = queryResult.next();
 			Snippet snippet = new Snippet();
-			snippet.setOnDocument(getNameFromUri("onDocument", solution));
+			snippet.setOnDocument(Helper.getNameFromUri(RdfNodeHelper.getString(solution, "onDocument")));
 			
 			snippet.setExact(RdfNodeHelper.getString(solution, "exact"));
 			snippet.setPrefix(RdfNodeHelper.getString(solution, "prefix"));
 			snippet.setPostfix(RdfNodeHelper.getString(solution, "postfix"));
 			snippet.setTopicUri(RdfNodeHelper.getString(solution, "topic"));
 			snippet.setCreatedOn(RdfNodeHelper.getString(solution, "createdOn"));
-			snippet.setTopic(getNameFromUri("topic", solution));
-			snippet.setCreatedBy(getNameFromUri("createdBy", solution));
+			snippet.setTopic(Helper.getNameFromUri(RdfNodeHelper.getString(solution, "topic")));
+			snippet.setCreatedBy(Helper.getNameFromUri(RdfNodeHelper.getString(solution, "createdBy")));
 			
 			//SelectorUri is set as key in hashmap
 			String selectorUri = solution.get("selectorUri").toString();
@@ -41,16 +41,6 @@ public class SnippetLoader {
 		}
 		
 		return snippets;
-		
-		
-	}
-	
-	private String getNameFromUri(String variable, QuerySolution solution) {
-		String[] splitBySlash = RdfNodeHelper.getString(solution,  variable).split("/");
-		String name = splitBySlash[splitBySlash.length-1];
-		String[] splitByHashTag = name.split("#");
-		name = splitByHashTag[splitByHashTag.length-1];
-		return name;
 	}
 	
 	private ResultSet queryForSnippets() {

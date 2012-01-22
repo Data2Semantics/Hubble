@@ -73,4 +73,5 @@ public class TabNavigation extends TabPanel {
 		addTab(new DrugDetails(view, drug),  drug.getLabel());
 		getView().onLoadingFinish();
 	}
+	
 }
