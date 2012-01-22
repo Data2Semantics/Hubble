@@ -63,7 +63,15 @@ public class Patient implements Serializable {
 		this.indications.put(uri, indication);
 	}
 	public Indication getIndication(String uri) {
-		return this.indications.get(uri);
+		Indication indication;
+		if (this.indications.containsKey(uri)) {
+			indication = this.indications.get(uri);
+		} else {
+			indication = new Indication();
+			indication.setUri(uri);
+			this.indications.put(uri, indication);
+		}
+		return indication;
 	}
 	public HashMap<String, Measurement> getMeasurements() {
 		return this.measurements;
@@ -72,7 +80,15 @@ public class Patient implements Serializable {
 		this.measurements.put(uri, measurement);
 	}
 	public Measurement getMeasurement(String uri) {
-		return this.measurements.get(uri);
+		Measurement measurement;
+		if (this.indications.containsKey(uri)) {
+			measurement = this.measurements.get(uri);
+		} else {
+			measurement = new Measurement();
+			measurement.setUri(uri);
+			this.measurements.put(uri, measurement);
+		}
+		return measurement;
 	}
 	public HashMap<String, Indication> getPreviousIndications() {
 		return previousIndications;
@@ -81,7 +97,15 @@ public class Patient implements Serializable {
 		this.previousIndications.put(uri, indication);
 	}
 	public Indication getPreviousIndication(String uri) {
-		return this.previousIndications.get(uri);
+		Indication indication;
+		if (this.previousIndications.containsKey(uri)) {
+			indication = this.previousIndications.get(uri);
+		} else {
+			indication = new Indication();
+			indication.setUri(uri);
+			this.previousIndications.put(uri, indication);
+		}
+		return indication;
 	}
 	public HashMap<String, Treatment> getRecentTreatments() {
 		return recentTreatments;
@@ -90,7 +114,15 @@ public class Patient implements Serializable {
 		this.recentTreatments.put(uri, treatment);
 	}
 	public Treatment getRecentTreatment(String uri) {
-		return this.recentTreatments.get(uri);
+		Treatment treatment;
+		if (this.previousIndications.containsKey(uri)) {
+			treatment = this.recentTreatments.get(uri);
+		} else {
+			treatment = new Treatment();
+			treatment.setUri(uri);
+			this.recentTreatments.put(uri, treatment);
+		}
+		return treatment;
 	}
 	public HashMap<String, Drug> getDrugs() {
 		return drugs;
@@ -99,6 +131,14 @@ public class Patient implements Serializable {
 		this.drugs.put(uri, drug);
 	}
 	public Drug getDrug(String uri) {
-		return this.drugs.get(uri);
+		Drug drug;
+		if (this.previousIndications.containsKey(uri)) {
+			drug = this.drugs.get(uri);
+		} else {
+			drug = new Drug();
+			drug.setUri(uri);
+			this.drugs.put(uri, drug);
+		}
+		return drug;
 	}
 }

@@ -93,26 +93,26 @@ public class PatientLoader {
 			/**
 			 * These are values (not uri's). Set them in the patient object
 			 */
-			else if (varName.equals("age")) {
+			if (varName.equals("age")) {
 				patientObject.setAge(RdfNodeHelper.getInt(rdfNode));
 			} else if (varName.equals("comment")) {
 				patientObject.setComment(RdfNodeHelper.getString(rdfNode));
 			} else if (varName.equals("status")) {
 				patientObject.setStatus(RdfNodeHelper.getString(rdfNode));
 			} else if (varName.equals("indication_definition")) {
-				String uri = solution.get("indication_uri").toString();
+				String uri = solution.get("indication").toString();
 				patientObject.getIndication(uri).setDefinition(RdfNodeHelper.getString(rdfNode));
 			} else if (varName.equals("indication_label")) {
-				String uri = solution.get("indication_uri").toString();
+				String uri = solution.get("indication").toString();
 				patientObject.getIndication(uri).setLabel(RdfNodeHelper.getString(rdfNode));
 			} else if (varName.equals("measurement_label")) {
-				String uri = solution.get("measurement_uri").toString();
+				String uri = solution.get("measurement").toString();
 				patientObject.getMeasurement(uri).setLabel(RdfNodeHelper.getString(rdfNode));
 			} else if (varName.equals("previousIndication_definition")) {
-				String uri = solution.get("previousIndication_uri").toString();
+				String uri = solution.get("previousIndication").toString();
 				patientObject.getPreviousIndication(uri).setDefinition(RdfNodeHelper.getString(rdfNode));
 			} else if (varName.equals("previousIndication_label")) {
-				String uri = solution.get("previousIndication_uri").toString();
+				String uri = solution.get("previousIndication").toString();
 				patientObject.getPreviousIndication(uri).setLabel(RdfNodeHelper.getString(rdfNode));
 			} else if (varName.equals("recentTreatment_label")) {
 				String uri = solution.get("recentTreatment").toString();
@@ -140,9 +140,10 @@ public class PatientLoader {
 			"SELECT DISTINCT " +
 				"?age \n" +
 				"?comment \n" +
-				"(str(?status_uri) AS ?status) \n" +
+				"?status \n" +
 				"?measurement \n" +
 				"?indication \n" +
+				"?indication_label \n" +
 				"?recentTreatment \n" +
 				"?recentTreatment_label \n" +
 				"?previousIndication \n" +
@@ -158,12 +159,19 @@ public class PatientLoader {
 						"owl:sameAs ?drug_sameAs." +
 					"FILTER regex(str(?drug_sameAs), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" + 
 				"}.\n" + 
-				"OPTIONAL{?patient patient:hasStatus ?status_uri}.\n" + 
+				"OPTIONAL{?patient patient:hasStatus ?status}.\n" + 
 				"OPTIONAL{?patient patient:hasMeasurement ?measurement}.\n" + 
-				"OPTIONAL{?patient patient:hasIndication ?indication}.\n" + 
+				"OPTIONAL{\n" +
+					"?patient patient:hasIndication ?indication.\n" +
+					"OPTIONAL{\n" + 
+						"?indication rdfs:label ?indication_label.\n" +
+					"}\n" +
+				"}.\n" + 
+				
 				//Workaround to get 'hadRecentTreatment' from our own 4store. This SHOULD BE in the lld rdf, but isnt :(
-				"OPTIONAL{?patient patient:hadRecentTreatment ?recentTreatment.\n" +
-					"?recentTreatment rdfs:label ?recentTreatment_label\n" +
+				"OPTIONAL{\n" +
+					"?patient patient:hadRecentTreatment ?recentTreatment.\n" +
+					"?recentTreatment rdfs:label ?recentTreatment_label.\n" +
 				"}.\n" + 
 				"OPTIONAL{?patient patient:hadPreviousIndication ?previousIndication}.\n" + 
 			"}\n" + 
@@ -217,13 +225,13 @@ public class PatientLoader {
 	
 	private void loadMeasurementsUnionPatterns() {
 		if (patientObject.getMeasurements().size() > 0) {
-			unions.get("variables").add("measurement_uri");
+			unions.get("variables").add("measurement");
 			unions.get("variables").add("measurement_label");
 			for (Map.Entry<String, Measurement> entry : patientObject.getMeasurements().entrySet()) {
 				String uri = entry.getKey();
 				unions.get("patterns").add(
 					"{\n" +
-						"BIND(\"" + uri + "\" AS ?measurement_uri).\n" +
+						"BIND(\"" + uri + "\" AS ?measurement).\n" +
 						"<" + uri + ">" + " skos-xl:prefLabel ?measurement_prefLabel.\n" +
 						"?measurement_prefLabel skos-xl:literalForm ?measurement_label.\n" +
 					"}\n"
@@ -233,14 +241,14 @@ public class PatientLoader {
 	}
 	private void loadIndicationUnionPatterns() {
 		if (patientObject.getIndications().size() > 0) {
-			unions.get("variables").add("indication_uri");
+			unions.get("variables").add("indication");
 			unions.get("variables").add("indication_label");
 			unions.get("variables").add("indication_definition");
 			for (Map.Entry<String, Indication> entry : patientObject.getIndications().entrySet()) {
 				String uri = entry.getKey();
 				unions.get("patterns").add(
 					"{\n" +
-						"BIND(\"" + uri + "\" AS ?indication_uri).\n" +
+						"BIND(\"" + uri + "\" AS ?indication).\n" +
 						"<" + uri + ">" + " skos-xl:prefLabel ?indication_prefLabel.\n" +
 						"?indication_prefLabel skos-xl:literalForm ?indication_label.\n" +
 						"<" + uri + ">" + " skos:definition ?indication_definition.\n" +
@@ -251,14 +259,14 @@ public class PatientLoader {
 	}
 	private void loadPreviousIndicationUnionPatterns() {
 		if (patientObject.getPreviousIndications().size() > 0) {
-			unions.get("variables").add("previousIndication_uri");
+			unions.get("variables").add("previousIndication");
 			unions.get("variables").add("previousIndication_label");
 			unions.get("variables").add("previousIndication_definition");
 			for (Map.Entry<String, Indication> entry : patientObject.getPreviousIndications().entrySet()) {
 				String uri = entry.getKey();
 				unions.get("patterns").add(
 					"{\n" +
-						"BIND(\"" + uri + "\" AS ?previousIndication_uri).\n" +
+						"BIND(\"" + uri + "\" AS ?previousIndication).\n" +
 						"<" + uri + ">" + " skos-xl:prefLabel ?previousIndication_prefLabel.\n" +
 						"?previousIndication_prefLabel skos-xl:literalForm ?previousIndication_label.\n" +
 						"<" + uri + ">" + " skos:definition ?previousIndication_definition.\n" +

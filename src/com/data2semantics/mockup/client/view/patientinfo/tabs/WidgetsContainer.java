@@ -35,7 +35,7 @@ public class WidgetsContainer extends FlowPanel {
 	
 	
 	private void drawRelevantSnippet(final Snippet snippet) {
-		HTML label = new HTML(snippet.getPrefix() + " " + snippet.getExact() + " " + snippet.getPostfix());
+		HTML label = new HTML(snippet.getPrefix() + " <strong>" + snippet.getExact() + "</strong> " + snippet.getPostfix());
 		label.setStyleName("snippet", true);
 		label.setWidth("200px");
 		label.addClickHandler(new ClickHandler() {
