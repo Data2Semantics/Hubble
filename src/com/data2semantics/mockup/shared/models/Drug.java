@@ -6,6 +6,11 @@ import com.data2semantics.mockup.client.helpers.Helper;
 
 
 public class Drug implements Serializable {
+	//Used in retrieving ID for image location
+	public static String DRUGBANK_PREFIX = "http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB";
+	//Location of drug image
+	public static String IMGLOCATION_PREFIX = "http://moldb.wishartlab.com/molecules/DB";
+	public static String IMGLOCATION_POSTFIX = "/image.png";
 	private static final long serialVersionUID = 1L;
 	private String label;
 	private String uri;
@@ -30,7 +35,7 @@ public class Drug implements Serializable {
 		this.label = Helper.ucWords(label);
 	}
 	public String getImgLocation() {
-		return imgLocation;
+		return this.imgLocation;
 	}
 	public void setImgLocation(String imgLocation) {
 		this.imgLocation = imgLocation;

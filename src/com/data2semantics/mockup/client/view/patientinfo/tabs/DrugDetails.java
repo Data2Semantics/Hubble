@@ -9,6 +9,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class DrugDetails extends VerticalPanel {
@@ -22,11 +23,18 @@ public class DrugDetails extends VerticalPanel {
 	}
 	
 	private void drawDrugImage() {
-		Image image = new Image(drug.getImgLocation());
-		image.getElement().setId("drugImage");
-		image.setWidth("400px");
-		image.setHeight("400px");
-		add(image);
+		String imgLocation = drug.getImgLocation();
+		if (imgLocation == null) {
+			Label label = new Label();
+			label.setText("Could not retrieve image");
+			add(label);
+		} else {
+			Image image = new Image(drug.getImgLocation());
+			image.getElement().setId("drugImage");
+			image.setWidth("400px");
+			image.setHeight("400px");
+			add(image);
+		}
 	}
 	
 	private void drawButtons() {

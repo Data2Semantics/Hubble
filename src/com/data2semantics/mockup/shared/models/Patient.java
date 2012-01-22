@@ -3,6 +3,8 @@ package com.data2semantics.mockup.shared.models;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import com.data2semantics.mockup.client.helpers.Helper;
+
 
 public class Patient implements Serializable {
 	
@@ -124,15 +126,17 @@ public class Patient implements Serializable {
 		}
 		return treatment;
 	}
+	
 	public HashMap<String, Drug> getDrugs() {
 		return drugs;
 	}
 	public void addDrug(String uri, Drug drug) {
 		this.drugs.put(uri, drug);
+		
 	}
 	public Drug getDrug(String uri) {
 		Drug drug;
-		if (this.previousIndications.containsKey(uri)) {
+		if (this.drugs.containsKey(uri)) {
 			drug = this.drugs.get(uri);
 		} else {
 			drug = new Drug();
@@ -141,4 +145,5 @@ public class Patient implements Serializable {
 		}
 		return drug;
 	}
+	
 }
