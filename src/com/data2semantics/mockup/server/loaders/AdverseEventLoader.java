@@ -31,7 +31,16 @@ public class AdverseEventLoader {
 	}
 	
 	public HashMap<String, AdverseEvent> getRelevantAdverseEvents(Drug drug) {
-		return new HashMap<String, AdverseEvent>();
+		ResultSet resultSet = queryRelevantAdverseEvents(drug);
+		while (resultSet.hasNext()) {
+			QuerySolution solution = resultSet.next();
+			loadCurrentAdverseEvent(solution);
+			Iterator<String> varnames = solution.varNames();
+			while (varnames.hasNext()) {
+				parseValue(varnames.next(), solution);
+			}
+		}
+		return adverseEvents;
 	}
 	
 	private ResultSet queryRelevantAdverseEvents(Indication indication) {
@@ -62,6 +71,41 @@ public class AdverseEventLoader {
 		System.out.println("Adverse Event loader\n" + queryString);
 		return Endpoint.query(Endpoint.ECULTURE2, queryString);
 	}
+	
+	
+	private ResultSet queryRelevantAdverseEvents(Drug drug) {
+		String queryString = Helper.getSparqlPrefixesAsString("aers") + "\n" + 
+				"SELECT DISTINCT \n" +
+				"?report \n" +
+				"?age \n" +
+				"?eventDate \n" +
+				"?gender \n" +
+				"?manufacturer \n" +
+				"?drug \n" +
+				"?drugLabel \n" +
+				"?drugBankUri \n" +
+				"{\n" +
+				"	BIND(<" + drug.getUri() + "> AS ?drug).\n" +
+				"	?report :age ?age;\n" +
+				"		:event_date ?eventDate;\n" +
+				"		:gender ?gender;\n" +
+				"		:manufacturer ?manufacturer.\n" +
+				"	?involvement :involved_in ?report;\n" +
+				"		:drug <" + drug.getUri() + ">;\n" +
+						":drug ?drug\n." +
+				"	<" + drug.getUri() + "> rdfs:label ?drugLabel;\n" +
+				"		owl:sameAs ?drugBankUri.\n" + 
+				"	FILTER regex(str(?drugBankUri), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" +
+//				"	OPTIONAL {\n" +
+//				"		?involvement\n" +
+//				"	\n" +
+				"}\n" + 
+				"LIMIT 10";
+			System.out.println("Adverse Event loader (drug)\n" + queryString);
+			return Endpoint.query(Endpoint.ECULTURE2, queryString);
+		
+		
+	}
 	private void parseValue(String varname, QuerySolution solution) {
 		RDFNode rdfNode = solution.get(varname);
 		if (varname.equals("age")) {
@@ -83,7 +127,6 @@ public class AdverseEventLoader {
 			String imageLocation = Drug.IMGLOCATION_PREFIX + drugbankID + Drug.IMGLOCATION_POSTFIX;
 			adverseEvent.getDrug(uri).setImgLocation(imageLocation);
 		}
-		
 	}
 	
 	/**
@@ -98,6 +141,5 @@ public class AdverseEventLoader {
 			adverseEvent.setUri(reportUri);
 			adverseEvents.put(reportUri, adverseEvent);
 		}
-		
 	}
 }
