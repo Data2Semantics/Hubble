@@ -5,21 +5,19 @@
          version="2.5"
          xmlns="http://java.sun.com/xml/ns/javaee">
 
-  <!-- Servlets -->
   <servlet>
-    <servlet-name>patientServlet</servlet-name>
-    <servlet-class>com.data2semantics.mockup.server.ServersideApiImpl</servlet-class>
+    <servlet-name>serversideapi</servlet-name>
+    <servlet-class>com.data2semantics.cds.ui.server.ServersideApiImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
-    <servlet-name>patientServlet</servlet-name>
-    <url-pattern>/mockupinterface/patientinfo</url-pattern>
+    <servlet-name>serversideapi</servlet-name>
+    <url-pattern>/lifescienceinterface/serversideapi</url-pattern>
   </servlet-mapping>
-  
   
   <!-- Default page to serve -->
   <welcome-file-list>
-    <welcome-file>MockupInterface.html</welcome-file>
+    <welcome-file>cds-interface.html</welcome-file>
   </welcome-file-list>
 
 </web-app>

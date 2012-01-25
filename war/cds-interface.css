@@ -1,0 +1,13 @@
+.provenance {
+	margin: 5px;
+	font-size: 0.9EM;
+}
+
+.snippet {
+	background-color: #f0f4f8;
+	margin: 4px;
+	padding: 5px;
+	width: 300px;
+	height: auto;
+	vertical-align: middle;
+}

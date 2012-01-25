@@ -23,6 +23,7 @@
 			<attribute name="javadoc_location" value="jar:file:/home/lrd900/code/libraries/commons-lang3-3.1/commons-lang3-3.1-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/smartgwt.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/junit4-10"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/arq-2.8.8.jar" sourcepath="/home/lrd900/.m2/repository/com/hp/hpl/jena/arq/2.8.8/arq-2.8.8-sources.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/icu4j-3.4.4.jar"/>
