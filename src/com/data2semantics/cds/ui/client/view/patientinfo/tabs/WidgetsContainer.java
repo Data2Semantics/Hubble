@@ -91,13 +91,4 @@ public class WidgetsContainer extends TileGrid {
 			getView().onError(e.getMessage());
 		}
 	}
-	
-		
-//	@Override
-//	public Canvas getTile(int pos){
-//		Canvas c = super.getTile(pos);
-//		
-//		c.setBackgroundColor("red");
-//		return c;
-//	}
 }

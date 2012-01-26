@@ -132,7 +132,6 @@ public class PatientDetails extends ListGrid {
         });
 		ListGridField buttonField = new ListGridField(Row.BUTTON, "More information", 100);
 		buttonField.setAlign(Alignment.CENTER);
-		//buttonField.setType(ListGridFieldType.ICON);
 		setFields(typeField, valueField, buttonField);
 		setEmptyMessage("Loading data");
 		draw();

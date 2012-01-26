@@ -95,9 +95,6 @@ public class AdverseEventLoader {
 				"	<" + drug.getUri() + "> rdfs:label ?drugLabel;\n" +
 				"		owl:sameAs ?drugBankUri.\n" + 
 				"	FILTER regex(str(?drugBankUri), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" +
-//				"	OPTIONAL {\n" +
-//				"		?involvement\n" +
-//				"	\n" +
 				"}\n" + 
 				"LIMIT 10";
 			return Endpoint.query(Endpoint.ECULTURE2, queryString);

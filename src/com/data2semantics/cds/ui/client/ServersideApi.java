@@ -17,7 +17,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface ServersideApi extends RemoteService {
   Patient getInfo(String patientID) throws IllegalArgumentException,SparqlException;
   ArrayList<String> getPatients() throws IllegalArgumentException;
-  String getChemicalStructure() throws IllegalArgumentException,SparqlException;
   String getAnnotatedPdf(String document, String topic) throws IllegalArgumentException,SparqlException;
   String query(String query) throws IllegalArgumentException,SparqlException;
   SerializiationWhitelist serializiationWorkaround(SerializiationWhitelist s) throws IllegalArgumentException;

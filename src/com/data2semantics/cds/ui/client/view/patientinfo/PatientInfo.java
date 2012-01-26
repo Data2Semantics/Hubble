@@ -14,7 +14,6 @@ public class PatientInfo extends VLayout {
 		setWidth(PatientInfo.RHS_WIDTH);
 		setStyleName("patientInfo");
 		
-		
 		patientDetails = new PatientDetails(view, patientId);
 		addMember(patientDetails);
 	}

@@ -21,7 +21,6 @@ public class TabNavigation extends TabSet {
 	public TabNavigation(View view, String patientId) {
 		this.view = view;
 		initTabNavigation();
-		//setWidth(PatientInfo.RHS_WIDTH);
 		
 		//fill first tab
 		addWidgets(patientId);
@@ -40,7 +39,7 @@ public class TabNavigation extends TabSet {
 	}
 	
 	/**
-	 * Add a tab to the TabPanel. Stores which tab is currently selected, and removes any necessary tabs
+	 * Add a tab to the TabPanel
 	 * 
 	 * @param widget Widget to add
 	 * @param title Title of the tab

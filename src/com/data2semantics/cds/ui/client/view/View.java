@@ -13,7 +13,6 @@ import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 
 public class View extends VLayout {
-	//private HorizontalPanel mainPanel = new HorizontalPanel();
 	private PatientInfo patientInfo;
 	private HLayout hLayout = new HLayout();
 	private ServersideApiAsync serverSideApi;

@@ -32,8 +32,6 @@ public class SnippetDetails extends VLayout {
 	private void drawProvenanceInfo() {
 		Label provenance = new Label("Annotated by " + snippet.getCreatedBy() + " on " + snippet.getCreatedOn());
 		provenance.setStyleName("provenance");
-//		provenance.getElement().getStyle().setFontSize(0.8, Unit.EM);
-//		provenance.getElement().getStyle().setMargin(5, Unit.PX);
 		addMember(provenance);
 	}
 	
@@ -52,7 +50,6 @@ public class SnippetDetails extends VLayout {
 			}
 		});
 		button.setIcon("icons/fugue/navigation-090-white.png");
-		//button.getElement().getStyle().setMargin(5, Unit.PX);
 		return button;
 	}
 	
@@ -68,7 +65,6 @@ public class SnippetDetails extends VLayout {
 				getAnnotatedPdf(snippet.getOnDocument(), snippet.getTopicUri());
 			}
 		});
-		//showPdf.getElement().getStyle().setMargin(5, Unit.PX);
 		return showPdf;
 	}
 	

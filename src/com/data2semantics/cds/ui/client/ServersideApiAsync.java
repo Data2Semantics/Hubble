@@ -15,7 +15,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface ServersideApiAsync {
 	void getInfo(String patientID, AsyncCallback<Patient> callback) throws IllegalArgumentException,SparqlException;
 	void getPatients(AsyncCallback<ArrayList<String>> callback) throws IllegalArgumentException;
-	void getChemicalStructure(AsyncCallback<String> callback) throws IllegalArgumentException,SparqlException;
 	void getAnnotatedPdf(String document, String topic, AsyncCallback<String> callback) throws IllegalArgumentException,SparqlException;
 	void query(String query, AsyncCallback<String> callback) throws IllegalArgumentException,SparqlException;
 	void serializiationWorkaround(SerializiationWhitelist s, AsyncCallback<SerializiationWhitelist> callback) throws IllegalArgumentException;

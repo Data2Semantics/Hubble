@@ -63,50 +63,10 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 
 	}
 	
-	/**
-	 * Retrieve chemical structure image using drugbank
-	 * 
-	 * @return Url to chemical structure image. If no valid url is found, an url to an error image is retrieved
-	 * @throws IllegalArgumentException
-	 */
-	public String getChemicalStructure() throws IllegalArgumentException,SparqlException  {
-		String imageLocation = "";
-		String queryString = Helper.getSparqlPrefixesAsString("aers") + "\n" + 
-				"SELECT DISTINCT ?sameAs {\n" + 
-				"<http://aers.data2semantics.org/resource/indication/FEBRILE_NEUTROPENIA> :reaction_of ?report.\n" + 
-				"?involvement :involved_in ?report.\n" + 
-				"?involvement :drug ?drug.\n" + 
-				"?drug rdfs:label ?drugLabel.\n" + 
-				"?drug owl:sameAs ?sameAs.\n" + 
-				"FILTER regex(str(?sameAs), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" + 
-				"} LIMIT 1";
-		ResultSet result = Endpoint.query(Endpoint.ECULTURE2, queryString);
-		
-		if (!result.hasNext()) {
-			throw new SparqlException("Empty result set for chemical structure query");
-		}
-		//Only 1 chem structure, so 1 solution of interest
-		String uri = result.next().get("sameAs").toString();
-		String drugbankID = uri.substring("http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB".length());
-		imageLocation = "http://moldb.wishartlab.com/molecules/DB" + drugbankID + "/image.png";
-		
-		return imageLocation;
-	}
-	
 	
 	public HashMap<String, Snippet> getRelevantSnippets(String patientId) throws IllegalArgumentException, SparqlException {
-//		HashMap<String, String> snippetInfo = new HashMap<String, String>();
-//		String snippet = "" +
-//			"It is also important to stress that <strong>even a severely infected neutropenic patient may not manifest a fever.</strong>\n" + 
-//			"Under these circumstances, infection may manifest with an abnormality in vital signs and/or evidence of new organ dysfunction including lactic acidosis.\n" + 
-//			"";
-//		String link = "http://www.google.com";
-//		snippetInfo.put("snippet", snippet);
-//		snippetInfo.put("link", link);
-		
 		SnippetLoader snippetsObject = new SnippetLoader(patientId);
 		HashMap<String, Snippet> snippetInfo = snippetsObject.getSnippets();
-		
 		return snippetInfo;
 	}
 	
