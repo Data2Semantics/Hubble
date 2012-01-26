@@ -6,8 +6,6 @@ import java.util.Map;
 
 import com.data2semantics.cds.ui.client.helpers.Helper;
 import com.data2semantics.cds.ui.client.view.View;
-import com.data2semantics.cds.ui.client.view.patientinfo.PatientInfo;
-import com.data2semantics.cds.ui.client.view.patientlisting.PatientListing;
 import com.data2semantics.cds.ui.shared.models.AdverseEvent;
 import com.data2semantics.cds.ui.shared.models.Drug;
 import com.data2semantics.cds.ui.shared.models.Indication;
