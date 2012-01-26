@@ -7,8 +7,6 @@ import java.util.Map;
 
 import com.data2semantics.cds.ui.client.helpers.Helper;
 import com.data2semantics.cds.ui.client.view.View;
-import com.data2semantics.cds.ui.client.view.patientinfo.PatientInfo;
-import com.data2semantics.cds.ui.client.view.patientlisting.PatientListing;
 import com.data2semantics.cds.ui.shared.models.AdverseEvent;
 import com.data2semantics.cds.ui.shared.models.Drug;
 import com.google.gwt.dom.client.Style.FontWeight;
@@ -43,6 +41,7 @@ public class DrugDetails extends VLayout {
 		public static String BUTTON = "button";
 	}
 	public DrugDetails(View view, Drug drug) {
+		setHeight(650);
 		this.view = view;
 		this.drug = drug;
 		drawDrugImage();
@@ -133,15 +132,14 @@ public class DrugDetails extends VLayout {
                 String fieldName = this.getFieldName(colNum);  
   
                if (fieldName.equals(Row.BUTTON)) {
-                    Button button = new Button("Show Drug Details");
+                    Button button = new Button("Show Adverse Event");
+                    button.setIcon("icons/fugue/navigation-090-white.png");
                     final String adverseEventUri = record.getAttribute(Row.ADVERSE_EVENT_URI);
-                    final String drugUri = record.getAttribute(Row.DRUG_URI);
-                    button.setHeight(18);  
-                    button.setWidth(110);                      
+                    button.setHeight(18);
+                    button.setWidth(135);
                     button.addClickHandler(new ClickHandler() {  
                         public void onClick(ClickEvent event) {
-		            		Drug drug = adverseEvents.get(adverseEventUri).getDrug(drugUri);
-		            		getView().getTabNavigation().addDrugDetails(drug);
+                        	Window.open(adverseEventUri, "_blank", "");
                         }
                     });
                     return button;
@@ -151,16 +149,18 @@ public class DrugDetails extends VLayout {
   
             }
         };
-		grid.setWidth(PatientInfo.RHS_WIDTH + PatientListing.WIDTH);
-		grid.setHeight(300);
+		//grid.setWidth(PatientInfo.RHS_WIDTH + PatientListing.WIDTH - 25);
+        grid.setWidth100();
+		grid.setHeight(275);
 		grid.setSelectionType(SelectionStyle.NONE);
 		grid.setShowRecordComponents(true);          
 		grid.setShowRecordComponentsByCell(true); 
 		
-		ListGridField eventDate = new ListGridField(Row.EVENT_DATE, "Event date");
+		ListGridField eventDate = new ListGridField(Row.EVENT_DATE, "Event date", 100);
 		ListGridField drugName = new ListGridField(Row.DRUGLABEL, "Drug Name");
 		ListGridField manufacturer = new ListGridField(Row.MANUFACTURER, "Manufacturer");
-		ListGridField button = new ListGridField(Row.BUTTON, "Drug details", 120);
+		ListGridField button = new ListGridField(Row.BUTTON, "Drug details", 170);
+		button.setAlign(Alignment.CENTER);
 		grid.setFields(eventDate, drugName, manufacturer, button);
 		records = new ArrayList<ListGridRecord>();
 		addMember(grid);

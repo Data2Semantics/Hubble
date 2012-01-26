@@ -52,6 +52,7 @@ public class TabNavigation extends TabSet {
 		selectTab(tab);
 	}
 	
+	
 	public void addSnippetDetails(Snippet snippet) {
 		getView().onLoadingStart();
 		addOwnTab(new SnippetDetails(getView(), snippet), snippet.getTopic());
@@ -60,7 +61,10 @@ public class TabNavigation extends TabSet {
 	
 	public void addWidgets(String patientId) {
 		getView().onLoadingStart();
-		addOwnTab(new WidgetsContainer(view, patientId),  "Overview");
+		Tab tab = new Tab("Overview");
+		tab.setPane(new WidgetsContainer(view, patientId));
+		addTab(tab);
+		selectTab(tab);
 		getView().onLoadingFinish();
 	}
 	public void addIndicationDetails(Indication indication) {

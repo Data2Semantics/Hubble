@@ -125,7 +125,7 @@ public class IndicationDetails extends VLayout {
   
             }
         };
-		setWidth(PatientInfo.RHS_WIDTH + PatientListing.WIDTH);
+		grid.setWidth100();
 		grid.setSelectionType(SelectionStyle.NONE);
 		grid.setShowRecordComponents(true);          
 		grid.setShowRecordComponentsByCell(true);
