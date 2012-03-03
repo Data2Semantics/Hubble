@@ -12,7 +12,7 @@
   
   <servlet-mapping>
     <servlet-name>serversideapi</servlet-name>
-    <url-pattern>/hubbleinterface/serversideapi</url-pattern>
+    <url-pattern>/hubbleInterface/serversideapi</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->
