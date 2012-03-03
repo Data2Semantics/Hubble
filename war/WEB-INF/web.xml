@@ -7,7 +7,7 @@
 
   <servlet>
     <servlet-name>serversideapi</servlet-name>
-    <servlet-class>com.data2semantics.cds.ui.server.ServersideApiImpl</servlet-class>
+    <servlet-class>com.data2semantics.hubble.server.ServersideApiImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
@@ -17,7 +17,7 @@
   
   <!-- Default page to serve -->
   <welcome-file-list>
-    <welcome-file>cds-interface.html</welcome-file>
+    <welcome-file>hubble.html</welcome-file>
   </welcome-file-list>
 
 </web-app>
