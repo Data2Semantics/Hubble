@@ -12,7 +12,7 @@
   
   <servlet-mapping>
     <servlet-name>serversideapi</servlet-name>
-    <url-pattern>/lifescienceinterface/serversideapi</url-pattern>
+    <url-pattern>/hubbleinterface/serversideapi</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->

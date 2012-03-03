@@ -1,4 +1,4 @@
-war/lifescienceinterface/*
+war/hubbleInterface/*
 .gwt
 .project
 gwt-unitCache
