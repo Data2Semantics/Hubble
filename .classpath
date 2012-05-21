@@ -32,5 +32,6 @@
 	<classpathentry exported="true" kind="lib" path="war/WEB-INF/lib/wstx-asl-3.2.9.jar"/>
 	<classpathentry exported="true" kind="lib" path="war/WEB-INF/lib/xercesImpl-2.7.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT (4)"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
