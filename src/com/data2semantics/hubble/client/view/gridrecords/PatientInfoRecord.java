@@ -40,7 +40,6 @@ public class PatientInfoRecord extends ListGridRecord {
 		return getAttribute(Row.URI);
 	}
 	public void setUri(String uri) {
-		setAttribute(Row.ICON, "magnifier--arrow");
 		setAttribute(Row.URI, uri);
 	}
 }

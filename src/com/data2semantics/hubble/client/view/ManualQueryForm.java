@@ -18,8 +18,6 @@ public class ManualQueryForm extends VLayout {
 	private View view;
 	public ManualQueryForm(View view) {
 		this.view = view;
-		setShowResizeBar(true);
-		
 	    addMember(drawForm());
 	}
 

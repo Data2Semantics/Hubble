@@ -51,7 +51,7 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 		ArrayList<String> patientList = new ArrayList<String>();
 		String variable = "patientID";
 		String queryString = Helper.getSparqlPrefixesAsString("aers") + "\n" +
-				"SELECT DISTINCT ?" + variable + " FROM <http://patient> {\n" + 
+				"SELECT DISTINCT ?" + variable + " {\n" + 
 				"?patient rdf:type patient:Patient.\n" + 
 				"?patient rdfs:label ?patientID.\n" + 
 				"}";

@@ -34,7 +34,7 @@ public class TabNavigation extends TabSet {
 	private void initTabNavigation() {
 		setTabBarPosition(Side.TOP);  
         setTabBarAlign(Side.LEFT);  
-        setWidth(PatientListing.WIDTH + PatientInfo.WIDTH);  
+        setWidth(PatientListing.WIDTH + PatientInfo.RHS_WIDTH);  
         setHeight(500);  
 	}
 	

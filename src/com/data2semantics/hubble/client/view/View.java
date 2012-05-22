@@ -10,21 +10,21 @@ import com.smartgwt.client.widgets.Window;
 import com.smartgwt.client.widgets.events.CloseClickEvent;
 import com.smartgwt.client.widgets.events.CloseClickHandler;
 import com.smartgwt.client.widgets.layout.HLayout;
+import com.smartgwt.client.widgets.layout.VLayout;
 /***
  * Main class
  *
  */
-
-public class View extends HLayout {
+public class View extends VLayout {
 	private PatientInfo patientInfo;
+	private HLayout hLayout = new HLayout();
 	private ServersideApiAsync serverSideApi;
 	private TabNavigation tabNavigation;
-	public static String HEIGHT = "100%";
 	public View(ServersideApiAsync serverSideApi) {
 		this.serverSideApi = serverSideApi;
-		setMargin(10);
-		setHeight(HEIGHT);
-		addMember(new PatientListing(this));
+		hLayout.setMargin(10);
+		addMember(hLayout);
+		hLayout.addMember(new PatientListing(this));
 	}
 	
 	public ServersideApiAsync getServerSideApi() {
@@ -40,7 +40,7 @@ public class View extends HLayout {
 		cleanCurrentPatientView();
 		patientInfo = new PatientInfo(this, patientID);
 		patientInfo.setRight(5);
-		addMember(patientInfo);
+		hLayout.addMember(patientInfo);
 		onLoadingFinish();
 	}
 	
@@ -87,9 +87,9 @@ public class View extends HLayout {
 	
 	private void cleanCurrentPatientView() {
 		//Cleanup any other already shown info
-		Canvas[] members = getMembers();
+		Canvas[] members = hLayout.getMembers();
 		if (members.length > 1) {
-			removeMember(members[1]);
+			hLayout.removeMember(members[1]);
 		}
 		//current (vLayout) {
 		members = getMembers();

@@ -7,14 +7,15 @@ public class PatientInfo extends VLayout {
 	private View view;
 	private PatientDetails patientDetails;
 	private TabNavigation tabNavigation;
-	public static int WIDTH = 400;
+	public static int RHS_WIDTH = 900;
 	
 	public PatientInfo(View view, String patientId) {
 		this.view = view;
-		setWidth(PatientInfo.WIDTH);
+		setWidth(PatientInfo.RHS_WIDTH);
+		setStyleName("patientInfo");
+		
 		patientDetails = new PatientDetails(view, patientId);
 		addMember(patientDetails);
-		
 	}
 	
 	public View getView() {
