@@ -45,8 +45,11 @@ public class TabNavigation extends TabSet {
 	 * @param title Title of the tab
 	 */
 	private void addOwnTab(Canvas pane, String title) {
+		//Clear tabs (i.e., only show 1 tab at a time)
+		removeTab(0);
+		
 		Tab tab = new Tab(title);
-		tab.setCanClose(true);
+		tab.setCanClose(false);
 		tab.setPane(pane);
 		addTab(tab);
 		selectTab(tab);
