@@ -10,6 +10,10 @@ import com.smartgwt.client.widgets.Window;
 import com.smartgwt.client.widgets.events.CloseClickEvent;
 import com.smartgwt.client.widgets.events.CloseClickHandler;
 import com.smartgwt.client.widgets.layout.HLayout;
+/***
+ * Main class
+ *
+ */
 
 public class View extends HLayout {
 	private PatientInfo patientInfo;
