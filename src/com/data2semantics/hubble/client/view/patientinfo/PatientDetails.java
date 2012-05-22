@@ -1,5 +1,11 @@
 package com.data2semantics.hubble.client.view.patientinfo;
 
+
+/***
+ * The class that visualizes all the patient details and creates the related grid
+ */
+
+
 import java.util.ArrayList;
 import java.util.Map;
 import com.data2semantics.hubble.client.view.View;
@@ -26,6 +32,9 @@ public class PatientDetails extends ListGrid {
 	private View view;
 	private String patientId;
 	private static int HEIGHT = 350;
+	
+	private static int ITEM_COLUMN_WIDTH = 150;
+	
 	ArrayList<PatientInfoRecord> rows;
 	Patient patientInfo;
 	public static class Row {
@@ -37,11 +46,11 @@ public class PatientDetails extends ListGrid {
 	}
 	
 	public static class RowHeaders {
-		public static String INDICATION = "Indication";
-		public static String PREV_INDICATION = "Previous Indication";
+		public static String INDICATION = "Diagnosis";
+		public static String PREV_INDICATION = "Previous Diagnosis";
 		public static String MEASUREMENT = "Measurement";
 		public static String TREATMENT = "Treatment";
-		public static String DRUG = "Drug";
+		public static String DRUG = "Drug administration";
 	}
 
 	
@@ -121,7 +130,8 @@ public class PatientDetails extends ListGrid {
 		setSelectionType(SelectionStyle.NONE);
         setShowRecordComponents(true);          
         setShowRecordComponentsByCell(true);  
-		ListGridField typeField = new ListGridField(Row.KEY, "Item");
+
+		ListGridField typeField = new ListGridField(Row.KEY, "Item", ITEM_COLUMN_WIDTH);
 		ListGridField valueField = new ListGridField(Row.VALUE, "Value");
 		valueField.setShowHover(true);
 		valueField.setHoverCustomizer(new HoverCustomizer() {  
@@ -129,6 +139,12 @@ public class PatientDetails extends ListGrid {
                 return record.getAttribute(Row.TOOLTIP);
             }  
         });
+		
+		///+++ TODO: check if it's better
+		//typeField.setAlign(Alignment.CENTER);
+
+
+		
 		ListGridField buttonField = new ListGridField(Row.BUTTON, "More information", 100);
 		buttonField.setAlign(Alignment.CENTER);
 		setFields(typeField, valueField, buttonField);

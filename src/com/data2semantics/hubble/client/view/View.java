@@ -12,7 +12,7 @@ import com.smartgwt.client.widgets.events.CloseClickHandler;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 /***
- * Main class
+ * Main class 
  *
  */
 public class View extends VLayout {
@@ -22,7 +22,8 @@ public class View extends VLayout {
 	private TabNavigation tabNavigation;
 	public View(ServersideApiAsync serverSideApi) {
 		this.serverSideApi = serverSideApi;
-		hLayout.setMargin(10);
+		//this.setMargin(10);//TODO:check margins
+		hLayout.setMargin(20);
 		addMember(hLayout);
 		hLayout.addMember(new PatientListing(this));
 	}

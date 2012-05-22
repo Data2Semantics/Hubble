@@ -61,7 +61,7 @@ public class TabNavigation extends TabSet {
 	
 	public void addWidgets(String patientId) {
 		getView().onLoadingStart();
-		Tab tab = new Tab("Overview");
+		Tab tab = new Tab("Related literature");
 		tab.setPane(new WidgetsContainer(view, patientId));
 		addTab(tab);
 		selectTab(tab);
