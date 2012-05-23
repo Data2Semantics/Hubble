@@ -20,6 +20,7 @@ import com.data2semantics.hubble.shared.models.Treatment;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.types.Alignment;
+import com.smartgwt.client.types.GroupStartOpen;
 import com.smartgwt.client.types.SelectionStyle;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Canvas;
@@ -119,6 +120,8 @@ public class PatientDetails extends ListGrid {
 					patientInfo = patient;
 					drawInfoIntoTable(patientInfo);
 					getView().onLoadingFinish();
+					groupBy(Row.KEY);
+					
 				}
 			});
 		} catch (Exception e) {
@@ -132,7 +135,7 @@ public class PatientDetails extends ListGrid {
 		setSelectionType(SelectionStyle.NONE);
         setShowRecordComponents(true);          
         setShowRecordComponentsByCell(true);  
-
+        
 		ListGridField typeField = new ListGridField(Row.KEY, "Item", ITEM_COLUMN_WIDTH);
 		ListGridField valueField = new ListGridField(Row.VALUE, "Value");
 		valueField.setShowHover(true);
@@ -150,6 +153,8 @@ public class PatientDetails extends ListGrid {
 		ListGridField buttonField = new ListGridField(Row.BUTTON, "More information", 100);
 		buttonField.setAlign(Alignment.CENTER);
 		setFields(typeField, valueField, buttonField);
+		setGroupByField(Row.KEY);
+		setGroupStartOpen(GroupStartOpen.ALL);
 		setEmptyMessage("Loading data");
 		draw();
 	}
