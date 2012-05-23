@@ -20,6 +20,7 @@ import com.data2semantics.hubble.shared.models.Treatment;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.types.Alignment;
+import com.smartgwt.client.types.GroupStartOpen;
 import com.smartgwt.client.types.SelectionStyle;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Canvas;
@@ -163,6 +164,8 @@ public class PatientDetails extends ListGrid {
 					patientInfo = patient;
 					drawInfoIntoTable(patientInfo);
 					getView().onLoadingFinish();
+					groupBy(Row.KEY);
+					
 				}
 			});
 		} catch (Exception e) {
@@ -176,7 +179,7 @@ public class PatientDetails extends ListGrid {
 		setSelectionType(SelectionStyle.NONE);
         setShowRecordComponents(true);          
         setShowRecordComponentsByCell(true);  
-
+        
 		ListGridField typeField = new ListGridField(Row.KEY, "Item", ITEM_COLUMN_WIDTH);
 		ListGridField valueField = new ListGridField(Row.VALUE, "Value");
 		valueField.setShowHover(true);
@@ -185,7 +188,7 @@ public class PatientDetails extends ListGrid {
                 return record.getAttribute(Row.TOOLTIP);
             }  
         });
-		
+
 		ListGridField buttonPic = new ListGridField(Row.BUTTON_PIC, " ", 130);
 		buttonPic.setAlign(Alignment.CENTER);
 		ListGridField buttonAers = new ListGridField(Row.BUTTON_AERS, " ", 130);
@@ -193,6 +196,8 @@ public class PatientDetails extends ListGrid {
 		ListGridField buttenRdf = new ListGridField(Row.BUTTON_RDF, " ", 130);
 		buttenRdf.setAlign(Alignment.CENTER);
 		setFields(typeField, valueField, buttonPic, buttonAers, buttenRdf);
+		setGroupByField(Row.KEY);
+		setGroupStartOpen(GroupStartOpen.ALL);
 		setEmptyMessage("Loading data");
 		draw();
 	}
