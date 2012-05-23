@@ -44,7 +44,10 @@ public class PatientDetails extends ListGrid {
 		public static String VALUE = "value";
 		public static String TOOLTIP = "tooltip";
 		public static String URI = "uri";
-		public static String BUTTON = "button";
+		public static String BUTTON_PIC = "drugPicture";
+		public static String BUTTON_AERS = "relatedAers";
+		public static String BUTTON_RDF = "browseRdf";
+		
 	}
 	
 	public static class RowHeaders {
@@ -73,38 +76,79 @@ public class PatientDetails extends ListGrid {
 	 * Overwrite this function to be able to used buttons... Smart GWT is crap at using buttons in grids
 	 */
 	protected Canvas createRecordComponent(final ListGridRecord record, Integer colNum) {  
-        String fieldName = this.getFieldName(colNum);  
-        if (fieldName.equals(Row.BUTTON) && record.getAttribute(Row.URI) != null ) {
-        	final String informationType = record.getAttribute(Row.KEY);
-            Button button = new Button("More Info");
-            button.setHeight(18);  
-            button.setWidth(80);
-            if (informationType.equals(RowHeaders.TREATMENT)) {
-            	button.setIcon("icons/fugue/navigation-090-white.png");
-            }
-            button.addClickHandler(new ClickHandler() {  
-                public void onClick(ClickEvent event) {
-                	
-                	if (informationType.equals(RowHeaders.INDICATION)) {
-                		Indication indication = patientInfo.getIndication(record.getAttribute(Row.URI));
-                		getView().addSouth(new IndicationDetails(view, indication));
-                	} else if (informationType.equals(RowHeaders.DRUG)) {
-                		Drug drug = patientInfo.getDrug(record.getAttribute(Row.URI));
-                		getView().addSouth(new DrugDetails(view, drug));
-                	} else if (informationType.equals(RowHeaders.MEASUREMENT)) {
-                		Window.open(record.getAttribute(Row.URI), "_blank", "");
-                	} else if (informationType.equals(RowHeaders.PREV_INDICATION)) {
-                		Indication indication = patientInfo.getPreviousIndication(record.getAttribute(Row.URI));
-                		getView().addSouth(new IndicationDetails(view, indication));
-                	} else if (informationType.equals(RowHeaders.TREATMENT)) {
-                		Window.open(record.getAttribute(Row.URI), "_blank", "");
-                	}
-                }
-            });
-            return button;  
-        } else {  
-            return null;  
-        }  
+        String fieldName = this.getFieldName(colNum);
+        final String informationType = record.getAttribute(Row.KEY);
+        if (record.getAttribute(Row.URI) != null) {
+        	
+	        if (fieldName.equals(Row.BUTTON_PIC) && informationType.equals(RowHeaders.DRUG)) {
+	            Button button = new Button("Show Drug Structure");
+	            button.setHeight(18);  
+	            button.setWidth(120);
+	            button.setAlign(Alignment.CENTER);
+	            button.addClickHandler(new ClickHandler() {
+	            	public void onClick(ClickEvent event) {
+		            	Drug drug = patientInfo.getDrug(record.getAttribute(Row.URI));
+		        		getView().addSouth(new DrugDetails(view, drug));
+	            	}
+	            });
+	            return button;
+	        } else if (fieldName.equals(Row.BUTTON_AERS) && 
+	        		(informationType.equals(RowHeaders.DRUG) || 
+	        				informationType.equals(RowHeaders.INDICATION) || 
+	        				informationType.equals(RowHeaders.MEASUREMENT) || 
+	        				informationType.equals(RowHeaders.PREV_INDICATION) || 
+	        				informationType.equals(RowHeaders.TREATMENT))) {
+	        	Button button = new Button("Show Related AERS");
+	            button.setHeight(18);  
+	            button.setWidth(120);
+	            button.setAlign(Alignment.CENTER);
+	            button.addClickHandler(new ClickHandler() {
+	            	public void onClick(ClickEvent event) {
+	            		Drug drug = patientInfo.getDrug(record.getAttribute(Row.URI));
+		        		getView().addSouth(new DrugDetails(view, drug));
+	            	}
+	            });
+	            return button;
+	        } else if (fieldName.equals(Row.BUTTON_RDF) && 
+	        		(informationType.equals(RowHeaders.DRUG) || 
+	        				informationType.equals(RowHeaders.INDICATION) || 
+	        				informationType.equals(RowHeaders.MEASUREMENT) || 
+	        				informationType.equals(RowHeaders.PREV_INDICATION) || 
+	        				informationType.equals(RowHeaders.TREATMENT))) {
+	        	Button button = new Button("Browse RDF");
+	            button.setHeight(18);  
+	            button.setWidth(120);
+	            button.setAlign(Alignment.CENTER);
+	            button.setIcon("icons/fugue/navigation-090-white.png");
+	            button.addClickHandler(new ClickHandler() {
+	            	public void onClick(ClickEvent event) {
+	            		Window.open(record.getAttribute(Row.URI), "_blank", "");
+	            	}
+	            });
+	            return button;
+//	            button.addClickHandler(new ClickHandler() {
+//	                public void onClick(ClickEvent event) {
+//	                	
+//	                	if (informationType.equals(RowHeaders.INDICATION)) {
+//	                		Indication indication = patientInfo.getIndication(record.getAttribute(Row.URI));
+//	                		getView().addSouth(new IndicationDetails(view, indication));
+//	                	} else if (informationType.equals(RowHeaders.DRUG)) {
+//	                		Drug drug = patientInfo.getDrug(record.getAttribute(Row.URI));
+//	                		getView().addSouth(new DrugDetails(view, drug));
+//	                	} else if (informationType.equals(RowHeaders.MEASUREMENT)) {
+//	                		Window.open(record.getAttribute(Row.URI), "_blank", "");
+//	                	} else if (informationType.equals(RowHeaders.PREV_INDICATION)) {
+//	                		Indication indication = patientInfo.getPreviousIndication(record.getAttribute(Row.URI));
+//	                		getView().addSouth(new IndicationDetails(view, indication));
+//	                	} else if (informationType.equals(RowHeaders.TREATMENT)) {
+//	                		Window.open(record.getAttribute(Row.URI), "_blank", "");
+//	                	}
+//	                }
+//	            });
+	            
+	        }
+        }
+		return null;  
 
     }  
 	
@@ -142,14 +186,13 @@ public class PatientDetails extends ListGrid {
             }  
         });
 		
-		///+++ TODO: check if it's better
-		//typeField.setAlign(Alignment.CENTER);
-
-
-		
-		ListGridField buttonField = new ListGridField(Row.BUTTON, "More information", 100);
-		buttonField.setAlign(Alignment.CENTER);
-		setFields(typeField, valueField, buttonField);
+		ListGridField buttonPic = new ListGridField(Row.BUTTON_PIC, " ", 130);
+		buttonPic.setAlign(Alignment.CENTER);
+		ListGridField buttonAers = new ListGridField(Row.BUTTON_AERS, " ", 130);
+		buttonAers.setAlign(Alignment.CENTER);
+		ListGridField buttenRdf = new ListGridField(Row.BUTTON_RDF, " ", 130);
+		buttenRdf.setAlign(Alignment.CENTER);
+		setFields(typeField, valueField, buttonPic, buttonAers, buttenRdf);
 		setEmptyMessage("Loading data");
 		draw();
 	}
