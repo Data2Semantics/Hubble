@@ -29,6 +29,10 @@ public class DrugDetails extends VLayout {
 	private View view;
 	private Drug drug;
 	private ListGrid grid;
+	private int content;
+	public static int SHOW_ALL = 0;
+	public static int SHOW_STRUCTURE = 1;
+	public static int SHOW_RELATED_AERS = 2;
 	HashMap<String, AdverseEvent> adverseEvents;
 	ArrayList<ListGridRecord> records;
 	Label label;
@@ -41,13 +45,22 @@ public class DrugDetails extends VLayout {
 		public static String BUTTON = "button";
 	}
 	public DrugDetails(View view, Drug drug) {
+		this(view, drug, SHOW_ALL);
+	}
+	
+	public DrugDetails(View view, Drug drug, int content) {
+		this.content = content;
 		setHeight(650);
 		this.view = view;
 		this.drug = drug;
-		drawDrugImage();
-		drawRelevantAdverseEvents();
-		addMember(drawMoreInfoButton());
+		if (content == SHOW_STRUCTURE || content == SHOW_ALL) {
+			drawDrugImage();
+		}
+		if (content == SHOW_RELATED_AERS || content == SHOW_ALL) {
+			drawRelevantAdverseEvents();
+		}
 	}
+	
 	
 	private void drawDrugImage() {
 		String imgLocation = drug.getImgLocation();

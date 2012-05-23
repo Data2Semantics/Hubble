@@ -88,7 +88,7 @@ public class PatientDetails extends ListGrid {
 	            button.addClickHandler(new ClickHandler() {
 	            	public void onClick(ClickEvent event) {
 		            	Drug drug = patientInfo.getDrug(record.getAttribute(Row.URI));
-		        		getView().addSouth(new DrugDetails(view, drug));
+		        		getView().addSouth(new DrugDetails(view, drug, DrugDetails.SHOW_STRUCTURE));
 	            	}
 	            });
 	            return button;
@@ -105,7 +105,7 @@ public class PatientDetails extends ListGrid {
 	            button.addClickHandler(new ClickHandler() {
 	            	public void onClick(ClickEvent event) {
 	            		Drug drug = patientInfo.getDrug(record.getAttribute(Row.URI));
-		        		getView().addSouth(new DrugDetails(view, drug));
+		        		getView().addSouth(new DrugDetails(view, drug, DrugDetails.SHOW_RELATED_AERS));
 	            	}
 	            });
 	            return button;

@@ -42,7 +42,7 @@ public class IndicationDetails extends VLayout {
 	public IndicationDetails(View view, Indication indication) {
 		this.view = view;
 		this.indication = indication;
-		label = new Label("Serious adverse events related to this indication");
+		label = new Label("Serious adverse events related to this diagnosis");
 		label.setHeight(20);
 		label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
 		addMember(label);
@@ -105,7 +105,7 @@ public class IndicationDetails extends VLayout {
             protected Canvas createRecordComponent(final ListGridRecord record, Integer colNum) {  
                 String fieldName = this.getFieldName(colNum);  
                if (fieldName.equals(Row.BUTTON)) {
-                    Button button = new Button("Show Drug Details");
+                    Button button = new Button("Show Drug Structure");
                     final String adverseEventUri = record.getAttribute(Row.ADVERSE_EVENT_URI);
                     final String drugUri = record.getAttribute(Row.DRUG_URI);
                     button.setHeight(18);  
@@ -113,7 +113,7 @@ public class IndicationDetails extends VLayout {
                     button.addClickHandler(new ClickHandler() {  
                         public void onClick(ClickEvent event) {
 		            		Drug drug = adverseEvents.get(adverseEventUri).getDrug(drugUri);
-		            		getView().addSouth(new DrugDetails(view, drug));
+		            		getView().addSouth(new DrugDetails(view, drug, DrugDetails.SHOW_STRUCTURE));
                         }
                     });
                     return button;
