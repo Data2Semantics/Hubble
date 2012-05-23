@@ -161,7 +161,7 @@ public class PatientLoader {
 				"OPTIONAL{?patient patient:hasStatus ?status}.\n" + 
 				"OPTIONAL{?patient patient:hasMeasurement ?measurement}.\n" + 
 				"OPTIONAL{\n" +
-					"?patient patient:hasIndication ?indication.\n" +
+					"?patient patient:hasDiagnosis ?indication.\n" +
 					"OPTIONAL{\n" + 
 						"?indication rdfs:label ?indication_label.\n" +
 					"}\n" +
