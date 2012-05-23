@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.data2semantics.hubble.client.helpers.Helper;
 import com.data2semantics.hubble.client.view.View;
+import com.data2semantics.hubble.client.view.annotations.AnnotationDetails;
 import com.data2semantics.hubble.client.view.patientinfo.tabs.WidgetsContainer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.types.SelectionStyle;
@@ -31,7 +32,9 @@ public class PatientListing extends ListGrid {
             	ListGridRecord[] records = getSelectedRecords();
             	if (records.length > 0) {
             		getView().showPatientInfo(records[0].getAttributeAsString("patientId"));
-            		getView().addSouth(new WidgetsContainer(view, records[0].getAttributeAsString("patientId")));
+            		//getView().addSouth(new WidgetsContainer(view, records[0].getAttributeAsString("patientId")));
+            		getView().addSouth(new AnnotationDetails(view, records[0].getAttributeAsString("patientId")));
+                    
             	}
             }  
         }); 
