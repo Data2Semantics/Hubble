@@ -40,6 +40,8 @@ public class Helper {
 			namespaceList.add("PREFIX pav: <http://purl.org/pav#>");
 			namespaceList.add("PREFIX ann: <http://www.w3.org/2000/10/annotation-ns#>");
 			namespaceList.add("PREFIX pro: <http://purl.obolibrary.org/obo#>");
+			namespaceList.add("PREFIX dcterms: <http://purl.org/dc/terms/>");
+			namespaceList.add("PREFIX patient: <http://www.data2semantics.org/ontology/patient/>");
 		} else if (prefixTypes.equals("lld")) {
 			namespaceList.add("PREFIX skos-xl: <http://www.w3.org/2008/05/skos-xl#>"); //used in lld
 		}

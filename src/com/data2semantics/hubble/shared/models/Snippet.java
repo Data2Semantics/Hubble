@@ -14,6 +14,8 @@ public class Snippet implements Serializable {
 	private String selectorUri;
 	private String createdOn;
 	private String createdBy;
+	private String documentTitle;
+	private String documentUri;
 	public String getExact() {
 		return exact;
 	}
@@ -67,6 +69,18 @@ public class Snippet implements Serializable {
 	}
 	public void setTopicUri(String topicUri) {
 		this.topicUri = topicUri;
+	}
+	public String getDocumentTitle() {
+		return documentTitle;
+	}
+	public void setDocumentTitle(String documentTitle) {
+		this.documentTitle = documentTitle;
+	}
+	public String getDocumentUri() {
+		return documentUri;
+	}
+	public void setDocumentUri(String documentUri) {
+		this.documentUri = documentUri;
 	}
 	
 }
