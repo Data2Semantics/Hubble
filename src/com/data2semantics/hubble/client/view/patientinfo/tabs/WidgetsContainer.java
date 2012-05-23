@@ -59,7 +59,7 @@ public class WidgetsContainer extends TileGrid {
 			public void onRecordClick(RecordClickEvent event) {
 				TileRecord record = getSelectedRecord();
 				Snippet snippet = snippets.get(record.getAttribute(Tile.URI));
-				getView().getTabNavigation().addSnippetDetails(snippet);
+				getView().addSouth(new SnippetDetails(getView(), snippet));
 			}
 		});
 		

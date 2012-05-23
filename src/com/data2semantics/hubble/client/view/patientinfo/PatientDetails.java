@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import com.data2semantics.hubble.client.view.View;
 import com.data2semantics.hubble.client.view.gridrecords.PatientInfoRecord;
+import com.data2semantics.hubble.client.view.patientinfo.tabs.DrugDetails;
+import com.data2semantics.hubble.client.view.patientinfo.tabs.IndicationDetails;
 import com.data2semantics.hubble.shared.models.Drug;
 import com.data2semantics.hubble.shared.models.Indication;
 import com.data2semantics.hubble.shared.models.Measurement;
@@ -85,15 +87,15 @@ public class PatientDetails extends ListGrid {
                 	
                 	if (informationType.equals(RowHeaders.INDICATION)) {
                 		Indication indication = patientInfo.getIndication(record.getAttribute(Row.URI));
-                		getView().getTabNavigation().addIndicationDetails(indication);
+                		getView().addSouth(new IndicationDetails(view, indication));
                 	} else if (informationType.equals(RowHeaders.DRUG)) {
                 		Drug drug = patientInfo.getDrug(record.getAttribute(Row.URI));
-                		getView().getTabNavigation().addDrugDetails(drug);
+                		getView().addSouth(new DrugDetails(view, drug));
                 	} else if (informationType.equals(RowHeaders.MEASUREMENT)) {
                 		Window.open(record.getAttribute(Row.URI), "_blank", "");
                 	} else if (informationType.equals(RowHeaders.PREV_INDICATION)) {
                 		Indication indication = patientInfo.getPreviousIndication(record.getAttribute(Row.URI));
-                		getView().getTabNavigation().addIndicationDetails(indication);
+                		getView().addSouth(new IndicationDetails(view, indication));
                 	} else if (informationType.equals(RowHeaders.TREATMENT)) {
                 		Window.open(record.getAttribute(Row.URI), "_blank", "");
                 	}

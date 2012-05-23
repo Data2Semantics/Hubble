@@ -113,7 +113,7 @@ public class IndicationDetails extends VLayout {
                     button.addClickHandler(new ClickHandler() {  
                         public void onClick(ClickEvent event) {
 		            		Drug drug = adverseEvents.get(adverseEventUri).getDrug(drugUri);
-		            		getView().getTabNavigation().addDrugDetails(drug);
+		            		getView().addSouth(new DrugDetails(view, drug));
                         }
                     });
                     return button;

@@ -2,7 +2,6 @@ package com.data2semantics.hubble.client.view;
 
 import com.data2semantics.hubble.client.ServersideApiAsync;
 import com.data2semantics.hubble.client.view.patientinfo.PatientInfo;
-import com.data2semantics.hubble.client.view.patientinfo.TabNavigation;
 import com.data2semantics.hubble.client.view.patientlisting.PatientListing;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.Label;
@@ -19,7 +18,6 @@ public class View extends VLayout {
 	private PatientInfo patientInfo;
 	private HLayout hLayout = new HLayout();
 	private ServersideApiAsync serverSideApi;
-	private TabNavigation tabNavigation;
 	public View(ServersideApiAsync serverSideApi) {
 		this.serverSideApi = serverSideApi;
 		//this.setMargin(10);//TODO:check margins
@@ -46,15 +44,13 @@ public class View extends VLayout {
 	}
 	
 	
-	
-	public TabNavigation getTabNavigation() {
-		return tabNavigation;
-	}
-	
-	public void initTabNavigation(String patientId) {
-		tabNavigation = new TabNavigation(this, patientId);
-		tabNavigation.setMargin(10);
-		addMember(tabNavigation);
+	public void addSouth(Canvas canvas) {
+		Canvas[] members = getMembers();
+		//If south already exists, remove it
+		if (members.length > 1) {
+			removeMember(members[members.length-1]);
+		}
+		addMember(canvas);
 	}
 	
 	public void onError( String error ){
@@ -75,7 +71,6 @@ public class View extends VLayout {
           Label label = new Label(error);
           winModal.addItem(label);
           winModal.draw();
-          //SC.say("");
 	}
 	
 	public void onLoadingFinish() {
