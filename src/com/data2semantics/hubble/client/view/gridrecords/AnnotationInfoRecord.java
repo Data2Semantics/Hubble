@@ -1,45 +1,21 @@
 package com.data2semantics.hubble.client.view.gridrecords;
 
-import com.data2semantics.hubble.client.view.annotations.AnnotationDetails.Row;
+
+
+import com.data2semantics.hubble.client.view.annotations.AnnotationDetails.Fields;
+import com.data2semantics.hubble.shared.models.Snippet;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
 
 public class AnnotationInfoRecord extends ListGridRecord {
-	public AnnotationInfoRecord() {}
 	
-	public AnnotationInfoRecord(String key, String value, String tooltip) {
-		setKey(key);
-		setValue(value);
-		setTooltip(tooltip);
-	}
-	public AnnotationInfoRecord(String key, String value) {
-		setKey(key);
-		setValue(value);
-	}
-	
-	public void setKey(String key) {
-		setAttribute(Row.KEY, key);
-	}
-	public String getKey() {
-		return getAttribute(Row.KEY);
+	public AnnotationInfoRecord(Snippet snip) {
+		
+		setAttribute(Fields.DOCURI.name(), snip.getDocumentUri());
+		setAttribute(Fields.TITLE.name(), snip.getDocumentTitle());
+		setAttribute(Fields.EXACT.name(), snip.getExact());
+		setAttribute(Fields.PREFIX.name(), snip.getPrefix());
+		setAttribute(Fields.POSTFIX.name(), snip.getPostfix());
+		setAttribute(Fields.SELECTOR.name(), snip.getSelectorUri());
 	}
 	
-	public void setValue(String value) {
-		setAttribute(Row.VALUE, value);
-	}
-	public String getValue() {
-		return getAttribute(Row.VALUE);
-	}
-	
-	public void setTooltip(String tooltip) {
-		setAttribute(Row.TOOLTIP, tooltip);
-	}
-	public String getTooltip() {
-		return getAttribute(Row.TOOLTIP);
-	}
-	public String getUri() {
-		return getAttribute(Row.URI);
-	}
-	public void setUri(String uri) {
-		setAttribute(Row.URI, uri);
-	}
 }

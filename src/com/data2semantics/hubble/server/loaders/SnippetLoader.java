@@ -48,10 +48,20 @@ public class SnippetLoader {
 				snippet.setTopicUri(RdfNodeHelper.getString(snippetQuerySolution, "topic"));
 				//snippet.setCreatedOn(RdfNodeHelper.getString(snippetQuerySolution, "createdOn"));
 				snippet.setTopic(Helper.getNameFromUri(RdfNodeHelper.getString(snippetQuerySolution, "topic")));
-				//snippet.setCreatedBy(Helper.getNameFromUri(RdfNodeHelper.getString(snippetQuerySolution, "createdBy")));
+				//snippet.setCreatedBy(DHelper.getNameFromUri(RdfNodeHelper.getString(snippetQuerySolution, "createdBy")));
 				String selectorUri = snippetQuerySolution.get("selectorUri").toString();
 				snippet.setSelectorUri(selectorUri);
 				snippets.put(selectorUri, snippet);
+//				
+//				System.out.println("\nTitle: "+snippet.getDocumentTitle()
+//								  + "\n   docuri: "+snippet.getDocumentUri() 
+//								  + "\n   exact: " + snippet.getExact()
+//								  + "\n   prefix: " + snippet.getPrefix()
+//								  + "\n   postfix" + snippet.getPostfix()
+//								  + "\n   topic  " + snippet.getTopic()
+//								  + "\n   topicURI  " + snippet.getTopicUri()
+//								  + "\n   selector  " + snippet.getSelectorUri());
+				
 			} else {
 				System.out.println("WRONG");
 			}
