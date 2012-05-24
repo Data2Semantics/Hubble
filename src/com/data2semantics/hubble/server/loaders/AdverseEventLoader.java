@@ -93,7 +93,7 @@ public class AdverseEventLoader {
 				"		:gender ?gender;\n" +
 				"		:manufacturer ?manufacturer.\n" +
 				"	?involvement :involved_in ?report;\n" +
-				"		:drug <" + drug.getUri() + ">;\n" +
+				"		:drug <" + drug.getUri() + ">.\n" +
 				"	<" + drug.getUri() + ">	owl:sameAs ?drugBankUri.\n" + 
 				"   ?drugBankUri <http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugbank/primaryAccessionNo> ?pan .\n" +
 				"	?drugBankUri rdfs:label ?drugLabel.\n" +
