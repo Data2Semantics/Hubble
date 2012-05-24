@@ -5,6 +5,8 @@ import java.util.Vector;
 
 import com.data2semantics.hubble.client.view.View;
 import com.data2semantics.hubble.client.view.gridrecords.AnnotationInfoRecord;
+import com.data2semantics.hubble.client.view.patientinfo.PatientInfo;
+import com.data2semantics.hubble.client.view.patientlisting.PatientListing;
 import com.data2semantics.hubble.shared.models.Snippet;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.types.GroupStartOpen;
@@ -32,26 +34,29 @@ public class AnnotationDetails extends ListGrid {
 	private void initializeGrid(){
 		setHoverWidth(300);
 		setHeight(500);
-		setWidth(1200);
+		setMargin(20);
+		setWidth(PatientInfo.RHS_WIDTH+PatientListing.WIDTH+40);
 		setSelectionType(SelectionStyle.NONE);
-        //setShowRecordComponents(true);          
-        //setShowRecordComponentsByCell(true);  
+
         setWrapCells(true);
         setCellHeight(56);
         
         ListGridField sourceField = new ListGridField(Fields.DOCURI.name(), "Source", 50);
         ListGridField titleField = new ListGridField(Fields.TITLE.name(), "Title");
         ListGridField snippetField = new ListGridField(Fields.SNIPPET.name(), "Snippet");
-        //ListGridField prefixField = new ListGridField(Fields.PREFIX.name(), "Prefix");
-        //ListGridField postfixField = new ListGridField(Fields.POSTFIX.name(), "Postfix");
-        //ListGridField topicField = new ListGridField(Fields.SELECTOR.name(), "Selector");
+
         titleField.setHidden(true);
         sourceField.setType(ListGridFieldType.LINK);
         sourceField.setLinkText("<img src='images/icons/glyphicons_222_share.png' width=20px>");
+       
+        
         ListGridField fields[] = new ListGridField[]{sourceField, titleField, snippetField, };
         setFields(fields);
+
         setGroupByField(Fields.TITLE.name());
 		setGroupStartOpen(GroupStartOpen.ALL);
+		
+		
 		setEmptyMessage("Loading data");
 		draw();
 	}
