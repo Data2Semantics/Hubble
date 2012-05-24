@@ -45,10 +45,9 @@ public class AnnotationDetails extends ListGrid {
         //ListGridField prefixField = new ListGridField(Fields.PREFIX.name(), "Prefix");
         //ListGridField postfixField = new ListGridField(Fields.POSTFIX.name(), "Postfix");
         //ListGridField topicField = new ListGridField(Fields.SELECTOR.name(), "Selector");
-        
+        titleField.setHidden(true);
         sourceField.setType(ListGridFieldType.LINK);
-        sourceField.setLinkText("SRC");
-        
+        sourceField.setLinkText("<img src='images/icons/glyphicons_222_share.png' width=20px>");
         ListGridField fields[] = new ListGridField[]{sourceField, titleField, snippetField, };
         setFields(fields);
         setGroupByField(Fields.TITLE.name());

@@ -27,6 +27,7 @@ public class PatientListing extends ListGrid {
 		setSelectionType(SelectionStyle.SINGLE);
 		ListGridField nameField = new ListGridField("patientId", "Patient");
 		setFields(nameField);
+		
 		addSelectionChangedHandler(new SelectionChangedHandler() {  
             public void onSelectionChanged(SelectionEvent event) {  
             	ListGridRecord[] records = getSelectedRecords();
@@ -38,7 +39,8 @@ public class PatientListing extends ListGrid {
             	}
             }  
         }); 
-		draw();
+		
+		//draw();
 		getView().getServerSideApi().getPatients(new AsyncCallback<ArrayList<String>>() {
 			public void onFailure(Throwable e) {
 				getView().onError(e.getMessage());
@@ -53,7 +55,10 @@ public class PatientListing extends ListGrid {
                     records.add(row);
 				}
 				setData(Helper.getListGridRecordArray(records));
+				selectRecord(0);
+				
 				redraw();
+				
 			}
 		});
 	}
