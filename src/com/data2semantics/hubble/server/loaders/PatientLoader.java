@@ -156,7 +156,8 @@ public class PatientLoader {
 				"OPTIONAL{?patient patient:usesMedication ?drug." +
 					"?drug rdfs:label ?drug_label;" +
 						"owl:sameAs ?drug_sameAs." +
-					"FILTER regex(str(?drug_sameAs), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" + 
+					"?drug_sameAs <http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugbank/primaryAccessionNo> ?pan ." +
+//					"FILTER regex(str(?drug_sameAs), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" + 
 				"}.\n" + 
 				"OPTIONAL{?patient patient:hasStatus ?status}.\n" + 
 				"OPTIONAL{?patient patient:hasMeasurement ?measurement}.\n" + 
