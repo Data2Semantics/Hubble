@@ -189,6 +189,7 @@ public class PatientDetails extends ListGrid {
             }  
         });
 
+		typeField.setHidden(true);
 		ListGridField buttonPic = new ListGridField(Row.BUTTON_PIC, " ", 120);
 		buttonPic.setAlign(Alignment.CENTER);
 		ListGridField buttonAers = new ListGridField(Row.BUTTON_AERS, " ", 120);
