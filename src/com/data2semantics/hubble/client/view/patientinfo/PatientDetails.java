@@ -94,8 +94,20 @@ public class PatientDetails extends ListGrid {
 	            });
 	            return button;
 	        } else if (fieldName.equals(Row.BUTTON_AERS) && 
-	        		(informationType.equals(RowHeaders.DRUG) || 
-	        				informationType.equals(RowHeaders.INDICATION) || 
+	        		(informationType.equals(RowHeaders.DRUG) )) {
+	        	Button button = new Button("Related Reports");
+	            button.setHeight(18);  
+	            button.setWidth(110);
+	            button.setAlign(Alignment.CENTER);
+	            button.addClickHandler(new ClickHandler() {
+	            	public void onClick(ClickEvent event) {
+	            		Drug drug = patientInfo.getDrug(record.getAttribute(Row.URI));
+		        		getView().addSouth(new DrugDetails(view, drug, DrugDetails.SHOW_RELATED_AERS));
+	            	}
+	            });
+	            return button;
+	        } else if (fieldName.equals(Row.BUTTON_AERS) && 
+	        		(informationType.equals(RowHeaders.INDICATION) || 
 	        				informationType.equals(RowHeaders.MEASUREMENT) || 
 	        				informationType.equals(RowHeaders.PREV_INDICATION) || 
 	        				informationType.equals(RowHeaders.TREATMENT))) {
@@ -105,8 +117,8 @@ public class PatientDetails extends ListGrid {
 	            button.setAlign(Alignment.CENTER);
 	            button.addClickHandler(new ClickHandler() {
 	            	public void onClick(ClickEvent event) {
-	            		Drug drug = patientInfo.getDrug(record.getAttribute(Row.URI));
-		        		getView().addSouth(new DrugDetails(view, drug, DrugDetails.SHOW_RELATED_AERS));
+	            		Indication indication = patientInfo.getIndication(record.getAttribute(Row.URI));
+		        		getView().addSouth(new IndicationDetails(view, indication));
 	            	}
 	            });
 	            return button;

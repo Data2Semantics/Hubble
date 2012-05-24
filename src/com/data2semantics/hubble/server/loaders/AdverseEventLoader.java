@@ -64,14 +64,13 @@ public class AdverseEventLoader {
 			"		:manufacturer ?manufacturer.\n" +
 			"	?involvement :involved_in ?report;\n" +
 			"		:drug ?drug.\n" +
-			"	?drug :drug_role <http://aers.data2semantics.org/resource/drug/role/PS>;\n" +	
-			"		owl:sameAs ?drugBankUri.\n" + 
+			"	?involvement :drug_role <http://aers.data2semantics.org/resource/drug/role/PS>.\n" +	
+			"	?drug owl:sameAs ?drugBankUri.\n" + 
 			"   ?drugBankUri <http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugbank/primaryAccessionNo> ?pan .\n" +
 			"	?drugBankUri rdfs:label ?drugLabel.\n" +
 //			"	FILTER regex(str(?drugBankUri), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" + 
 			"}\n" + 
 			"LIMIT 100";
-		System.out.println(queryString);
 		return Endpoint.query(Endpoint.ECULTURE2, queryString);
 	}
 	
@@ -95,10 +94,9 @@ public class AdverseEventLoader {
 				"		:manufacturer ?manufacturer.\n" +
 				"	?involvement :involved_in ?report;\n" +
 				"		:drug <" + drug.getUri() + ">;\n" +
-						":drug ?drug\n." +
-				"	<" + drug.getUri() + "> rdfs:label ?drugLabel;\n" +
-				"		owl:sameAs ?drugBankUri.\n" + 
+				"	<" + drug.getUri() + ">	owl:sameAs ?drugBankUri.\n" + 
 				"   ?drugBankUri <http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugbank/primaryAccessionNo> ?pan .\n" +
+				"	?drugBankUri rdfs:label ?drugLabel.\n" +
 //				"	FILTER regex(str(?drugBankUri), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" +
 				"}\n" + 
 				"LIMIT 10";
