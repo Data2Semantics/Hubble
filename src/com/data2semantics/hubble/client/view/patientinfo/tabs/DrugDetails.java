@@ -182,7 +182,7 @@ public class DrugDetails extends VLayout {
 		ListGridField eventDate = new ListGridField(Row.EVENT_DATE, "Event date", 100);
 		ListGridField drugName = new ListGridField(Row.DRUGLABEL, "Drug Name");
 		ListGridField manufacturer = new ListGridField(Row.MANUFACTURER, "Manufacturer");
-		ListGridField button = new ListGridField(Row.BUTTON, " ", 120);
+		ListGridField button = new ListGridField(Row.BUTTON, " ", 125);
 		button.setAlign(Alignment.CENTER);
 		grid.setFields(eventDate, drugName, manufacturer, button);
 		records = new ArrayList<ListGridRecord>();

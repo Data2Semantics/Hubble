@@ -148,7 +148,7 @@ public class IndicationDetails extends VLayout {
 		ListGridField drugName = new ListGridField(Row.DRUGLABEL, "Primary Suspect Drug Name");
 		//ListGridField indicationName = new ListGridField(Row.INDICATIONLABEL, "Indication Name");
 		ListGridField manufacturer = new ListGridField(Row.MANUFACTURER, "Manufacturer");
-		ListGridField button = new ListGridField(Row.BUTTON, " ",120);
+		ListGridField button = new ListGridField(Row.BUTTON, " ",125);
 		grid.setFields(eventDate, drugName, manufacturer, button);
 		records = new ArrayList<ListGridRecord>();
 		
