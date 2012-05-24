@@ -82,7 +82,7 @@ public class PatientDetails extends ListGrid {
         if (record.getAttribute(Row.URI) != null) {
         	
 	        if (fieldName.equals(Row.BUTTON_PIC) && informationType.equals(RowHeaders.DRUG)) {
-	            Button button = new Button("Drug Structure");
+	            Button button = new Button("Molecule");
 	            button.setHeight(18);  
 	            button.setWidth(110);
 	            button.setAlign(Alignment.CENTER);
@@ -99,7 +99,7 @@ public class PatientDetails extends ListGrid {
 	        				informationType.equals(RowHeaders.MEASUREMENT) || 
 	        				informationType.equals(RowHeaders.PREV_INDICATION) || 
 	        				informationType.equals(RowHeaders.TREATMENT))) {
-	        	Button button = new Button("Related AERS");
+	        	Button button = new Button("Related Reports");
 	            button.setHeight(18);  
 	            button.setWidth(110);
 	            button.setAlign(Alignment.CENTER);
@@ -116,7 +116,7 @@ public class PatientDetails extends ListGrid {
 	        				informationType.equals(RowHeaders.MEASUREMENT) || 
 	        				informationType.equals(RowHeaders.PREV_INDICATION) || 
 	        				informationType.equals(RowHeaders.TREATMENT))) {
-	        	Button button = new Button("Browse RDF");
+	        	Button button = new Button("Browse");
 	            button.setHeight(18);  
 	            button.setWidth(110);
 	            button.setAlign(Alignment.CENTER);
