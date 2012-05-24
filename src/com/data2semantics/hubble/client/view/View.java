@@ -51,9 +51,8 @@ public class View extends VLayout {
 			removeMember(members[members.length-1]);
 		}
 
-		canvas.setWidth(PatientListing.WIDTH+ PatientInfo.RHS_WIDTH);
+		canvas.setWidth(PatientListing.WIDTH + PatientInfo.RHS_WIDTH + 40);
 		canvas.setHeight(PatientListing.HEIGHT);
-		
 		addMember(canvas);
 		
 	}

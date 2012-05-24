@@ -99,7 +99,7 @@ public class AdverseEventLoader {
 				"	?drugBankUri rdfs:label ?drugLabel.\n" +
 //				"	FILTER regex(str(?drugBankUri), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" +
 				"}\n" + 
-				"LIMIT 10";
+				"LIMIT 100";
 			return Endpoint.query(Endpoint.ECULTURE2, queryString);
 		
 		

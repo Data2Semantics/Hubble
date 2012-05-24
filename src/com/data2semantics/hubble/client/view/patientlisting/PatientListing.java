@@ -17,7 +17,7 @@ import com.smartgwt.client.widgets.grid.events.SelectionEvent;
 public class PatientListing extends ListGrid {
 	View view;
 	public static int WIDTH = 180;
-	public static int HEIGHT = 350;
+	public static int HEIGHT = 400;
 	
 	public PatientListing(final View view) {
 		this.view = view;

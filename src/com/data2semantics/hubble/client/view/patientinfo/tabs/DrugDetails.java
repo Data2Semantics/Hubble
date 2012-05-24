@@ -7,12 +7,16 @@ import java.util.Map;
 
 import com.data2semantics.hubble.client.helpers.Helper;
 import com.data2semantics.hubble.client.view.View;
+import com.data2semantics.hubble.client.view.annotations.AnnotationDetails.Fields;
+import com.data2semantics.hubble.client.view.patientinfo.PatientInfo;
+import com.data2semantics.hubble.client.view.patientlisting.PatientListing;
 import com.data2semantics.hubble.shared.models.AdverseEvent;
 import com.data2semantics.hubble.shared.models.Drug;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.types.Alignment;
+import com.smartgwt.client.types.GroupStartOpen;
 import com.smartgwt.client.types.SelectionStyle;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Canvas;
@@ -49,8 +53,14 @@ public class DrugDetails extends VLayout {
 	}
 	
 	public DrugDetails(View view, Drug drug, int content) {
+		
+		setHoverWidth(300);
+		setHeight(500);
+		setMargin(20);
+		setWidth(PatientInfo.RHS_WIDTH+PatientListing.WIDTH+40);
+		
 		this.content = content;
-		setHeight(650);
+//		setHeight(650);
 		this.view = view;
 		this.drug = drug;
 		if (content == SHOW_STRUCTURE || content == SHOW_ALL) {
@@ -91,9 +101,9 @@ public class DrugDetails extends VLayout {
 	}
 	
 	private void drawRelevantAdverseEvents() {
-		label = new Label("Related adverse events");
-		label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-		addMember(label);
+//		label = new Label("Related adverse events");
+//		label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+//		addMember(label);
 		initAdverseEventGrid();
 		try {
 			getView().getServerSideApi().getRelevantAdverseEvents(drug, new AsyncCallback<HashMap<String, AdverseEvent>>() {
@@ -145,11 +155,11 @@ public class DrugDetails extends VLayout {
                 String fieldName = this.getFieldName(colNum);  
   
                if (fieldName.equals(Row.BUTTON)) {
-                    Button button = new Button("Show Adverse Event");
+                    Button button = new Button("Browse");
                     button.setIcon("icons/fugue/navigation-090-white.png");
                     final String adverseEventUri = record.getAttribute(Row.ADVERSE_EVENT_URI);
                     button.setHeight(18);
-                    button.setWidth(135);
+                    button.setWidth(120);
                     button.addClickHandler(new ClickHandler() {  
                         public void onClick(ClickEvent event) {
                         	Window.open(adverseEventUri, "_blank", "");
@@ -164,7 +174,7 @@ public class DrugDetails extends VLayout {
         };
 		//grid.setWidth(PatientInfo.RHS_WIDTH + PatientListing.WIDTH - 25);
         grid.setWidth100();
-		grid.setHeight(275);
+		grid.setHeight(400);
 		grid.setSelectionType(SelectionStyle.NONE);
 		grid.setShowRecordComponents(true);          
 		grid.setShowRecordComponentsByCell(true); 
@@ -172,10 +182,12 @@ public class DrugDetails extends VLayout {
 		ListGridField eventDate = new ListGridField(Row.EVENT_DATE, "Event date", 100);
 		ListGridField drugName = new ListGridField(Row.DRUGLABEL, "Drug Name");
 		ListGridField manufacturer = new ListGridField(Row.MANUFACTURER, "Manufacturer");
-		ListGridField button = new ListGridField(Row.BUTTON, "Adverse events details", 170);
+		ListGridField button = new ListGridField(Row.BUTTON, " ", 120);
 		button.setAlign(Alignment.CENTER);
 		grid.setFields(eventDate, drugName, manufacturer, button);
 		records = new ArrayList<ListGridRecord>();
+		
+		
 		addMember(grid);
 	}
 }

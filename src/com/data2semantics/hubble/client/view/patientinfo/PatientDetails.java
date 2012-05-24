@@ -34,7 +34,7 @@ import com.smartgwt.client.widgets.grid.ListGridRecord;
 public class PatientDetails extends ListGrid {
 	private View view;
 	private String patientId;
-	private static int HEIGHT = 350;
+	private static int HEIGHT = 400;
 	
 	private static int ITEM_COLUMN_WIDTH = 150;
 	
