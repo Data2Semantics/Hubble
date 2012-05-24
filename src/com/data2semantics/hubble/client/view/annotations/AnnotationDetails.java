@@ -5,17 +5,13 @@ import java.util.Vector;
 
 import com.data2semantics.hubble.client.view.View;
 import com.data2semantics.hubble.client.view.gridrecords.AnnotationInfoRecord;
-import com.data2semantics.hubble.shared.models.Patient;
 import com.data2semantics.hubble.shared.models.Snippet;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.GroupStartOpen;
 import com.smartgwt.client.types.ListGridFieldType;
 import com.smartgwt.client.types.SelectionStyle;
-import com.smartgwt.client.widgets.grid.HoverCustomizer;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
-import com.smartgwt.client.widgets.grid.ListGridRecord;
 
 public class AnnotationDetails extends ListGrid {
 	private View view;
@@ -30,33 +26,32 @@ public class AnnotationDetails extends ListGrid {
 	}
 	
 	public enum Fields {
-		DOCURI, TITLE, EXACT, PREFIX, POSTFIX, TOPIC, SELECTOR, TOOLTIP
+		DOCURI, TITLE, EXACT, PREFIX, POSTFIX, TOPIC, SELECTOR, TOOLTIP, SNIPPET
 	}
 	
 	private void initializeGrid(){
 		setHoverWidth(300);
 		setHeight(500);
-		setWidth(900);
+		setWidth(1200);
 		setSelectionType(SelectionStyle.NONE);
-        setShowRecordComponents(true);          
-        setShowRecordComponentsByCell(true);  
+        //setShowRecordComponents(true);          
+        //setShowRecordComponentsByCell(true);  
+        setWrapCells(true);
+        setCellHeight(56);
         
-        
-        ListGridField sourceField = new ListGridField(Fields.DOCURI.name(), "Source");
+        ListGridField sourceField = new ListGridField(Fields.DOCURI.name(), "Source", 50);
         ListGridField titleField = new ListGridField(Fields.TITLE.name(), "Title");
-        ListGridField exactField = new ListGridField(Fields.EXACT.name(), "Match");
-        ListGridField prefixField = new ListGridField(Fields.PREFIX.name(), "Prefix");
-        ListGridField postfixField = new ListGridField(Fields.POSTFIX.name(), "Postfix");
-        ListGridField topicField = new ListGridField(Fields.SELECTOR.name(), "Selector");
+        ListGridField snippetField = new ListGridField(Fields.SNIPPET.name(), "Snippet");
+        //ListGridField prefixField = new ListGridField(Fields.PREFIX.name(), "Prefix");
+        //ListGridField postfixField = new ListGridField(Fields.POSTFIX.name(), "Postfix");
+        //ListGridField topicField = new ListGridField(Fields.SELECTOR.name(), "Selector");
         
-        prefixField.setMultiple(true);
-        postfixField.setMultiple(true);
         sourceField.setType(ListGridFieldType.LINK);
         sourceField.setLinkText("SRC");
         
-        ListGridField fields[] = new ListGridField[]{sourceField, titleField, exactField, prefixField, postfixField, topicField};
+        ListGridField fields[] = new ListGridField[]{sourceField, titleField, snippetField, };
         setFields(fields);
-        
+        setGroupByField(Fields.TITLE.name());
 		setGroupStartOpen(GroupStartOpen.ALL);
 		setEmptyMessage("Loading data");
 		draw();

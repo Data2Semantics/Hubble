@@ -12,10 +12,15 @@ public class AnnotationInfoRecord extends ListGridRecord {
 		
 		setAttribute(Fields.DOCURI.name(), snip.getDocumentUri());
 		setAttribute(Fields.TITLE.name(), snip.getDocumentTitle());
-		setAttribute(Fields.EXACT.name(), snip.getExact());
-		setAttribute(Fields.PREFIX.name(), snip.getPrefix());
-		setAttribute(Fields.POSTFIX.name(), snip.getPostfix());
-		setAttribute(Fields.SELECTOR.name(), snip.getSelectorUri());
+		setAttribute(Fields.SNIPPET.name(), getHighlightedText(snip));
+	}
+
+	private String getHighlightedText(Snippet snip) {
+		String pre = snip.getPrefix();
+		String post = snip.getPostfix();
+		String match = snip.getExact();
+		return pre + "<b><i>" + match + "</b></i>"+post;
+		
 	}
 	
 }
