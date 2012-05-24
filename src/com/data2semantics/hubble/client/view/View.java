@@ -50,7 +50,12 @@ public class View extends VLayout {
 		if (members.length > 1) {
 			removeMember(members[members.length-1]);
 		}
+//		canvas.setLeft(-20);
+		canvas.setWidth(PatientListing.WIDTH+ PatientInfo.RHS_WIDTH);
+		canvas.setHeight(PatientListing.HEIGHT);
+		
 		addMember(canvas);
+		
 	}
 	
 	public void onError( String error ){
