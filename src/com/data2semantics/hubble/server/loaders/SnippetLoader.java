@@ -118,6 +118,10 @@ public class SnippetLoader {
 				"?selectorUri " +
 				//"(count(?topic) as ?count) " +
 				"WHERE {\n" + 
+				"			 ?patientUri rdfs:label '" + patientId + "'@en.\n" +			 
+				"            ?patientUri ?p ?feature .\n" + 
+				"            ?feature owl:sameAs ?lld .\n" + 
+				"            ?topic owl:sameAs ?lld .\n" + 
 				"	<" + docUri + "> dcterms:title ?title .\n" + 
 				"	?q aof:annotatesDocument <" + docUri + ">;\n" + 
 				"		ao:hasTopic ?topic ;\n" + 
