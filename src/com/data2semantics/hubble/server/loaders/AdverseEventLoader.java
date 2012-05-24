@@ -83,11 +83,10 @@ public class AdverseEventLoader {
 				"?eventDate \n" +
 				"?gender \n" +
 				"?manufacturer \n" +
-				"?drug \n" +
+				"(<" + drug.getUri() + "> AS ?drug) \n" +
 				"?drugLabel \n" +
 				"?drugBankUri \n" +
 				"{\n" +
-				"	BIND(<" + drug.getUri() + "> AS ?drug).\n" +
 				"	?report :age ?age;\n" +
 				"		:event_date ?eventDate;\n" +
 				"		:gender ?gender;\n" +
