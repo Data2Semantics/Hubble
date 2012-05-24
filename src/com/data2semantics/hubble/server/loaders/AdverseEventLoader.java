@@ -44,6 +44,8 @@ public class AdverseEventLoader {
 	}
 	
 	private ResultSet queryRelevantAdverseEvents(Indication indication) {
+		// Get all adverse events for the indication, and return those where we have a drugBank URI for the primary suspect (PS) drug
+		
 		String queryString = Helper.getSparqlPrefixesAsString("aers") + "\n" + 
 			"SELECT DISTINCT \n" +
 			"?report \n" +
@@ -55,19 +57,21 @@ public class AdverseEventLoader {
 			"?drugLabel \n" +
 			"?drugBankUri" +
 			"{\n" + 
-			"	<" + indication.getUri() + "> owl:sameAs ?sameAs.\n" + 
-			"	?sameAs :reaction_of ?report.\n" +
+			"	<" + indication.getUri() + "> :reaction_of ?report.\n" +
 			"	?report :age ?age;\n" +
 			"		:event_date ?eventDate;\n" +
 			"		:gender ?gender;\n" +
 			"		:manufacturer ?manufacturer.\n" +
 			"	?involvement :involved_in ?report;\n" +
 			"		:drug ?drug.\n" +
-			"	?drug rdfs:label ?drugLabel;\n" +
+			"	?drug :drug_role <http://aers.data2semantics.org/resource/drug/role/PS>;\n" +	
 			"		owl:sameAs ?drugBankUri.\n" + 
-			"	FILTER regex(str(?drugBankUri), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" + 
+			"   ?drugBankUri <http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugbank/primaryAccessionNo> ?pan .\n" +
+			"	?drugBankUri rdfs:label ?drugLabel.\n" +
+//			"	FILTER regex(str(?drugBankUri), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" + 
 			"}\n" + 
 			"LIMIT 100";
+		System.out.println(queryString);
 		return Endpoint.query(Endpoint.ECULTURE2, queryString);
 	}
 	
@@ -94,7 +98,8 @@ public class AdverseEventLoader {
 						":drug ?drug\n." +
 				"	<" + drug.getUri() + "> rdfs:label ?drugLabel;\n" +
 				"		owl:sameAs ?drugBankUri.\n" + 
-				"	FILTER regex(str(?drugBankUri), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" +
+				"   ?drugBankUri <http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugbank/primaryAccessionNo> ?pan .\n" +
+//				"	FILTER regex(str(?drugBankUri), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" +
 				"}\n" + 
 				"LIMIT 10";
 			return Endpoint.query(Endpoint.ECULTURE2, queryString);
