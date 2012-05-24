@@ -82,9 +82,9 @@ public class PatientDetails extends ListGrid {
         if (record.getAttribute(Row.URI) != null) {
         	
 	        if (fieldName.equals(Row.BUTTON_PIC) && informationType.equals(RowHeaders.DRUG)) {
-	            Button button = new Button("Show Drug Structure");
+	            Button button = new Button("Drug Structure");
 	            button.setHeight(18);  
-	            button.setWidth(120);
+	            button.setWidth(110);
 	            button.setAlign(Alignment.CENTER);
 	            button.addClickHandler(new ClickHandler() {
 	            	public void onClick(ClickEvent event) {
@@ -99,9 +99,9 @@ public class PatientDetails extends ListGrid {
 	        				informationType.equals(RowHeaders.MEASUREMENT) || 
 	        				informationType.equals(RowHeaders.PREV_INDICATION) || 
 	        				informationType.equals(RowHeaders.TREATMENT))) {
-	        	Button button = new Button("Show Related AERS");
+	        	Button button = new Button("Related AERS");
 	            button.setHeight(18);  
-	            button.setWidth(120);
+	            button.setWidth(110);
 	            button.setAlign(Alignment.CENTER);
 	            button.addClickHandler(new ClickHandler() {
 	            	public void onClick(ClickEvent event) {
@@ -118,7 +118,7 @@ public class PatientDetails extends ListGrid {
 	        				informationType.equals(RowHeaders.TREATMENT))) {
 	        	Button button = new Button("Browse RDF");
 	            button.setHeight(18);  
-	            button.setWidth(120);
+	            button.setWidth(110);
 	            button.setAlign(Alignment.CENTER);
 	            button.setIcon("icons/fugue/navigation-090-white.png");
 	            button.addClickHandler(new ClickHandler() {
@@ -189,11 +189,11 @@ public class PatientDetails extends ListGrid {
             }  
         });
 
-		ListGridField buttonPic = new ListGridField(Row.BUTTON_PIC, " ", 130);
+		ListGridField buttonPic = new ListGridField(Row.BUTTON_PIC, " ", 120);
 		buttonPic.setAlign(Alignment.CENTER);
-		ListGridField buttonAers = new ListGridField(Row.BUTTON_AERS, " ", 130);
+		ListGridField buttonAers = new ListGridField(Row.BUTTON_AERS, " ", 120);
 		buttonAers.setAlign(Alignment.CENTER);
-		ListGridField buttenRdf = new ListGridField(Row.BUTTON_RDF, " ", 130);
+		ListGridField buttenRdf = new ListGridField(Row.BUTTON_RDF, " ", 120);
 		buttenRdf.setAlign(Alignment.CENTER);
 		setFields(typeField, valueField, buttonPic, buttonAers, buttenRdf);
 		setGroupByField(Row.KEY);
