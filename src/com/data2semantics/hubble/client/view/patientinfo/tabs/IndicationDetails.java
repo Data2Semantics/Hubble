@@ -34,6 +34,7 @@ public class IndicationDetails extends VLayout {
 		public static String MANUFACTURER = "manufacturer";
 		public static String EVENT_DATE = "eventdate";
 		public static String DRUGLABEL = "druglabel";
+		public static String INDICATIONLABEL = "indicationlabel";
 		public static String ADVERSE_EVENT_URI = "adverseeventuri";
 		public static String DRUG_URI = "druguri";
 		public static String BUTTON = "button";
@@ -42,10 +43,8 @@ public class IndicationDetails extends VLayout {
 	public IndicationDetails(View view, Indication indication) {
 		this.view = view;
 		this.indication = indication;
-		label = new Label("Serious adverse events related to this diagnosis");
-		label.setHeight(20);
-		label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-		addMember(label);
+		setHeight(650);
+		
 		drawRelevantAdverseEvents();
 		addMember(drawMoreInfoButton());
 	}
@@ -56,6 +55,9 @@ public class IndicationDetails extends VLayout {
 	}
 	
 	private void drawRelevantAdverseEvents() {
+		label = new Label("Serious adverse events related to diagnosis: " + indication.getLabel());
+		label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+		addMember(label);
 		initAdverseEventGrid();
 		try {
 			getView().getServerSideApi().getRelevantAdverseEvents(indication, new AsyncCallback<HashMap<String, AdverseEvent>>() {
@@ -93,6 +95,7 @@ public class IndicationDetails extends VLayout {
 			record.setAttribute(Row.EVENT_DATE, adverseEvent.getEventDate());
 			record.setAttribute(Row.MANUFACTURER, adverseEvent.getManufacturer());
 			record.setAttribute(Row.DRUGLABEL, entry.getValue().getLabel());
+			//record.setAttribute(Row.INDICATIONLABEL, adverseEvent.getIndicationLabel());
 			record.setAttribute(Row.ADVERSE_EVENT_URI, adverseEvent.getUri());
 			record.setAttribute(Row.DRUG_URI, entry.getKey());
 			records.add(record);
@@ -105,35 +108,40 @@ public class IndicationDetails extends VLayout {
             protected Canvas createRecordComponent(final ListGridRecord record, Integer colNum) {  
                 String fieldName = this.getFieldName(colNum);  
                if (fieldName.equals(Row.BUTTON)) {
-                    Button button = new Button("Show Drug Structure");
+                    Button button = new Button("Show Adverse Event");
+                    button.setIcon("icons/fugue/navigation-090-white.png");
                     final String adverseEventUri = record.getAttribute(Row.ADVERSE_EVENT_URI);
                     final String drugUri = record.getAttribute(Row.DRUG_URI);
                     button.setHeight(18);  
                     button.setWidth(110);
                     button.addClickHandler(new ClickHandler() {  
                         public void onClick(ClickEvent event) {
-		            		Drug drug = adverseEvents.get(adverseEventUri).getDrug(drugUri);
-		            		getView().addSouth(new DrugDetails(view, drug, DrugDetails.SHOW_STRUCTURE));
+//		            		Drug drug = adverseEvents.get(adverseEventUri).getDrug(drugUri);
+//		            		getView().addSouth(new DrugDetails(view, drug, DrugDetails.SHOW_STRUCTURE));
+                           	Window.open(adverseEventUri, "_blank", "");
                         }
                     });
                     return button;
                 } else {
                     return null;  
                 }
-  
+         
             }
         };
 		grid.setWidth100();
+		grid.setHeight(275);
 		grid.setSelectionType(SelectionStyle.NONE);
 		grid.setShowRecordComponents(true);          
 		grid.setShowRecordComponentsByCell(true);
 		grid.setShowAllRecords(true);
 		grid.setEmptyMessage("Loading data");
+
 		
-		ListGridField eventDate = new ListGridField(Row.EVENT_DATE, "Event date");
-		ListGridField drugName = new ListGridField(Row.DRUGLABEL, "Drug Name");
+		ListGridField eventDate = new ListGridField(Row.EVENT_DATE, "Event date", 100);
+		ListGridField drugName = new ListGridField(Row.DRUGLABEL, "Primary Suspect Drug Name");
+		//ListGridField indicationName = new ListGridField(Row.INDICATIONLABEL, "Indication Name");
 		ListGridField manufacturer = new ListGridField(Row.MANUFACTURER, "Manufacturer");
-		ListGridField button = new ListGridField(Row.BUTTON, "Drug details", 120);
+		ListGridField button = new ListGridField(Row.BUTTON, "Adverse events details", 170);
 		grid.setFields(eventDate, drugName, manufacturer, button);
 		records = new ArrayList<ListGridRecord>();
 		addMember(grid);

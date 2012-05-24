@@ -55,7 +55,8 @@ public class AdverseEventLoader {
 			"?manufacturer \n" +
 			"?drug \n" +
 			"?drugLabel \n" +
-			"?drugBankUri" +
+			"?drugBankUri \n" +
+			"(<" + indication.getLabel() + "> AS ?indicationLabel) \n" +
 			"{\n" + 
 			"	<" + indication.getUri() + "> :reaction_of ?report.\n" +
 			"	?report :age ?age;\n" +
