@@ -41,7 +41,7 @@ public class HubbleInterface implements EntryPoint
 			View mainView = new View(serverSideApi);
 			
 			mainLayout.setWidth100();
-			mainLayout.setHeight100();
+			//mainLayout.setHeight100();
 			mainLayout.addMember(headerArea);
 			mainLayout.addMember(mainView);
 			mainLayout.draw();
