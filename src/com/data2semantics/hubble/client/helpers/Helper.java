@@ -44,6 +44,14 @@ public class Helper {
 			namespaceList.add("PREFIX patient: <http://www.data2semantics.org/ontology/patient/>");
 		} else if (prefixTypes.equals("lld")) {
 			namespaceList.add("PREFIX skos-xl: <http://www.w3.org/2008/05/skos-xl#>"); //used in lld
+		} else if (prefixTypes.equals("oa")){
+			namespaceList.add("PREFIX oa: <http://www.w3.org/ns/openannotation/core/>"); 
+			namespaceList.add("PREFIX oax: <http://www.w3.org/ns/openannotation/extension/>"); 
+			namespaceList.add("PREFIX cnt: <http://www.w3.org/2011/content#>"); 
+			namespaceList.add("PREFIX dc: <http://purl.org/dc/elements/1.1/>"); 
+			namespaceList.add("PREFIX dcterms: <http://purl.org/dc/terms/>"); 
+			namespaceList.add("PREFIX aers: <http://aers.data2semantics.org/>");
+					
 		}
 
 		return namespaceList;

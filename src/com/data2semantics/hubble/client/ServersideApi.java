@@ -9,6 +9,7 @@ import com.data2semantics.hubble.shared.models.AdverseEvent;
 import com.data2semantics.hubble.shared.models.Drug;
 import com.data2semantics.hubble.shared.models.Indication;
 import com.data2semantics.hubble.shared.models.Patient;
+import com.data2semantics.hubble.shared.models.Recommendation;
 import com.data2semantics.hubble.shared.models.Snippet;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -23,4 +24,7 @@ public interface ServersideApi extends RemoteService {
   HashMap<String, Snippet> getRelevantSnippets(String patientId) throws IllegalArgumentException,SparqlException;
   HashMap<String, AdverseEvent> getRelevantAdverseEvents(Indication indication) throws IllegalArgumentException,SparqlException;
   HashMap<String, AdverseEvent> getRelevantAdverseEvents(Drug drug) throws IllegalArgumentException,SparqlException;
+  
+  ArrayList<Recommendation> getRelevantRecommendations(String patientID) throws IllegalArgumentException, SparqlException;
+  
 }

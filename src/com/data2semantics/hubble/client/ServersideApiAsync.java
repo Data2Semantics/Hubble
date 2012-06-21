@@ -9,6 +9,7 @@ import com.data2semantics.hubble.shared.models.AdverseEvent;
 import com.data2semantics.hubble.shared.models.Drug;
 import com.data2semantics.hubble.shared.models.Indication;
 import com.data2semantics.hubble.shared.models.Patient;
+import com.data2semantics.hubble.shared.models.Recommendation;
 import com.data2semantics.hubble.shared.models.Snippet;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -21,4 +22,7 @@ public interface ServersideApiAsync {
 	void getRelevantSnippets(String patientId, AsyncCallback<HashMap<String, Snippet>> callback) throws IllegalArgumentException,SparqlException;
 	void getRelevantAdverseEvents(Indication indication, AsyncCallback<HashMap<String, AdverseEvent>> callback) throws IllegalArgumentException,SparqlException;
 	void getRelevantAdverseEvents(Drug drug, AsyncCallback<HashMap<String, AdverseEvent>> callback) throws IllegalArgumentException,SparqlException;
+	
+	void getRelevantRecommendations(String patientId, AsyncCallback < ArrayList<Recommendation> > callback) throws IllegalArgumentException,SparqlException;
+	
 }

@@ -6,6 +6,7 @@ import com.data2semantics.hubble.client.helpers.Helper;
 import com.data2semantics.hubble.client.view.View;
 import com.data2semantics.hubble.client.view.annotations.AnnotationDetails;
 import com.data2semantics.hubble.client.view.patientinfo.tabs.WidgetsContainer;
+import com.data2semantics.hubble.client.view.recommendation.RecommendationColumnTree;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.types.SelectionStyle;
 import com.smartgwt.client.widgets.grid.ListGrid;
@@ -34,7 +35,9 @@ public class PatientListing extends ListGrid {
             	if (records.length > 0) {
             		getView().showPatientInfo(records[0].getAttributeAsString("patientId"));
             		//getView().addSouth(new WidgetsContainer(view, records[0].getAttributeAsString("patientId")));
-            		getView().addSouth(new AnnotationDetails(view, records[0].getAttributeAsString("patientId")));
+            		//getView().addSouth(new AnnotationDetails(view, records[0].getAttributeAsString("patientId")));
+            		getView().addSouth(new RecommendationColumnTree(view, records[0].getAttributeAsString("patientId")));
+            		
                     
             	}
             }  
