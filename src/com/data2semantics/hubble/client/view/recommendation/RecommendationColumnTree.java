@@ -7,10 +7,22 @@ import com.data2semantics.hubble.client.view.patientinfo.PatientInfo;
 import com.data2semantics.hubble.client.view.patientlisting.PatientListing;
 import com.data2semantics.hubble.shared.models.Recommendation;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.smartgwt.client.types.ListGridFieldType;
 import com.smartgwt.client.types.TreeModelType;
 import com.smartgwt.client.widgets.grid.ColumnTree;
+import com.smartgwt.client.widgets.grid.HeaderSpan;
+import com.smartgwt.client.widgets.grid.ListGrid;
+import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.tree.Tree;
+import com.smartgwt.client.widgets.tree.TreeNode;
 
+/**
+ * Recommendations are shown as Miller Column tree, with recommendations, evidence summary and supporting evidence as the columns.
+ * The RecommendationTreeNode are arranged following this structure, recommendations as top levels having evidence summary as children and 
+ * each evidence in turns as children of evidence summary
+ * @author wibisono
+ *
+ */
 public class RecommendationColumnTree extends ColumnTree {
 	private View view;
 	private String patientId;
@@ -34,6 +46,7 @@ public class RecommendationColumnTree extends ColumnTree {
 				}
 				@Override
 				public void onSuccess(ArrayList<Recommendation> result) {
+					getView().onLoadingFinish();
 					loadResult(result);
 				}
 
@@ -45,12 +58,15 @@ public class RecommendationColumnTree extends ColumnTree {
 		
 	}
 
+	
 	private void loadResult(ArrayList<Recommendation> result) {
+		TreeNode rootNode = 	new RecommendationTreeNode(result);
+		
 		Tree recommendationTree = new Tree();
-		recommendationTree.setModelType(TreeModelType.CHILDREN);
-		recommendationTree.setNameProperty(RecommendationTreeNode.NAME_PROPERTY);
+		recommendationTree.setModelType(TreeModelType.PARENT);
+		recommendationTree.setNameProperty(RecommendationTreeNode.HEADER_PROPERTY);
 		recommendationTree.setChildrenProperty(RecommendationTreeNode.CHILDREN_PROPERTY);
-		recommendationTree.setRoot(new RecommendationTreeNode(result));
+		recommendationTree.setRoot(rootNode);
 	
 		setData(recommendationTree);
 
@@ -62,11 +78,47 @@ public class RecommendationColumnTree extends ColumnTree {
 		setHeight(500);
 		setMargin(20);
 		setWidth(PatientInfo.RHS_WIDTH+PatientListing.WIDTH+40);
-		setShowHeaders(true);
-		
-		
+		setShowMultipleColumns(true);
+		setFirstColumnTitle("Recommendations");
+		setNodeIcon("icons/fugue/information-white.png");
+		setFolderIcon("icons/fugue/information-white.png");
+		setShowOpenIcons(false);  
+	    setShowDropIcons(false);  
+	    setClosedIconSuffix("");
+	    setTitle("Reccommendations");
+	    setShowHeaders(true);
 	}
 	
+
+	@Override
+    public ListGrid getCustomColumnProperties(TreeNode node, int colNum) {
+				
+		ListGridField uriField = new ListGridField("uri","");
+		uriField.setType(ListGridFieldType.LINK);
+		uriField.setLinkText("<img src='images/icons/glyphicons_222_share.png' width=20px>");
+		uriField.setWidth(30);
+        uriField.setTitle(" ");
+
+		String bodyColumnTitle = "";
+		
+		if(colNum==0) bodyColumnTitle = "Recommendations";
+		else
+		if(colNum == 1) bodyColumnTitle = "Evidence Summary";
+		else
+		if(colNum == 2) bodyColumnTitle = "Supporting Evidence";
+		
+		ListGridField bodyField = new ListGridField("body",bodyColumnTitle);
+        
+        ListGrid customColumnPropertyTemplate = new ListGrid();
+        customColumnPropertyTemplate.setShowHeader(true);
+		customColumnPropertyTemplate.setFixedRecordHeights(false);
+		customColumnPropertyTemplate.setWrapCells(true);
+		
+		customColumnPropertyTemplate.setFields(new ListGridField[]{uriField, bodyField});
+		
+		return customColumnPropertyTemplate;
+    }
+
 	public View getView(){
 		return view;
 	}
