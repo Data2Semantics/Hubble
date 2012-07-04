@@ -49,8 +49,15 @@ public class RecommendationLoader {
 			
 			String evidenceSummaryUri = qEs.get("evidenceSummaryUri").toString();
 			String evidenceSummaryBody = qEs.get("evidenceSummaryBody").toString();
+			String evidenceSummarySrc  = null;
 			
-			EvidenceSummary curEvidenceSummary = new EvidenceSummary(evidenceSummaryBody, evidenceSummaryUri);
+			if(qEs.get("realSrc") != null){
+				evidenceSummarySrc = qEs.get("realSrc").toString();
+			} else
+				evidenceSummarySrc = qEs.get("evidenceSrc").toString();
+				
+			
+			EvidenceSummary curEvidenceSummary = new EvidenceSummary(evidenceSummaryBody, evidenceSummaryUri, evidenceSummarySrc);
 			evidenceSummaries.add(curEvidenceSummary);
 			
 			ArrayList<Evidence> evidences = getEvidences(evidenceSummaryUri);
@@ -70,8 +77,14 @@ public class RecommendationLoader {
 		
 			String evidenceUri = qEv.get("evidenceUri").toString();
 			String evidenceBody = qEv.get("evidenceBody").toString();
+			String evidenceSrc = null;
 			
-			Evidence curEvidence = new Evidence(evidenceBody, evidenceUri);
+			if(qEv.get("realSrc") != null){
+				evidenceSrc = qEv.get("realSrc").toString();
+			} else
+				evidenceSrc = qEv.get("evidenceSrc").toString();
+			
+			Evidence curEvidence = new Evidence(evidenceBody, evidenceUri, evidenceSrc);
 			evidences.add(curEvidence);
 		}
 		return evidences;
@@ -90,10 +103,13 @@ public class RecommendationLoader {
 	
 	private ResultSet queryForEvidenceSummary(String recommendationUri){
 		String queryString = Helper.getSparqlPrefixesAsString("oa") + "\n" +
-				"SELECT ?evidenceSummaryBody ?evidenceSummaryUri \n WHERE {" +
+				"SELECT ?realSrc ?evidenceSrc ?evidenceSummaryBody ?evidenceSummaryUri \n WHERE {" +
 				"   ?evidenceSummaryUri a  <http://aers.data2semantics.org/vocab/annotation/EvidenceSummaryAnnotation> .\n "+
 				"	<" + recommendationUri + "> <http://aers.data2semantics.org/vocab/annotation/hasEvidenceSummary> ?evidenceSummaryUri .\n" +
 				"	?evidenceSummaryUri oa:hasBody ?evidenceSummaryBody .\n" + 
+				"   ?evidenceSummaryUri oa:hasTarget ?evidenceTgt . \n" +
+				"   ?evidenceTgt oa:hasSource ?evidenceSrc . \n" + 
+				"   OPTIONAL { ?evidenceSrc owl:sameAs ?realSrc } .\n" +
 				"}" ;
 		
 		ResultSet queryResult = Endpoint.query(Endpoint.ECULTURE2, queryString);
@@ -102,10 +118,13 @@ public class RecommendationLoader {
 	
 	private ResultSet queryForSupportingEvidences(String evidenceSummaryUri){
 		String queryString = Helper.getSparqlPrefixesAsString("oa") + "\n" +
-				"SELECT ?evidenceUri ?evidenceBody \n WHERE {" +
+				"SELECT ?realSrc ?evidenceSrc ?evidenceUri ?evidenceBody \n WHERE {" +
 				"   ?evidenceUri a  <http://aers.data2semantics.org/vocab/annotation/EvidenceAnnotation> . \n" +
 				"	<" + evidenceSummaryUri + "> <http://purl.org/swan/2.0/discourse-relationships/referencesAsSupportingEvidence> ?evidenceUri .\n" +
 				"	?evidenceUri oa:hasBody ?evidenceBody .\n" + 
+				"   ?evidenceUri oa:hasTarget ?evidenceTgt . \n" +
+				"   ?evidenceTgt oa:hasSource ?evidenceSrc . \n" + 
+				"   OPTIONAL { ?evidenceSrc owl:sameAs ?realSrc } .\n" +
 				"}" ;
 		ResultSet queryResult = Endpoint.query(Endpoint.ECULTURE2, queryString);
 		return queryResult;

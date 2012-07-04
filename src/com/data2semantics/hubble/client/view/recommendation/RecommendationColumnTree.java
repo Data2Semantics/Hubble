@@ -100,7 +100,7 @@ public class RecommendationColumnTree extends ColumnTree {
 		ListGridField blankField = new ListGridField("uri","");
 		blankField.setWidth(1);
 		
-		ListGridField uriField = new ListGridField("uri","");
+		ListGridField uriField = new ListGridField("src","");
 		uriField.setType(ListGridFieldType.LINK);
 		uriField.setLinkText("<img src='images/icons/glyphicons_222_share.png' width=20px>");
 		uriField.setWidth(30);

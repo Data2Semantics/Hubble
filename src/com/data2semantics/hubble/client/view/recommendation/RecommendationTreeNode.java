@@ -14,6 +14,7 @@ public class RecommendationTreeNode extends TreeNode {
 
 	public RecommendationTreeNode(Evidence rec) {
 		setAttribute("uri", rec.getUri());
+		setAttribute("src", rec.getSrc());
 		setAttribute("body", rec.getBody());
 		setAttribute("header","Evidence");
 		
@@ -21,6 +22,7 @@ public class RecommendationTreeNode extends TreeNode {
 
 	public RecommendationTreeNode(EvidenceSummary rec) {
 		setAttribute("uri", rec.getUri());
+		setAttribute("src", rec.getSrc());
 		setAttribute("body", rec.getBody());
 		setAttribute("header","Evidence Summary");
 	}

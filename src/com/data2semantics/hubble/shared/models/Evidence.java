@@ -5,14 +5,16 @@ import java.io.Serializable;
 public class Evidence implements Serializable {
 	private String body;
 	private String uri;
+	private String src;
 
 	private static final long serialVersionUID = 1L;
 	
 	public Evidence(){};
 	
-	public Evidence(String body, String uri) {
+	public Evidence(String body, String uri, String src) {
 		this.body = body;
 		this.uri = uri;
+		this.src = src;
 	}
 
 	public String getBody() {
@@ -25,6 +27,14 @@ public class Evidence implements Serializable {
 	public String getUri() {
 		// TODO Auto-generated method stub
 		return uri;
+	}
+
+	public String getSrc() {
+		return src;
+	}
+
+	public void setSrc(String src) {
+		this.src = src;
 	}
 	
 }

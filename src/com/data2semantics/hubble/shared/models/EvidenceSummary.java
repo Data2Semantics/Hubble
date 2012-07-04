@@ -10,13 +10,16 @@ public class EvidenceSummary implements Serializable {
 	private static final long serialVersionUID = 1L;
 		private String body;
 		private String uri;
+		private String src;
+		
 		private ArrayList<Evidence> suportingReferences;
 
 		public EvidenceSummary(){};
 		
-		public EvidenceSummary(String body, String uri) {
+		public EvidenceSummary(String body, String uri, String src) {
 			this.body = body;
-			this.setUri(uri);
+			this.uri = uri;
+			this.src = src;
 		}
 		/**
 		 * @return the body
@@ -48,6 +51,14 @@ public class EvidenceSummary implements Serializable {
 		}
 		public void setUri(String uri) {
 			this.uri = uri;
+		}
+
+		public String getSrc() {
+			return src;
+		}
+
+		public void setSrc(String src) {
+			this.src = src;
 		}
 		
 }
