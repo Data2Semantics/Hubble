@@ -103,7 +103,7 @@ public class RecommendationLoader {
 	
 	private ResultSet queryForEvidenceSummary(String recommendationUri){
 		String queryString = Helper.getSparqlPrefixesAsString("oa") + "\n" +
-				"SELECT ?realSrc ?evidenceSrc ?evidenceSummaryBody ?evidenceSummaryUri \n WHERE {" +
+				"SELECT DISTINCT ?realSrc ?evidenceSrc ?evidenceSummaryBody ?evidenceSummaryUri \n WHERE {" +
 				"   ?evidenceSummaryUri a  <http://aers.data2semantics.org/vocab/annotation/EvidenceSummaryAnnotation> .\n "+
 				"	<" + recommendationUri + "> <http://aers.data2semantics.org/vocab/annotation/hasEvidenceSummary> ?evidenceSummaryUri .\n" +
 				"	?evidenceSummaryUri oa:hasBody ?evidenceSummaryBody .\n" + 
@@ -118,7 +118,7 @@ public class RecommendationLoader {
 	
 	private ResultSet queryForSupportingEvidences(String evidenceSummaryUri){
 		String queryString = Helper.getSparqlPrefixesAsString("oa") + "\n" +
-				"SELECT ?realSrc ?evidenceSrc ?evidenceUri ?evidenceBody \n WHERE {" +
+				"SELECT DISTINCT ?realSrc ?evidenceSrc ?evidenceUri ?evidenceBody \n WHERE {" +
 				"   ?evidenceUri a  <http://aers.data2semantics.org/vocab/annotation/EvidenceAnnotation> . \n" +
 				"	<" + evidenceSummaryUri + "> <http://purl.org/swan/2.0/discourse-relationships/referencesAsSupportingEvidence> ?evidenceUri .\n" +
 				"	?evidenceUri oa:hasBody ?evidenceBody .\n" + 
