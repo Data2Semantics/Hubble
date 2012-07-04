@@ -13,6 +13,7 @@ import com.smartgwt.client.widgets.grid.ColumnTree;
 import com.smartgwt.client.widgets.grid.HeaderSpan;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
+import com.smartgwt.client.widgets.grid.events.NodeSelectedHandler;
 import com.smartgwt.client.widgets.tree.Tree;
 import com.smartgwt.client.widgets.tree.TreeNode;
 
@@ -87,18 +88,25 @@ public class RecommendationColumnTree extends ColumnTree {
 	    setClosedIconSuffix("");
 	    setTitle("Reccommendations");
 	    setShowHeaders(true);
+	    ListGrid template = new ListGrid();
+		template.setFixedRecordHeights(false);
+		template.setWrapCells(true);
+		setColumnProperties(template);
+		
 	}
-	
 
 	@Override
     public ListGrid getCustomColumnProperties(TreeNode node, int colNum) {
-				
+		ListGridField blankField = new ListGridField("uri","");
+		blankField.setWidth(1);
+		
 		ListGridField uriField = new ListGridField("uri","");
 		uriField.setType(ListGridFieldType.LINK);
 		uriField.setLinkText("<img src='images/icons/glyphicons_222_share.png' width=20px>");
 		uriField.setWidth(30);
         uriField.setTitle(" ");
-
+        uriField.setAttribute("showHeader", "false");
+        
 		String bodyColumnTitle = "";
 		
 		if(colNum==0) bodyColumnTitle = "Recommendations";
@@ -114,7 +122,8 @@ public class RecommendationColumnTree extends ColumnTree {
 		customColumnPropertyTemplate.setFixedRecordHeights(false);
 		customColumnPropertyTemplate.setWrapCells(true);
 		
-		customColumnPropertyTemplate.setFields(new ListGridField[]{uriField, bodyField});
+		customColumnPropertyTemplate.setFields(new ListGridField[]{blankField, uriField, bodyField});
+		customColumnPropertyTemplate.setCanResizeFields(false);
 		
 		return customColumnPropertyTemplate;
     }
