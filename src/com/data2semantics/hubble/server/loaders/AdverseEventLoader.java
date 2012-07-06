@@ -58,7 +58,7 @@ public class AdverseEventLoader {
 			"?drugBankUri \n" +
 			"(<" + indication.getLabel() + "> AS ?indicationLabel) \n" +
 			"{\n" + 
-			"	<" + indication.getUri() + "> :reaction_of ?report.\n" +
+			"	{<" + indication.getUri() + "> :reaction_of ?report.} UNION { <" + indication.getUri() + "> skos:exactMatch ?ind . ?ind :reaction_of ?report . }\n" +
 			"	?report :age ?age;\n" +
 			"		:event_date ?eventDate;\n" +
 			"		:gender ?gender;\n" +
@@ -66,7 +66,7 @@ public class AdverseEventLoader {
 			"	?involvement :involved_in ?report;\n" +
 			"		:drug ?drug.\n" +
 			"	?involvement :drug_role <http://aers.data2semantics.org/resource/drug/role/PS>.\n" +	
-			"	?drug owl:sameAs ?drugBankUri.\n" + 
+			"	?drug skos:exactMatch ?drugBankUri.\n" + 
 			"   ?drugBankUri <http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugbank/primaryAccessionNo> ?pan .\n" +
 			"	?drugBankUri rdfs:label ?drugLabel.\n" +
 //			"	FILTER regex(str(?drugBankUri), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" + 
@@ -94,7 +94,7 @@ public class AdverseEventLoader {
 				"		:manufacturer ?manufacturer.\n" +
 				"	?involvement :involved_in ?report;\n" +
 				"		:drug <" + drug.getUri() + ">.\n" +
-				"	<" + drug.getUri() + ">	owl:sameAs ?drugBankUri.\n" + 
+				"	<" + drug.getUri() + ">	skos:exactMatch ?drugBankUri.\n" + 
 				"   ?drugBankUri <http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugbank/primaryAccessionNo> ?pan .\n" +
 				"	?drugBankUri rdfs:label ?drugLabel.\n" +
 //				"	FILTER regex(str(?drugBankUri), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" +
