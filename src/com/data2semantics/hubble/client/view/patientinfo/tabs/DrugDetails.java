@@ -7,16 +7,13 @@ import java.util.Map;
 
 import com.data2semantics.hubble.client.helpers.Helper;
 import com.data2semantics.hubble.client.view.View;
-import com.data2semantics.hubble.client.view.annotations.AnnotationDetails.Fields;
 import com.data2semantics.hubble.client.view.patientinfo.PatientInfo;
 import com.data2semantics.hubble.client.view.patientlisting.PatientListing;
 import com.data2semantics.hubble.shared.models.AdverseEvent;
 import com.data2semantics.hubble.shared.models.Drug;
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.types.Alignment;
-import com.smartgwt.client.types.GroupStartOpen;
 import com.smartgwt.client.types.SelectionStyle;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Canvas;
@@ -33,6 +30,7 @@ public class DrugDetails extends VLayout {
 	private View view;
 	private Drug drug;
 	private ListGrid grid;
+	@SuppressWarnings("unused")
 	private int content;
 	public static int SHOW_ALL = 0;
 	public static int SHOW_STRUCTURE = 1;
@@ -86,18 +84,6 @@ public class DrugDetails extends VLayout {
 	}
 	public View getView() {
 		return view;
-	}
-	
-	private Button drawMoreInfoButton() {
-		Button moreInfo = new Button("Show details");
-		moreInfo.setAlign(Alignment.CENTER);
-		moreInfo.setIcon("icons/fugue/navigation-090-white.png");
-		moreInfo.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				Window.open(drug.getUri(), "_blank", "");
-			}
-		});
-		return moreInfo;
 	}
 	
 	private void drawRelevantAdverseEvents() {

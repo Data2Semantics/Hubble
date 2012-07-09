@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import com.data2semantics.hubble.client.helpers.Helper;
 import com.data2semantics.hubble.client.view.View;
-import com.data2semantics.hubble.client.view.annotations.AnnotationDetails;
-import com.data2semantics.hubble.client.view.patientinfo.tabs.WidgetsContainer;
 import com.data2semantics.hubble.client.view.recommendation.RecommendationColumnTree;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.types.SelectionStyle;

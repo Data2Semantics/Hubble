@@ -6,13 +6,11 @@ import java.util.Map;
 
 import com.data2semantics.hubble.client.helpers.Helper;
 import com.data2semantics.hubble.client.view.View;
-import com.data2semantics.hubble.client.view.annotations.AnnotationDetails.Fields;
 import com.data2semantics.hubble.client.view.patientinfo.PatientInfo;
 import com.data2semantics.hubble.client.view.patientlisting.PatientListing;
 import com.data2semantics.hubble.shared.models.AdverseEvent;
 import com.data2semantics.hubble.shared.models.Drug;
 import com.data2semantics.hubble.shared.models.Indication;
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.types.GroupStartOpen;
@@ -38,6 +36,7 @@ public class IndicationDetails extends VLayout {
 		public static String MANUFACTURER = "manufacturer";
 		public static String EVENT_DATE = "eventdate";
 		public static String DRUGLABEL = "druglabel";
+		@SuppressWarnings("unused")
 		public static String INDICATIONLABEL = "indicationlabel";
 		public static String ADVERSE_EVENT_URI = "adverseeventuri";
 		public static String DRUG_URI = "druguri";

@@ -1,7 +1,6 @@
 package com.data2semantics.hubble.shared.models;
 
 import java.io.Serializable;
-
 import com.data2semantics.hubble.client.helpers.Helper;
 
 public class Treatment implements Serializable {

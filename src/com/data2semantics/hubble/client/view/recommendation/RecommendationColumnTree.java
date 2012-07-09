@@ -10,10 +10,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.types.ListGridFieldType;
 import com.smartgwt.client.types.TreeModelType;
 import com.smartgwt.client.widgets.grid.ColumnTree;
-import com.smartgwt.client.widgets.grid.HeaderSpan;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
-import com.smartgwt.client.widgets.grid.events.NodeSelectedHandler;
 import com.smartgwt.client.widgets.tree.Tree;
 import com.smartgwt.client.widgets.tree.TreeNode;
 
