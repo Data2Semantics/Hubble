@@ -117,7 +117,7 @@ public class IndicationDetails extends VLayout {
                     Button button = new Button("Browse");
                     button.setIcon("icons/fugue/navigation-090-white.png");
                     final String adverseEventUri = record.getAttribute(Row.ADVERSE_EVENT_URI);
-                    final String drugUri = record.getAttribute(Row.DRUG_URI);
+//                    final String drugUri = record.getAttribute(Row.DRUG_URI);
                     button.setHeight(18);  
                     button.setWidth(120);
                     button.addClickHandler(new ClickHandler() {  
@@ -154,16 +154,5 @@ public class IndicationDetails extends VLayout {
         grid.setGroupByField(Row.DRUGLABEL);
 		grid.setGroupStartOpen(GroupStartOpen.ALL);
 		addMember(grid);
-	}
-	
-	private Button drawMoreInfoButton() {
-		Button moreInfo = new Button("Show details");
-		moreInfo.setIcon("icons/fugue/navigation-090-white.png");
-		moreInfo.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				Window.open(indication.getUri(), "_blank", "");
-			}
-		});
-		return moreInfo;
 	}
 }

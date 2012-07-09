@@ -1,8 +1,6 @@
 package com.data2semantics.hubble.server.loaders;
 
 import java.util.ArrayList;
-import java.util.Vector;
-
 import com.data2semantics.hubble.client.exceptions.SparqlException;
 import com.data2semantics.hubble.client.helpers.Helper;
 import com.data2semantics.hubble.server.Endpoint;
