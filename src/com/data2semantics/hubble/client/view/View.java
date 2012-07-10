@@ -3,6 +3,7 @@ package com.data2semantics.hubble.client.view;
 import com.data2semantics.hubble.client.ServersideApiAsync;
 import com.data2semantics.hubble.client.view.patientinfo.PatientInfo;
 import com.data2semantics.hubble.client.view.patientlisting.PatientListing;
+import com.data2semantics.hubble.client.view.recommendation.RecommendationColumnTree;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.Window;
@@ -16,6 +17,7 @@ import com.smartgwt.client.widgets.layout.VLayout;
  */
 public class View extends VLayout {
 	private PatientInfo patientInfo;
+	private RecommendationColumnTree recommendationColumnTree;
 	private HLayout hLayout = new HLayout();
 	private ServersideApiAsync serverSideApi;
 	public View(ServersideApiAsync serverSideApi) {
@@ -43,6 +45,12 @@ public class View extends VLayout {
 		onLoadingFinish();
 	}
 	
+	public void showRecommendation(String patientID) {
+		onLoadingStart();
+		recommendationColumnTree = new RecommendationColumnTree(this, patientID);
+		addSouth(recommendationColumnTree);
+		onLoadingFinish();
+	}
 	
 	public void addSouth(Canvas canvas) {
 		Canvas[] members = getMembers();
