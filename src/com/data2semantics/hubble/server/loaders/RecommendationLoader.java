@@ -1,6 +1,8 @@
 package com.data2semantics.hubble.server.loaders;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+
 import com.data2semantics.hubble.client.exceptions.SparqlException;
 import com.data2semantics.hubble.client.helpers.Helper;
 import com.data2semantics.hubble.server.Endpoint;
@@ -19,14 +21,21 @@ public class RecommendationLoader {
 
 	public  ArrayList<Recommendation>  getRecommendations() {
 		ArrayList<Recommendation> recommendations = new ArrayList<Recommendation>();
-		ResultSet recommendationsRS = queryForRecommendation();
+		ResultSet relevantRecommendationRS = queryForRelevantRecommendation();
+		HashSet<String> relevantRecommendationSet = new HashSet<String>();
+		while(relevantRecommendationRS.hasNext()){
+			QuerySolution qRec 		= relevantRecommendationRS.next();
+			relevantRecommendationSet.add(qRec.get("recommendationUri").toString());
+		}
 		
+		ResultSet recommendationsRS = queryForAllRecommendation();
 		while(recommendationsRS.hasNext()){
 			QuerySolution qRec 		= recommendationsRS.next();
 			String recommendationUri 	= qRec.get("recommendationUri").toString();
 			String recommendationBody 	= qRec.get("recommendationBody").toString();
+			String relatedFeature		= relevantRecommendationSet.contains(recommendationUri)? "Related Recomendations" : "Other";
 			
-			Recommendation curRecommendation = new Recommendation(recommendationBody, recommendationUri);
+			Recommendation curRecommendation = new Recommendation(recommendationBody, recommendationUri,relatedFeature);
 			recommendations.add(curRecommendation);
 		
 			ArrayList<EvidenceSummary> evidenceSummaries = getEvidenceSummaries(recommendationUri);
@@ -88,12 +97,34 @@ public class RecommendationLoader {
 		return evidences;
 	}
 	
-	private ResultSet queryForRecommendation() {
+	private ResultSet queryForRelevantRecommendation() {
 		String queryString = Helper.getSparqlPrefixesAsString("oa");
-		queryString += 	"	SELECT ?recommendationUri ?recommendationBody WHERE {" +
-						"		?recommendationUri  a <http://aers.data2semantics.org/vocab/annotation/RecommendationAnnotation> . " +
-						" 		?recommendationUri oa:hasBody ?recommendationBody}";
+		queryString += 	"\n	SELECT DISTINCT ?recommendationUri ?recommendationBody ?aerstag WHERE {" +
+						"\n			?recommendationUri  a d2sa:RecommendationAnnotation . " +
+						"\n 		?recommendationUri oa:hasBody ?recommendationBody ." +
+						"\n			?recommendationUri d2sa:hasEvidenceSummary ?es . " +
+						"\n		    ?es swanrel:referencesAsSupportingEvidence ?ev ." +
+						"\n 		?ev oa:hasTarget ?tg ." +
+						"\n 		?tg oa:hasSource ?s ." +
+						"\n 		?s owl:sameAs ?doc ." +
+    					"\n 		?ta2 oa:hasSource ?doc ." +
+    					"\n 		?taga oa:hasTarget ?ta2 . " +
+    					"\n			?pp rdfs:label '" + patientId + "'@en ." + 
+    					"\n			?pp ?p ?aerstag . "+
+    					"\n         ?tag skos:relatedMatch ?aerstag ."+
+    					"\n			?taga oax:hasSemanticTag ?tag ."+			
+						"\n}";
+		ResultSet queryResult = Endpoint.query(Endpoint.ECULTURE2, queryString);
+		return queryResult;
 		
+	}
+	
+	private ResultSet queryForAllRecommendation() {
+		String queryString = Helper.getSparqlPrefixesAsString("oa");
+		queryString += 	"\n	SELECT DISTINCT ?recommendationUri ?recommendationBody WHERE {" +
+						"\n		?recommendationUri  a d2sa:RecommendationAnnotation . " +
+						"\n 		?recommendationUri oa:hasBody ?recommendationBody ." +
+						"\n}";
 		ResultSet queryResult = Endpoint.query(Endpoint.ECULTURE2, queryString);
 		return queryResult;
 		
@@ -132,16 +163,11 @@ public class RecommendationLoader {
 
 	public static void main(String[] args) throws IllegalArgumentException,
 			SparqlException {
-		RecommendationLoader loader = new RecommendationLoader("patientJoe");
+		RecommendationLoader loader = new RecommendationLoader("John Doe");
 		ArrayList<Recommendation> recs = loader.getRecommendations();
 		for (Recommendation r : recs) {
-			System.out.println(r.getBody());
-			for (EvidenceSummary es : r.getEvidenceSummaries()) {
-				System.out.println("    ->" + es.getBody());
-				for (Evidence e : es.getSuportingEvidences()) {
-					System.out.println("        > " + e.getBody());
-				}
-			}
+			System.out.println(r.getRelatedFeature() + "  " +r.getBody());
+			
 		}
 		
 	
