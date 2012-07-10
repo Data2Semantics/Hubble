@@ -51,7 +51,8 @@ public class Helper {
 			namespaceList.add("PREFIX dc: <http://purl.org/dc/elements/1.1/>"); 
 			namespaceList.add("PREFIX dcterms: <http://purl.org/dc/terms/>"); 
 			namespaceList.add("PREFIX aers: <http://aers.data2semantics.org/>");
-					
+			namespaceList.add("PREFIX swanrel: <http://purl.org/swan/2.0/discourse-relationships/>");		
+			namespaceList.add("PREFIX d2sa: <http://aers.data2semantics.org/vocab/annotation/>");
 		}
 
 		return namespaceList;
