@@ -17,6 +17,7 @@ public class RecommendationTreeNode extends TreeNode {
 		setAttribute("src", rec.getSrc());
 		setAttribute("body", rec.getBody());
 		setAttribute("header","Evidence");
+		setAttribute("relatedFeature","Supporting Evidence");
 		
 	}
 
@@ -25,22 +26,26 @@ public class RecommendationTreeNode extends TreeNode {
 		setAttribute("src", rec.getSrc());
 		setAttribute("body", rec.getBody());
 		setAttribute("header","Evidence Summary");
+		setAttribute("relatedFeature","Evidence Summary");
+		
 	}
 
 	public RecommendationTreeNode(Recommendation rec) {
+		
 		setAttribute("uri", rec.getUri());
 		setAttribute("body",rec.getBody());
 		setChildren(getRecommendationTreeNodeFromEvidenceSummaries(rec
 				.getEvidenceSummaries()));
 		
 		setAttribute("header",rec.getBody());
-		setAttribute("wrapCells",true);
+		setAttribute("relatedFeature", rec.getRelatedFeature());
 	}
 
 	public RecommendationTreeNode(ArrayList<Recommendation> result) {
 		setAttribute("uri", "RootNode");
 		setAttribute("body", "Recommendations");
 		setAttribute("header","Recommendations");
+		setAttribute("relatedFeature","");
 		
 		RecommendationTreeNode[] mainChildren = new RecommendationTreeNode[result
 				.size()];
