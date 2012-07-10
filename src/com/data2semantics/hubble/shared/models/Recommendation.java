@@ -11,6 +11,7 @@ public class Recommendation implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String body;
 	private String uri;
+	private String relatedFeature;
 	
 	private ArrayList<EvidenceSummary> evidenceSummaries;
 
@@ -20,6 +21,12 @@ public class Recommendation implements Serializable {
 	public Recommendation(String body, String uri) {
 		this.body = body;
 		this.setUri(uri);
+	}
+	public Recommendation(String recommendationBody, String recommendationUri,
+			String relatedFeature) {
+		this.body =recommendationBody;
+		this.uri = recommendationUri;
+		this.setRelatedFeature(relatedFeature);
 	}
 	/**
 	 * @return the body
@@ -51,5 +58,11 @@ public class Recommendation implements Serializable {
 	}
 	public void setUri(String uri) {
 		this.uri = uri;
+	}
+	public String getRelatedFeature() {
+		return relatedFeature;
+	}
+	public void setRelatedFeature(String relatedFeature) {
+		this.relatedFeature = relatedFeature;
 	}
 }
