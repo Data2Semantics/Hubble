@@ -2,13 +2,20 @@ package com.data2semantics.hubble.client.view.recommendation;
 
 import java.util.ArrayList;
 
+import org.apache.bcel.verifier.structurals.OperandStack;
+
 import com.data2semantics.hubble.client.view.View;
 import com.data2semantics.hubble.client.view.patientinfo.PatientInfo;
 import com.data2semantics.hubble.client.view.patientlisting.PatientListing;
 import com.data2semantics.hubble.shared.models.Recommendation;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.smartgwt.client.data.Criteria;
+import com.smartgwt.client.data.Criterion;
+import com.smartgwt.client.data.Hilite;
 import com.smartgwt.client.types.ListGridFieldType;
+import com.smartgwt.client.types.OperatorId;
 import com.smartgwt.client.types.TreeModelType;
+import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.grid.ColumnTree;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
@@ -31,6 +38,7 @@ public class RecommendationColumnTree extends ColumnTree {
 		this.view= view;
 		this.patientId = patientId;
 		initializeGrid();
+		setAttribute("wrapCells",true,true);
 		loadData();
 	}
 
@@ -70,6 +78,7 @@ public class RecommendationColumnTree extends ColumnTree {
 		setData(recommendationTree);
 
 		redraw();
+		
 	}
 	
 	private void initializeGrid() {
@@ -85,17 +94,31 @@ public class RecommendationColumnTree extends ColumnTree {
 	    setShowDropIcons(false);  
 	    setClosedIconSuffix("");
 	    setTitle("Reccommendations");
-	    setShowHeaders(true);
-	    ListGrid template = new ListGrid();
-		template.setFixedRecordHeights(false);
-		template.setWrapCells(true);
-		setColumnProperties(template);
+	    //setShowHeaders(true);
+	    
+	    
+		ListGridField bodyField		= new ListGridField("body","Body");
+		ListGridField bloodyField 	= new ListGridField("relatedFeature","Feature");
+		bloodyField.setHidden(true);
 		
+		//Important, it seems that setting fields of the template only is not enough
+		setFields(bodyField, bloodyField);
+		
+		//This is what is required for first column.
+	    ListGrid template = new ListGrid();
+		template.setDefaultFields(new ListGridField[]{bodyField,bloodyField});
+	    template.setFixedRecordHeights(false);
+		template.setWrapCells(true);
+		
+		template.setGroupByField("relatedFeature");
+		template.setGroupStartOpen("all");
+		setColumnProperties(template);
+	
 	}
 
 	@Override
     public ListGrid getCustomColumnProperties(TreeNode node, int colNum) {
-		ListGridField blankField = new ListGridField("uri","");
+		ListGridField blankField = new ListGridField("relatedFeature","");
 		blankField.setWidth(1);
 		
 		ListGridField uriField = new ListGridField("src","");
@@ -115,18 +138,20 @@ public class RecommendationColumnTree extends ColumnTree {
 		
 		ListGridField bodyField = new ListGridField("body",bodyColumnTitle);
         
-        ListGrid customColumnPropertyTemplate = new ListGrid();
-        customColumnPropertyTemplate.setShowHeader(true);
-		customColumnPropertyTemplate.setFixedRecordHeights(false);
-		customColumnPropertyTemplate.setWrapCells(true);
+        ListGrid template = new ListGrid();
+        template.setShowHeader(false);
+		template.setFixedRecordHeights(false);
+		template.setWrapCells(true);
 		
-		customColumnPropertyTemplate.setFields(new ListGridField[]{blankField, uriField, bodyField});
-		customColumnPropertyTemplate.setCanResizeFields(false);
+		template.setFields(new ListGridField[]{blankField, uriField, bodyField});
+		template.setCanResizeFields(false);
 		
-		return customColumnPropertyTemplate;
+		return template;
     }
 
 	public View getView(){
 		return view;
 	}
+	
+
 }
