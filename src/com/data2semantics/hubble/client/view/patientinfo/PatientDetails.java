@@ -185,12 +185,14 @@ public class PatientDetails extends ListGrid {
 		}
 	}
 	private void initializeGrid() {
-		setWidth(PatientInfo.RHS_WIDTH);
+		//setWidth(PatientInfo.RHS_WIDTH);
+		setWidth100();
 		setHeight(HEIGHT);
 		setHoverWidth(300);
 		setSelectionType(SelectionStyle.NONE);
         setShowRecordComponents(true);          
         setShowRecordComponentsByCell(true);  
+        setLeaveScrollbarGap(false);
         
 		ListGridField typeField = new ListGridField(Row.KEY, "Item", ITEM_COLUMN_WIDTH);
 		ListGridField valueField = new ListGridField(Row.VALUE, "Value");

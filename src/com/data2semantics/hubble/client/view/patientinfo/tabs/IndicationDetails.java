@@ -48,8 +48,8 @@ public class IndicationDetails extends VLayout {
 		this.indication = indication;
 		setHoverWidth(300);
 		setHeight(500);
-		setMargin(20);
-		setWidth(PatientInfo.RHS_WIDTH+PatientListing.WIDTH+40);
+		//setMargin(20);
+		//setWidth(PatientInfo.RHS_WIDTH+PatientListing.WIDTH+40);
 		
 		drawRelevantAdverseEvents();
 //		addMember(drawMoreInfoButton());

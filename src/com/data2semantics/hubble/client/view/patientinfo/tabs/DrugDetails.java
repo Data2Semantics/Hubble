@@ -54,8 +54,8 @@ public class DrugDetails extends VLayout {
 		
 		setHoverWidth(300);
 		setHeight(500);
-		setMargin(20);
-		setWidth(PatientInfo.RHS_WIDTH+PatientListing.WIDTH+40);
+		//setMargin(20);
+		//setWidth(PatientInfo.RHS_WIDTH+PatientListing.WIDTH+40);
 		
 		this.content = content;
 //		setHeight(650);

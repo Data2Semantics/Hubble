@@ -23,9 +23,13 @@ public class View extends VLayout {
 	public View(ServersideApiAsync serverSideApi) {
 		this.serverSideApi = serverSideApi;
 		//this.setMargin(10);//TODO:check margins
-		hLayout.setMargin(20);
-		addMember(hLayout);
+		//hLayout.setMargin(20);
+		setMargin(20);
+		hLayout.setLeaveScrollbarGap(false);
 		hLayout.addMember(new PatientListing(this));
+		
+		addMember(hLayout);
+		
 	}
 	
 	public ServersideApiAsync getServerSideApi() {
@@ -59,7 +63,7 @@ public class View extends VLayout {
 			removeMember(members[members.length-1]);
 		}
 
-		canvas.setWidth(PatientListing.WIDTH + PatientInfo.RHS_WIDTH + 40);
+		//canvas.setWidth(PatientListing.WIDTH + PatientInfo.RHS_WIDTH + 40);
 		canvas.setHeight(PatientListing.HEIGHT);
 		addMember(canvas);
 		

@@ -10,7 +10,8 @@ public class PatientInfo extends VLayout {
 	
 	public PatientInfo(View view, String patientId) {
 		this.view = view;
-		setWidth(PatientInfo.RHS_WIDTH);
+		//setWidth(PatientInfo.RHS_WIDTH);
+		setWidth100();
 		setStyleName("patientInfo");
 		
 		patientDetails = new PatientDetails(view, patientId);

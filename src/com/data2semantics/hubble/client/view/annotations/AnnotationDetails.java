@@ -34,7 +34,7 @@ public class AnnotationDetails extends ListGrid {
 	private void initializeGrid(){
 		setHoverWidth(300);
 		setHeight(500);
-		setMargin(20);
+		//setMargin(20);
 		setWidth(PatientInfo.RHS_WIDTH+PatientListing.WIDTH+40);
 		setSelectionType(SelectionStyle.NONE);
 

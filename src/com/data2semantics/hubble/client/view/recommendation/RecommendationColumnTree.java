@@ -84,8 +84,8 @@ public class RecommendationColumnTree extends ColumnTree {
 	private void initializeGrid() {
 		setHoverWidth(300);
 		setHeight(500);
-		setMargin(20);
-		setWidth(PatientInfo.RHS_WIDTH+PatientListing.WIDTH+40);
+		//setMargin(20);
+		//setWidth(PatientInfo.RHS_WIDTH+PatientListing.WIDTH);
 		setShowMultipleColumns(true);
 		setFirstColumnTitle("Recommendations");
 		setNodeIcon("icons/fugue/information-white.png");
