@@ -32,9 +32,10 @@ public class PatientListing extends ListGrid {
             	ListGridRecord[] records = getSelectedRecords();
             	if (records.length > 0) {
             		getView().showPatientInfo(records[0].getAttributeAsString("patientId"));
+            		getView().showRecommendation(records[0].getAttributeAsString("patientId"));
             		//getView().addSouth(new WidgetsContainer(view, records[0].getAttributeAsString("patientId")));
             		//getView().addSouth(new AnnotationDetails(view, records[0].getAttributeAsString("patientId")));
-            		getView().addSouth(new RecommendationColumnTree(view, records[0].getAttributeAsString("patientId")));
+            		//getView().addSouth(new RecommendationColumnTree(view, records[0].getAttributeAsString("patientId")));
             		
                     
             	}
