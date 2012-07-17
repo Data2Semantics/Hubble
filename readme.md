@@ -1,3 +1,8 @@
-Interface is built using the Smart GWT (Google Web Toolkit):  http://code.google.com/p/smartgwt/
-Editing the interface is easiest using the GWT Eclipse plugin: <http://code.google.com/eclipse/docs/download.html>
+## Hubble
+
+Hubble is a prototype clinical decision support system that connects patient records to recommendations in evidence based clinical guidelines.
+
+The latest version of Hubble is online at: <http://aers.data2semantics.org/hubble> 
+
+
 
