@@ -8,4 +8,5 @@ war/pdfs/cache/*
 war/pdfs/srcDocs/*.pdf
 test-classes/*
 .classpath
+bin/*
 
