@@ -2,20 +2,11 @@ package com.data2semantics.hubble.client.view.recommendation;
 
 import java.util.ArrayList;
 
-import org.apache.bcel.verifier.structurals.OperandStack;
-
 import com.data2semantics.hubble.client.view.View;
-import com.data2semantics.hubble.client.view.patientinfo.PatientInfo;
-import com.data2semantics.hubble.client.view.patientlisting.PatientListing;
 import com.data2semantics.hubble.shared.models.Recommendation;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.smartgwt.client.data.Criteria;
-import com.smartgwt.client.data.Criterion;
-import com.smartgwt.client.data.Hilite;
 import com.smartgwt.client.types.ListGridFieldType;
-import com.smartgwt.client.types.OperatorId;
 import com.smartgwt.client.types.TreeModelType;
-import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.grid.ColumnTree;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;

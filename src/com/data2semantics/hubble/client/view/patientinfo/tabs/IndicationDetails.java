@@ -6,8 +6,6 @@ import java.util.Map;
 
 import com.data2semantics.hubble.client.helpers.Helper;
 import com.data2semantics.hubble.client.view.View;
-import com.data2semantics.hubble.client.view.patientinfo.PatientInfo;
-import com.data2semantics.hubble.client.view.patientlisting.PatientListing;
 import com.data2semantics.hubble.shared.models.AdverseEvent;
 import com.data2semantics.hubble.shared.models.Drug;
 import com.data2semantics.hubble.shared.models.Indication;
