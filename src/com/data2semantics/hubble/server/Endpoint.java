@@ -11,25 +11,23 @@ import com.hp.hpl.jena.query.ResultSetFormatter;
  * The server side implementation of the RPC service.
  */
 public class Endpoint {
-
+	private static String LOCAL_PROXY = "http://localhost:8080/sparqlProxy/";
 	public static String ECULTURE2 = "http://eculture2.cs.vu.nl:5020/sparql/";
 	public static String LINKED_LIFE_DATA = "http://linkedlifedata.com/sparql";
 	
 
-	
-	
 	/**
-	 * Execute query
+	 * Execute query. Uses local proxy
 	 * 
 	 * @param queryString
 	 */
 	public static ResultSet query(String endpoint, String queryString) {
+		//if ()
 		Query query = QueryFactory.create(queryString);
-		QueryExecution queryExecution = QueryExecutionFactory.sparqlService(endpoint, query);
+		QueryExecution queryExecution = QueryExecutionFactory.sparqlService(LOCAL_PROXY + endpoint, query);
 		ResultSet results = queryExecution.execSelect();
 		return results;
 	}
-
 	
 	public static void queryPrintResult(String endpoint, String queryString) {
 		ResultSet results = Endpoint.query(endpoint, queryString);
