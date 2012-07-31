@@ -11,7 +11,8 @@ import com.hp.hpl.jena.query.ResultSetFormatter;
  * The server side implementation of the RPC service.
  */
 public class Endpoint {
-	private static String LOCAL_PROXY = "http://localhost:8080/sparqlProxy/";
+//	private static String LOCAL_PROXY = "http://localhost:8080/sparqlProxy/";
+	private static String LOCAL_PROXY = "";
 	public static String ECULTURE2 = "http://eculture2.cs.vu.nl:5020/sparql/";
 	public static String LINKED_LIFE_DATA = "http://linkedlifedata.com/sparql";
 	
