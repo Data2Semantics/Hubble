@@ -55,7 +55,7 @@ public class ServersideApiImpl extends RemoteServiceServlet implements Serversid
 		String queryString = Helper.getSparqlPrefixesAsString("aers") + "\n" +
 				"SELECT DISTINCT ?" + variable + " {\n" + 
 				"?patient rdf:type patient:Patient.\n" + 
-				"?patient rdfs:label ?patientID.\n" + 
+				"?patient rdfs:label ?" + variable + ".\n" + 
 				"}";
 		ResultSet result = Endpoint.query(Endpoint.ECULTURE2, queryString);
 		while (result.hasNext()) {

@@ -150,13 +150,14 @@ public class PatientLoader {
 				"?drug_label \n" +
 				"?drug_sameAs \n" +
 			"{\n" + 
+				"?patient rdf:type patient:Patient.\n" + 
 				"?patient rdfs:label '" + patientId + "'@en.\n" + 
 				"?patient patient:hasAge ?age.\n" + 
 				"?patient rdfs:comment ?comment.\n" + 
-				"OPTIONAL{?patient patient:usesMedication ?drug." +
-					"?drug rdfs:label ?drug_label;" +
-						"skos:exactMatch ?drug_sameAs." +
-					"?drug_sameAs <http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugbank/primaryAccessionNo> ?pan ." +
+				"OPTIONAL{?patient patient:usesMedication ?drug.\n" +
+					"?drug rdfs:label ?drug_label;\n" +
+						"skos:exactMatch ?drug_sameAs.\n" +
+					"?drug_sameAs <http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugbank/primaryAccessionNo> ?pan .\n" +
 //					"FILTER regex(str(?drug_sameAs), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" + 
 				"}.\n" + 
 				"OPTIONAL{?patient patient:hasStatus ?status}.\n" + 
@@ -187,6 +188,7 @@ public class PatientLoader {
 	 */
 	private void loadLinkedLifeData() throws IllegalArgumentException, SparqlException {
 		String queryString = getLinkedLifeDataQuery();
+		//System.out.println(queryString);
 		ResultSet result = Endpoint.query(Endpoint.LINKED_LIFE_DATA, queryString);
 		while (result.hasNext()) {
 			QuerySolution solution = result.next();
@@ -217,6 +219,7 @@ public class PatientLoader {
 				"{\n" +
 					Helper.implode(unions.get("patterns"), " UNION \n") + 
 				"}";
+		System.out.println(queryString);
 		return queryString;
 	}
 	
