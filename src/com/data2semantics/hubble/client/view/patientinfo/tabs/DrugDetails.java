@@ -106,8 +106,12 @@ public class DrugDetails extends VLayout {
 						}
 						grid.setData(Helper.getListGridRecordArray(records));
 					} else {
-						removeMember(grid);
-						removeMember(label);
+						if (grid != null && hasMember(grid)) {
+							removeMember(grid);
+						}
+						if (label != null && hasMember(label)) {
+							removeMember(label);
+						}
 						addMember(new Label("No related adverse events found"));
 					}
 				}
