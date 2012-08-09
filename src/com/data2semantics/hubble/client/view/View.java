@@ -88,6 +88,13 @@ public class View extends VLayout {
           winModal.addItem(label);
           winModal.draw();
 	}
+	public void onError(Throwable throwable) {
+		String st = throwable.getClass().getName() + ": " + throwable.getMessage();
+		for (StackTraceElement ste : throwable.getStackTrace()) {
+			st += "\n" + ste.toString();
+		}
+		onError(st);
+	}
 	
 	public void onLoadingFinish() {
 		//loading.loadingEnd();
