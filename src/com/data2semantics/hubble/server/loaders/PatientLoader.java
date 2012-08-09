@@ -182,7 +182,7 @@ public class PatientLoader {
 	
 	/**
 	 * Load linked life data. Combine into 1 big query. Using several small queries will be way to slow
-	 * 
+	 * (laurens) DOES THIS WORK?? We use d2s uri's (diagnosis) to retrieve lld data. These do not exist in the LLD dataset 
 	 * @throws IllegalArgumentException
 	 * @throws SparqlException
 	 */
