@@ -1,5 +1,8 @@
 package com.data2semantics.hubble.client.view;
 
+import java.util.LinkedHashMap;
+import java.util.logging.Logger;
+
 import com.data2semantics.hubble.client.ServersideApiAsync;
 import com.data2semantics.hubble.client.view.patientinfo.PatientInfo;
 import com.data2semantics.hubble.client.view.patientlisting.PatientListing;
@@ -20,16 +23,13 @@ public class View extends VLayout {
 	private RecommendationColumnTree recommendationColumnTree;
 	private HLayout hLayout = new HLayout();
 	private ServersideApiAsync serverSideApi;
+	private Logger logger = Logger.getLogger("");
 	public View(ServersideApiAsync serverSideApi) {
 		this.serverSideApi = serverSideApi;
-		//this.setMargin(10);//TODO:check margins
-		//hLayout.setMargin(20);
 		setMargin(20);
 		hLayout.setLeaveScrollbarGap(false);
 		hLayout.addMember(new PatientListing(this));
-		
 		addMember(hLayout);
-		
 	}
 	
 	public ServersideApiAsync getServerSideApi() {
@@ -105,6 +105,10 @@ public class View extends VLayout {
 		//loading.loadingBegin();
 	}
 	
+	public Logger getLogger() {
+		return this.logger;
+	}
+	
 	private void cleanCurrentPatientView() {
 		//Cleanup any other already shown info
 		Canvas[] members = hLayout.getMembers();
@@ -118,4 +122,5 @@ public class View extends VLayout {
 		}
 		
 	}
+
 }
