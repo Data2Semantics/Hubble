@@ -51,7 +51,7 @@ public class PatientListing extends ListGrid {
 
 			public void onSuccess(ArrayList<String> patients) {
 				ArrayList<ListGridRecord> records = new ArrayList<ListGridRecord>();
-				if (records.size() > 0) {
+				if (patients.size() > 0) {
 					for (String patientId: patients) {
 						ListGridRecord row = new ListGridRecord();
 						row.setAttribute("patientId", patientId);
