@@ -71,22 +71,23 @@ public class View extends VLayout {
 	
 	public void onError( String error ){
 		onLoadingFinish();
-		  final Window winModal = new Window();  
-          winModal.setWidth(360);  
-          winModal.setHeight(115);  
-          winModal.setTitle("Error");  
-          winModal.setShowMinimizeButton(false);  
-          winModal.setIsModal(true);  
-          winModal.setShowModalMask(true);  
-          winModal.centerInPage();  
-          winModal.addCloseClickHandler(new CloseClickHandler() {  
-              public void onCloseClick(CloseClickEvent event) {  
-                  winModal.destroy();  
-              }  
-          });
-          Label label = new Label(error);
-          winModal.addItem(label);
-          winModal.draw();
+		final Window window = new Window();
+		window.setAutoSize(true);
+		window.setTitle("Error");
+		window.setShowMinimizeButton(false);
+		window.setIsModal(true);
+		window.setShowModalMask(true);
+		window.setAutoCenter(true);
+		window.addCloseClickHandler(new CloseClickHandler() {
+			@Override
+			public void onCloseClick(CloseClickEvent event) {
+				window.destroy();
+				
+			}
+		});
+		Label label = new Label(error);
+		window.addItem(label);
+		window.draw();
 	}
 	public void onError(Throwable throwable) {
 		String st = throwable.getClass().getName() + ": " + throwable.getMessage();
