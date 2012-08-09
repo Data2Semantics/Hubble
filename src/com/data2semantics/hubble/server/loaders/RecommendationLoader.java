@@ -53,22 +53,23 @@ public class RecommendationLoader {
 		
 		while(evidenceSummariesRS.hasNext()){
 			QuerySolution qEs = evidenceSummariesRS.next();
-			
-			String evidenceSummaryUri = qEs.get("evidenceSummaryUri").toString();
-			String evidenceSummaryBody = qEs.get("evidenceSummaryBody").toString();
-			String evidenceSummarySrc  = null;
-			
-			if(qEs.get("realSrc") != null){
-				evidenceSummarySrc = qEs.get("realSrc").toString();
-			} else
-				evidenceSummarySrc = qEs.get("evidenceSrc").toString();
+			if (qEs.contains("evidenceSummaryUri")) {
+				String evidenceSummaryUri = qEs.get("evidenceSummaryUri").toString();
+				String evidenceSummaryBody = qEs.get("evidenceSummaryBody").toString();
+				String evidenceSummarySrc  = null;
 				
-			
-			EvidenceSummary curEvidenceSummary = new EvidenceSummary(evidenceSummaryBody, evidenceSummaryUri, evidenceSummarySrc);
-			evidenceSummaries.add(curEvidenceSummary);
-			
-			ArrayList<Evidence> evidences = getEvidences(evidenceSummaryUri);
-			curEvidenceSummary.setSuportingEvidences(evidences);
+				if(qEs.get("realSrc") != null){
+					evidenceSummarySrc = qEs.get("realSrc").toString();
+				} else
+					evidenceSummarySrc = qEs.get("evidenceSrc").toString();
+					
+				
+				EvidenceSummary curEvidenceSummary = new EvidenceSummary(evidenceSummaryBody, evidenceSummaryUri, evidenceSummarySrc);
+				evidenceSummaries.add(curEvidenceSummary);
+				
+				ArrayList<Evidence> evidences = getEvidences(evidenceSummaryUri);
+				curEvidenceSummary.setSuportingEvidences(evidences);
+			}
 			
 		}
 		
@@ -81,18 +82,19 @@ public class RecommendationLoader {
 		
 		while(supportingEvidencesRS.hasNext()){
 			QuerySolution qEv = supportingEvidencesRS.next();
-		
-			String evidenceUri = qEv.get("evidenceUri").toString();
-			String evidenceBody = qEv.get("evidenceBody").toString();
-			String evidenceSrc = null;
-			
-			if(qEv.get("realSrc") != null){
-				evidenceSrc = qEv.get("realSrc").toString();
-			} else
-				evidenceSrc = qEv.get("evidenceSrc").toString();
-			
-			Evidence curEvidence = new Evidence(evidenceBody, evidenceUri, evidenceSrc);
-			evidences.add(curEvidence);
+			if (qEv.contains("evidenceUri")) {
+				String evidenceUri = qEv.get("evidenceUri").toString();
+				String evidenceBody = qEv.get("evidenceBody").toString();
+				String evidenceSrc = null;
+				
+				if(qEv.get("realSrc") != null){
+					evidenceSrc = qEv.get("realSrc").toString();
+				} else
+					evidenceSrc = qEv.get("evidenceSrc").toString();
+				
+				Evidence curEvidence = new Evidence(evidenceBody, evidenceUri, evidenceSrc);
+				evidences.add(curEvidence);
+			}
 		}
 		return evidences;
 	}
