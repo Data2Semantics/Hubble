@@ -56,7 +56,7 @@ public class AdverseEventLoader {
 			"?drug \n" +
 			"?drugLabel \n" +
 			"?drugBankUri \n" +
-			"(<" + indication.getLabel() + "> AS ?indicationLabel) \n" +
+			"(\"" + indication.getLabel() + "\" AS ?indicationLabel) \n" +
 			"{\n" + 
 			"	{<" + indication.getUri() + "> :reaction_of ?report.} UNION { <" + indication.getUri() + "> skos:exactMatch ?ind . ?ind :reaction_of ?report . }\n" +
 			"	?report :age ?age;\n" +
@@ -72,6 +72,7 @@ public class AdverseEventLoader {
 //			"	FILTER regex(str(?drugBankUri), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" + 
 			"}\n" + 
 			"LIMIT 100";
+		
 		return Endpoint.query(Endpoint.ECULTURE2, queryString);
 	}
 	
@@ -84,7 +85,7 @@ public class AdverseEventLoader {
 				"?eventDate \n" +
 				"?gender \n" +
 				"?manufacturer \n" +
-				"(<" + drug.getUri() + "> AS ?drug) \n" +
+				"(\"" + drug.getUri() + "\" AS ?drug) \n" +
 				"?drugLabel \n" +
 				"?drugBankUri \n" +
 				"{\n" +
@@ -100,6 +101,7 @@ public class AdverseEventLoader {
 //				"	FILTER regex(str(?drugBankUri), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" +
 				"}\n" + 
 				"LIMIT 100";
+		
 			return Endpoint.query(Endpoint.ECULTURE2, queryString);
 		
 		
