@@ -55,6 +55,7 @@ public class WidgetsContainer extends TileGrid {
         setWrapValues(true);
 
         addRecordClickHandler(new RecordClickHandler() {
+			@Override
 			public void onRecordClick(RecordClickEvent event) {
 				TileRecord record = getSelectedRecord();
 				Snippet snippet = snippets.get(record.getAttribute(Tile.URI));
@@ -67,7 +68,7 @@ public class WidgetsContainer extends TileGrid {
 	
 	private void drawRelevantSnippets() {
 		try {
-			getView().getRemoteService().getRelevantSnippets(patientId, new AsyncCallback<HashMap<String, Snippet>>() {
+			getView().getRemoteService().getRelevantSnippets(patientId, getView().getEndpoint(), new AsyncCallback<HashMap<String, Snippet>>() {
 				public void onFailure(Throwable e) {
 					getView().onError(e.getMessage());
 				}

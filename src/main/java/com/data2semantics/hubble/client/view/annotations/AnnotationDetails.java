@@ -2,6 +2,7 @@ package com.data2semantics.hubble.client.view.annotations;
 
 import java.util.HashMap;
 import java.util.Vector;
+
 import com.data2semantics.hubble.client.view.View;
 import com.data2semantics.hubble.client.view.gridrecords.AnnotationInfoRecord;
 import com.data2semantics.hubble.client.view.patientinfo.PatientInfo;
@@ -63,10 +64,13 @@ public class AnnotationDetails extends ListGrid {
 	private void loadData(){
 		getView().onLoadingStart();
 		try {
-			getView().getRemoteService().getRelevantSnippets(patientId, new AsyncCallback<HashMap<String,Snippet>>() {
+			getView().getRemoteService().getRelevantSnippets(patientId, getView().getEndpoint(), new AsyncCallback<HashMap<String,Snippet>>() {
+				@Override
 				public void onFailure(Throwable caught) {
 					getView().onError(caught);
 				}
+
+				@Override
 				public void onSuccess(HashMap<String, Snippet> result) {
 					loadResultIntoListGrid(result);
 				}

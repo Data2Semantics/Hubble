@@ -20,81 +20,77 @@ import com.data2semantics.hubble.shared.models.Snippet;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.hp.hpl.jena.query.ResultSet;
 
-
 /**
  * The server side implementation of the RPC service.
  */
 public class HubbleServiceImpl extends RemoteServiceServlet implements HubbleService {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
-	 * Get info for a given patient. Currently static values. Should evantually load this data from patient data records
+	 * Get info for a given patient. Currently static values. Should evantually
+	 * load this data from patient data records
 	 * 
-	 * @param patientID ID of patient
+	 * @param patientID
+	 *            ID of patient
 	 * @return Patient
 	 * @throws IllegalArgumentException
-	 * @throws SparqlException 
+	 * @throws SparqlException
 	 */
-	public Patient getInfo(String patientId) throws IllegalArgumentException, SparqlException {
-		PatientLoader patientLoader = new PatientLoader(patientId);
+	public Patient getInfo(String patientId, String endpointMode) throws IllegalArgumentException, SparqlException {
+		PatientLoader patientLoader = new PatientLoader(patientId, endpointMode);
 		return patientLoader.getPatientObject();
 	}
-	
-	
+
 	/**
 	 * Get patients
 	 * 
 	 * @return List of patient Id's
 	 * @throws IllegalArgumentException
-	 * @throws SparqlException 
+	 * @throws SparqlException
 	 */
-	public ArrayList<String> getPatients() throws IllegalArgumentException {
+	public ArrayList<String> getPatients(String endpointMode) throws IllegalArgumentException {
 		ArrayList<String> patientList = new ArrayList<String>();
 		String variable = "patientID";
-		String queryString = Helper.getSparqlPrefixesAsString("aers") + "\n" +
-				"SELECT DISTINCT ?" + variable + " {\n" + 
-				"?patient rdf:type patient:Patient.\n" + 
-				"?patient rdfs:label ?" + variable + ".\n" + 
-				"}";
-		ResultSet result = Endpoint.query(Endpoint.ECULTURE2, queryString);
+		String queryString = Helper.getSparqlPrefixesAsString("aers") + "\n" + "SELECT DISTINCT ?" + variable + " {\n"
+				+ "?patient rdf:type patient:Patient.\n" + "?patient rdfs:label ?" + variable + ".\n" + "}";
+		ResultSet result = Endpoint.query(Endpoint.ECULTURE2, queryString, endpointMode);
 		while (result.hasNext()) {
 			patientList.add(result.next().get(variable).asLiteral().getString());
 		}
 		return patientList;
 
 	}
-	
-	
-	public HashMap<String, Snippet> getRelevantSnippets(String patientId) throws IllegalArgumentException, SparqlException {
-		SnippetLoader snippetsObject = new SnippetLoader(patientId);
+
+	public HashMap<String, Snippet> getRelevantSnippets(String patientId, String endpointMode) throws IllegalArgumentException, SparqlException {
+		SnippetLoader snippetsObject = new SnippetLoader(patientId, endpointMode);
 		HashMap<String, Snippet> snippetInfo = snippetsObject.getSnippets();
 		return snippetInfo;
 	}
-	
+
 	public SerializiationWhitelist serializiationWorkaround(SerializiationWhitelist s) throws IllegalArgumentException {
 		return null;
 	}
-	
-	public String getAnnotatedPdf(String document, String topic) throws IllegalArgumentException, SparqlException {
-		PdfAnnotator pdfAnnotator = new PdfAnnotator(document);
+
+	public String getAnnotatedPdf(String document, String topic, String endpointMode) throws IllegalArgumentException, SparqlException {
+		PdfAnnotator pdfAnnotator = new PdfAnnotator(document, endpointMode);
 		return pdfAnnotator.getAnnotatedPdfForTopic(topic);
 	}
-	public String query(String queryString) throws IllegalArgumentException,SparqlException {
-		return Endpoint.queryGetString(Endpoint.ECULTURE2, queryString);
-	}
-	
-	public HashMap<String, AdverseEvent> getRelevantAdverseEvents(Indication indication) {
-		AdverseEventLoader adverseEventLoader = new AdverseEventLoader();
+
+
+	public HashMap<String, AdverseEvent> getRelevantAdverseEvents(Indication indication, String endpointMode) {
+		AdverseEventLoader adverseEventLoader = new AdverseEventLoader(endpointMode);
 		return adverseEventLoader.getRelevantAdverseEvents(indication);
 	}
-	public HashMap<String, AdverseEvent> getRelevantAdverseEvents(Drug drug) {
-		AdverseEventLoader adverseEventLoader = new AdverseEventLoader();
+
+	public HashMap<String, AdverseEvent> getRelevantAdverseEvents(Drug drug, String endpointMode) {
+		AdverseEventLoader adverseEventLoader = new AdverseEventLoader(endpointMode);
 		return adverseEventLoader.getRelevantAdverseEvents(drug);
 	}
-	
-	public ArrayList<Recommendation> getRelevantRecommendations(String patientId) throws IllegalArgumentException, SparqlException {
-			RecommendationLoader recLoader = new RecommendationLoader(patientId);
-			return recLoader.getRecommendations();
+
+	public ArrayList<Recommendation> getRelevantRecommendations(String patientId, String endpointMode) throws IllegalArgumentException, SparqlException {
+		RecommendationLoader recLoader = new RecommendationLoader(patientId, endpointMode);
+		return recLoader.getRecommendations();
 	}
+
 }

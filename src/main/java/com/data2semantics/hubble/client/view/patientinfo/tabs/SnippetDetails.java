@@ -70,7 +70,7 @@ public class SnippetDetails extends VLayout {
 	
 	private void getAnnotatedPdf(String document, String topic) {
 		try {
-			getView().getRemoteService().getAnnotatedPdf(document, topic, new AsyncCallback<String>() {
+			getView().getRemoteService().getAnnotatedPdf(document, topic, getView().getEndpoint(), new AsyncCallback<String>() {
 				public void onFailure(Throwable e) {
 					getView().onError(e.getMessage());
 				}

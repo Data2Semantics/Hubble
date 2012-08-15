@@ -12,9 +12,10 @@ import com.hp.hpl.jena.query.ResultSet;
 
 public class SnippetLoader {
 	String patientId;
-	
-	public SnippetLoader(String patientId) throws IllegalArgumentException, SparqlException {
+	private String endpointMode;
+	public SnippetLoader(String patientId, String endpointMode) throws IllegalArgumentException, SparqlException {
 		this.patientId = patientId;
+		this.endpointMode = endpointMode;
 	}
 	
 	/**
@@ -96,7 +97,7 @@ public class SnippetLoader {
 			"            ?q aof:annotatesDocument ?doc .\n" + 
 			"        } GROUP BY ?doc ORDER BY DESC(?c)" +
 			"";
-		ResultSet queryResult = Endpoint.query(Endpoint.ECULTURE2, queryString);
+		ResultSet queryResult = Endpoint.query(Endpoint.ECULTURE2, queryString, endpointMode);
 		return queryResult;
 	}
 	
@@ -135,7 +136,7 @@ public class SnippetLoader {
 				//GROUP BY, and LIMIT does not work together...
 				//"} GROUP BY ?topic ORDER BY DESC(?count) LIMIT 1" + 
 				"";
-			ResultSet queryResult = Endpoint.query(Endpoint.ECULTURE2, queryString);
+			ResultSet queryResult = Endpoint.query(Endpoint.ECULTURE2, queryString, endpointMode);
 			return queryResult;
 	}
 	

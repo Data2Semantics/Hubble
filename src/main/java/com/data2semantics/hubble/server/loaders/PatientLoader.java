@@ -22,9 +22,10 @@ public class PatientLoader {
 	Patient patientObject;
 	String patientId;
 	HashMap<String, ArrayList<String>> unions;
-	
-	public PatientLoader(String patientId) throws IllegalArgumentException, SparqlException {
+	private String endpointMode;
+	public PatientLoader(String patientId, String endpointMode) throws IllegalArgumentException, SparqlException {
 		this.patientId = patientId;
+		this.endpointMode = endpointMode;
 		patientObject = new Patient(patientId);
 		ResultSet sparqlResult = queryPatientData();
 		parseIntoPatientObject(sparqlResult);
@@ -177,7 +178,7 @@ public class PatientLoader {
 				"OPTIONAL{?patient patient:hadPreviousIndication ?previousIndication}.\n" + 
 			"}\n" + 
 			"";
-		return Endpoint.query(Endpoint.ECULTURE2, queryString);
+		return Endpoint.query(Endpoint.ECULTURE2, queryString, endpointMode);
 	}
 	
 	/**
@@ -189,7 +190,7 @@ public class PatientLoader {
 	private void loadLinkedLifeData() throws IllegalArgumentException, SparqlException {
 		String queryString = getLinkedLifeDataQuery();
 		//System.out.println(queryString);
-		ResultSet result = Endpoint.query(Endpoint.LINKED_LIFE_DATA, queryString);
+		ResultSet result = Endpoint.query(Endpoint.LINKED_LIFE_DATA, queryString, endpointMode);
 		while (result.hasNext()) {
 			QuerySolution solution = result.next();
 			Iterator<String> varnames = solution.varNames();
@@ -219,6 +220,7 @@ public class PatientLoader {
 				"{\n" +
 					Helper.implode(unions.get("patterns"), " UNION \n") + 
 				"}";
+		//System.out.println(queryString);
 		return queryString;
 	}
 	

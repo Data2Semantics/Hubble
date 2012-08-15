@@ -6,6 +6,7 @@ import java.util.HashSet;
 import com.data2semantics.hubble.client.exceptions.SparqlException;
 import com.data2semantics.hubble.client.helpers.Helper;
 import com.data2semantics.hubble.server.Endpoint;
+import com.data2semantics.hubble.shared.EndpointMode;
 import com.data2semantics.hubble.shared.models.Evidence;
 import com.data2semantics.hubble.shared.models.EvidenceSummary;
 import com.data2semantics.hubble.shared.models.Recommendation;
@@ -14,9 +15,10 @@ import com.hp.hpl.jena.query.ResultSet;
 
 public class RecommendationLoader {
 	String patientId;
-	
-	public RecommendationLoader(String patientId) throws IllegalArgumentException, SparqlException {
+	private String endpointMode;
+	public RecommendationLoader(String patientId, String endpointMode) throws IllegalArgumentException, SparqlException {
 		this.patientId = patientId;
+		this.endpointMode = endpointMode;
 	}
 
 	public  ArrayList<Recommendation>  getRecommendations() {
@@ -116,7 +118,7 @@ public class RecommendationLoader {
     					"\n         ?tag skos:relatedMatch ?aerstag ."+
     					"\n			?taga oax:hasSemanticTag ?tag ."+			
 						"\n}";
-		ResultSet queryResult = Endpoint.query(Endpoint.ECULTURE2, queryString);
+		ResultSet queryResult = Endpoint.query(Endpoint.ECULTURE2, queryString, endpointMode);
 		return queryResult;
 		
 	}
@@ -127,7 +129,7 @@ public class RecommendationLoader {
 						"\n		?recommendationUri  a d2sa:RecommendationAnnotation . " +
 						"\n 		?recommendationUri oa:hasBody ?recommendationBody ." +
 						"\n}";
-		ResultSet queryResult = Endpoint.query(Endpoint.ECULTURE2, queryString);
+		ResultSet queryResult = Endpoint.query(Endpoint.ECULTURE2, queryString, endpointMode);
 		return queryResult;
 		
 	}
@@ -143,7 +145,7 @@ public class RecommendationLoader {
 				"   OPTIONAL { ?evidenceSrc owl:sameAs ?realSrc } .\n" +
 				"}" ;
 		
-		ResultSet queryResult = Endpoint.query(Endpoint.ECULTURE2, queryString);
+		ResultSet queryResult = Endpoint.query(Endpoint.ECULTURE2, queryString, endpointMode);
 		return queryResult;
 	}
 	
@@ -157,7 +159,7 @@ public class RecommendationLoader {
 				"   ?evidenceTgt oa:hasSource ?evidenceSrc . \n" + 
 				"   OPTIONAL { ?evidenceSrc owl:sameAs ?realSrc } .\n" +
 				"}" ;
-		ResultSet queryResult = Endpoint.query(Endpoint.ECULTURE2, queryString);
+		ResultSet queryResult = Endpoint.query(Endpoint.ECULTURE2, queryString, endpointMode);
 		return queryResult;
 	}
 	
@@ -165,7 +167,7 @@ public class RecommendationLoader {
 
 	public static void main(String[] args) throws IllegalArgumentException,
 			SparqlException {
-		RecommendationLoader loader = new RecommendationLoader("John Doe");
+		RecommendationLoader loader = new RecommendationLoader("John Doe", EndpointMode.DEFAULT_ENDPOINT);
 		ArrayList<Recommendation> recs = loader.getRecommendations();
 		for (Recommendation r : recs) {
 			System.out.println(r.getRelatedFeature() + "  " +r.getBody());

@@ -20,12 +20,13 @@ import com.hp.hpl.jena.query.ResultSet;
 public class PdfAnnotator {
 	public static String PDF_SRC_DIR = "pdfs/srcDocs/";
 	public static String PDF_CACHE_DIR = "pdfs/cache/";
-	
+	private String endpointMode;
 	private String srcFileName;
 	private ArrayList<Annotation> annotations = new ArrayList<Annotation>();
 	
-	public PdfAnnotator(String srcFileName) {
+	public PdfAnnotator(String srcFileName, String endpointMode) {
 		this.srcFileName = srcFileName;
+		this.endpointMode = endpointMode;
 	}
 	public String getAnnotatedPdf() {
 		this.getAnnotations();
@@ -61,7 +62,7 @@ public class PdfAnnotator {
 				"?textSelector rdf:type aos:PrefixPostfixSelector;\n" + 
 					"ao:onSourceDocument <http://www.data2semantics.org/example/sourceDocs/neutropeniaHUP.pdf> .\n" + 
 			"}\n";
-		ResultSet results = Endpoint.query(Endpoint.ECULTURE2, queryString);
+		ResultSet results = Endpoint.query(Endpoint.ECULTURE2, queryString, endpointMode);
 		while (results.hasNext()) {
 			QuerySolution solution = results.next();
 			Annotation annotation = getQueryResultAsAnnotation(solution);
@@ -85,7 +86,7 @@ public class PdfAnnotator {
 					"pav:createdBy ?createdBy;\n" + 
 					"ao:hasTopic ?topic.\n" + 
 			"}\n";
-		ResultSet results = Endpoint.query(Endpoint.ECULTURE2, queryString);
+		ResultSet results = Endpoint.query(Endpoint.ECULTURE2, queryString, endpointMode);
 		while (results.hasNext()) {
 			QuerySolution solution = results.next();
 			annotations.add(getQueryResultAsAnnotation(solution));

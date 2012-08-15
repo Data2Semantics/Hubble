@@ -44,7 +44,7 @@ public class PatientListing extends ListGrid {
 		});
 
 		// draw();
-		getView().getRemoteService().getPatients(new AsyncCallback<ArrayList<String>>() {
+		getView().getRemoteService().getPatients(getView().getEndpoint(), new AsyncCallback<ArrayList<String>>() {
 			public void onFailure(Throwable e) {
 				getView().onError(e.getMessage());
 			}

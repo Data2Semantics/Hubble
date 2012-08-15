@@ -16,7 +16,10 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 public class AdverseEventLoader {
 	HashMap<String, AdverseEvent> adverseEvents = new HashMap<String, AdverseEvent>();
 	AdverseEvent adverseEvent;
-	
+	private String endpointMode;
+	public AdverseEventLoader(String endpointMode) {
+		this.endpointMode = endpointMode;
+	}
 	public HashMap<String, AdverseEvent> getRelevantAdverseEvents(Indication indication) {
 		ResultSet resultSet = queryRelevantAdverseEvents(indication);
 		while (resultSet.hasNext()) {
@@ -73,7 +76,7 @@ public class AdverseEventLoader {
 			"}\n" + 
 			"LIMIT 100";
 		
-		return Endpoint.query(Endpoint.ECULTURE2, queryString);
+		return Endpoint.query(Endpoint.ECULTURE2, queryString, endpointMode);
 	}
 	
 	
@@ -102,7 +105,7 @@ public class AdverseEventLoader {
 				"}\n" + 
 				"LIMIT 100";
 		
-			return Endpoint.query(Endpoint.ECULTURE2, queryString);
+			return Endpoint.query(Endpoint.ECULTURE2, queryString, endpointMode);
 		
 		
 	}
