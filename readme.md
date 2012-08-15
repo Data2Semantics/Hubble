@@ -16,4 +16,4 @@ The application uses maven for dependency management
  * Clone GIT repository
  * In eclipse, import this directory as existing maven project
  * In the project context menu, select Maven->Update Project
- * No run this as a regular Web Application project
+ * Now run this as a regular Web Application project
