@@ -168,7 +168,7 @@ public class PatientDetails extends ListGrid {
 	private void loadData() {
 		getView().onLoadingStart();
 		try {
-			getView().getServerSideApi().getInfo(patientId, new AsyncCallback<Patient>() {
+			getView().getRemoteService().getInfo(patientId, new AsyncCallback<Patient>() {
 				public void onFailure(Throwable caught) {
 					getView().onError("Failed retrieving patient details:<br/>" + caught.getMessage());
 				}

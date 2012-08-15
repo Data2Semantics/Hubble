@@ -64,7 +64,7 @@ public class IndicationDetails extends VLayout {
 //		addMember(label);
 		initAdverseEventGrid();
 		try {
-			getView().getServerSideApi().getRelevantAdverseEvents(indication, new AsyncCallback<HashMap<String, AdverseEvent>>() {
+			getView().getRemoteService().getRelevantAdverseEvents(indication, new AsyncCallback<HashMap<String, AdverseEvent>>() {
 				public void onFailure(Throwable e) {
 					getView().onError(e.getMessage());
 				}

@@ -20,23 +20,22 @@ public class View extends VLayout {
 	private PatientInfo patientInfo;
 	private RecommendationColumnTree recommendationColumnTree;
 	private HLayout hLayout = new HLayout();
-	private HubbleServiceAsync serverSideApi;
+	private HubbleServiceAsync remoteService;
 	private Logger logger = Logger.getLogger("");
-	public View(HubbleServiceAsync serverSideApi) {
-		this.serverSideApi = serverSideApi;
+	public View(HubbleServiceAsync remoteService) {
+		this.remoteService = remoteService;
 		setMargin(20);
 		hLayout.setLeaveScrollbarGap(false);
 		hLayout.addMember(new PatientListing(this));
 		addMember(hLayout);
-		logger.severe("woeii");
 	}
 	
-	public HubbleServiceAsync getServerSideApi() {
-		return serverSideApi;
+	public HubbleServiceAsync getRemoteService() {
+		return remoteService;
 	}
 	
 	public void setServerSideApi(HubbleServiceAsync serverSideApi) {
-		this.serverSideApi = serverSideApi;
+		this.remoteService = serverSideApi;
 	}
 
 	public void showPatientInfo(String patientID) {

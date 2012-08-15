@@ -67,7 +67,7 @@ public class WidgetsContainer extends TileGrid {
 	
 	private void drawRelevantSnippets() {
 		try {
-			getView().getServerSideApi().getRelevantSnippets(patientId, new AsyncCallback<HashMap<String, Snippet>>() {
+			getView().getRemoteService().getRelevantSnippets(patientId, new AsyncCallback<HashMap<String, Snippet>>() {
 				public void onFailure(Throwable e) {
 					getView().onError(e.getMessage());
 				}

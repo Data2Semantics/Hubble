@@ -37,7 +37,7 @@ public class RecommendationColumnTree extends ColumnTree {
 	private void loadData() {
 		getView().onLoadingStart();
 		try {
-			getView().getServerSideApi().getRelevantRecommendations(patientId, new AsyncCallback< ArrayList<Recommendation>>() {
+			getView().getRemoteService().getRelevantRecommendations(patientId, new AsyncCallback< ArrayList<Recommendation>>() {
 				public void onFailure(Throwable caught) {
 					getView().onError(caught);
 				}

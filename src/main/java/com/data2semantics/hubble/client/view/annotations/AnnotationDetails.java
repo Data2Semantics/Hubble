@@ -63,7 +63,7 @@ public class AnnotationDetails extends ListGrid {
 	private void loadData(){
 		getView().onLoadingStart();
 		try {
-			getView().getServerSideApi().getRelevantSnippets(patientId, new AsyncCallback<HashMap<String,Snippet>>() {
+			getView().getRemoteService().getRelevantSnippets(patientId, new AsyncCallback<HashMap<String,Snippet>>() {
 				public void onFailure(Throwable caught) {
 					getView().onError(caught);
 				}

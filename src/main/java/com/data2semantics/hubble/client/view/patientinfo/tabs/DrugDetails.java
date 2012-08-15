@@ -90,7 +90,7 @@ public class DrugDetails extends VLayout {
 //		addMember(label);
 		initAdverseEventGrid();
 		try {
-			getView().getServerSideApi().getRelevantAdverseEvents(drug, new AsyncCallback<HashMap<String, AdverseEvent>>() {
+			getView().getRemoteService().getRelevantAdverseEvents(drug, new AsyncCallback<HashMap<String, AdverseEvent>>() {
 				public void onFailure(Throwable e) {
 					getView().onError(e.getMessage());
 				}
