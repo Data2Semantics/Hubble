@@ -8,3 +8,6 @@ src/main/webapp/pdfs/srcDocs/*.pdf
 target
 .settings
 .project
+.gwt/
+gwt-unitCache/
+war/
