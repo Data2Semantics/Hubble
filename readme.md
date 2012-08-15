@@ -15,5 +15,4 @@ The application uses maven for dependency management
  * Make sure you have the maven eclipse plugin installed (m2e), the maven integration for WTP plugin, and the Google Web Toolkit plugin
  * Clone GIT repository
  * In eclipse, import this directory as existing maven project
- * In the project context menu, select Maven->Update Project
  * Now run this as a regular Web Application project
