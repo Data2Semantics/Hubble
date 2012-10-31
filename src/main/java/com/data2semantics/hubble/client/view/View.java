@@ -160,6 +160,7 @@ public class View extends VLayout {
         	defaultEndpointMode = EndpointMode.DEFAULT_ENDPOINT;
         	Cookies.setCookie(ENDPOINT_SELECTION_COOKIE, EndpointMode.DEFAULT_ENDPOINT);
         }
+        defaultEndpointMode = EndpointMode.LOCAL_REPLICA;
         
         
         valueMap.put(EndpointMode.DEFAULT_ENDPOINT, "Default Endpoint");  

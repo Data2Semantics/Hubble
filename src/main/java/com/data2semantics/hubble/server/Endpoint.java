@@ -14,8 +14,9 @@ import com.hp.hpl.jena.sparql.resultset.ResultSetException;
  */
 public class Endpoint {
 	private static String LOCAL_PROXY = "http://localhost:8080/sparqlProxy/";
-	private static String LOCAL_REPLICA = "http://localhost:8080/openrdf-workbench/repositories/localrep/query";
+	private static String LOCAL_REPLICA = "http://localhost:8080/openrdf-workbench/repositories/replica/query";
 	public static String ECULTURE2 = "http://eculture2.cs.vu.nl:5020/sparql/";
+//	public static String ECULTURE2 = "http://localhost:8080/openrdf-workbench/repositories/aers/query";
 	public static String LINKED_LIFE_DATA = "http://linkedlifedata.com/sparql";
 	
 
