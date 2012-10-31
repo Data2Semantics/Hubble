@@ -25,6 +25,7 @@ public class PatientListing extends ListGrid {
 		setSelectionType(SelectionStyle.SINGLE);
 		ListGridField nameField = new ListGridField("patientId", "Patient");
 		setFields(nameField);
+		
 		setLeaveScrollbarGap(false);
 		addSelectionChangedHandler(new SelectionChangedHandler() {
 			public void onSelectionChanged(SelectionEvent event) {

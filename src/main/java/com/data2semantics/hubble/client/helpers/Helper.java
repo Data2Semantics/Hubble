@@ -31,6 +31,8 @@ public class Helper {
 			namespaceList.add("PREFIX ns1: <http://purl.org/cpr/0.75#>");
 			namespaceList.add("PREFIX : <http://aers.data2semantics.org/vocab/>");
 			namespaceList.add("PREFIX patient: <http://www.data2semantics.org/ontology/patient/>");
+			namespaceList.add("PREFIX aers: <http://aers.data2semantics.org/>");
+			namespaceList.add("PREFIX aersv: <http://aers.data2semantics.org/vocab/>");
 		} else if (prefixTypes.equals("annotations")) {
 			namespaceList.add("PREFIX ao: <http://purl.org/ao/core#>");
 			namespaceList.add("PREFIX aot: <http://purl.org/ao/types#>");
@@ -50,7 +52,6 @@ public class Helper {
 			namespaceList.add("PREFIX cnt: <http://www.w3.org/2011/content#>"); 
 			namespaceList.add("PREFIX dc: <http://purl.org/dc/elements/1.1/>"); 
 			namespaceList.add("PREFIX dcterms: <http://purl.org/dc/terms/>"); 
-			namespaceList.add("PREFIX aers: <http://aers.data2semantics.org/>");
 			namespaceList.add("PREFIX swanrel: <http://purl.org/swan/2.0/discourse-relationships/>");		
 			namespaceList.add("PREFIX d2sa: <http://aers.data2semantics.org/vocab/annotation/>");
 		}

@@ -16,6 +16,13 @@ public class RdfNodeHelper {
 		return node.asLiteral().getInt();
 	}
 	
+	public static double getDouble(RDFNode node) {
+		return node.asLiteral().getDouble();
+	}
+	
+//	public static BigDecimal getBigDecimal(RDFNode node) {
+//		return node.asLiteral().getString();
+//	}
 	public static String getString(QuerySolution solution, String variable) {
 		return getString(solution.get(variable));
 	}

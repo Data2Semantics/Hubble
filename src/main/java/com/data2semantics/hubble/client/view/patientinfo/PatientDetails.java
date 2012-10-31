@@ -16,7 +16,6 @@ import com.data2semantics.hubble.shared.models.Drug;
 import com.data2semantics.hubble.shared.models.Indication;
 import com.data2semantics.hubble.shared.models.Measurement;
 import com.data2semantics.hubble.shared.models.Patient;
-import com.data2semantics.hubble.shared.models.Treatment;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.types.Alignment;
@@ -220,13 +219,23 @@ public class PatientDetails extends ListGrid {
 	private void drawInfoIntoTable(Patient patientInfo) {
 		rows = new ArrayList<PatientInfoRecord>();
 		rows.add(new PatientInfoRecord("Patient ID", patientInfo.getPatientID()));
-		rows.add(new PatientInfoRecord("Comment", patientInfo.getComment()));
-		rows.add(new PatientInfoRecord("Age", Integer.toString(patientInfo.getAge())));
+		String comment = patientInfo.getComment();
+		if (comment != null) {
+			rows.add(new PatientInfoRecord("Comment", patientInfo.getComment()));
+		}
+		int age = patientInfo.getAge();
+		if (age != 0) {
+			rows.add(new PatientInfoRecord("Age", Integer.toString(patientInfo.getAge())));
+		}
+		String weight = patientInfo.getWeight();
+		if (weight != null) {
+			rows.add(new PatientInfoRecord("Weight", weight));
+		}
 		drawIndications(patientInfo);
-		drawPreviousIndications(patientInfo);
+		//drawPreviousIndications(patientInfo);
 		drawDrugs(patientInfo);
 		drawMeasurements(patientInfo);
-		drawRecentTreatments(patientInfo);
+		//drawRecentTreatments(patientInfo);
 		
 		PatientInfoRecord[] rowsArray = new PatientInfoRecord[rows.size()];
 		rows.toArray(rowsArray);
@@ -242,14 +251,14 @@ public class PatientDetails extends ListGrid {
 			rows.add(row);
 		}
 	}
-	private void drawPreviousIndications(Patient patientInfo) {
-		for (Map.Entry<String, Indication> entry : patientInfo.getPreviousIndications().entrySet()) {
-			final Indication indication = entry.getValue();
-			PatientInfoRecord row = new PatientInfoRecord(RowHeaders.PREV_INDICATION, indication.getLabel(), indication.getDefinition());
-			row.setUri(entry.getKey());
-			rows.add(row);
-		}
-	}
+//	private void drawPreviousIndications(Patient patientInfo) {
+//		for (Map.Entry<String, Indication> entry : patientInfo.getPreviousIndications().entrySet()) {
+//			final Indication indication = entry.getValue();
+//			PatientInfoRecord row = new PatientInfoRecord(RowHeaders.PREV_INDICATION, indication.getLabel(), indication.getDefinition());
+//			row.setUri(entry.getKey());
+//			rows.add(row);
+//		}
+//	}
 	private void drawMeasurements(Patient patientInfo) {
 		for (Map.Entry<String, Measurement> entry : patientInfo.getMeasurements().entrySet()) {
 			final Measurement measurement = entry.getValue();
@@ -261,14 +270,14 @@ public class PatientDetails extends ListGrid {
 		}
 
 	}
-	private void drawRecentTreatments(Patient patientInfo) {
-		for (Map.Entry<String, Treatment> entry : patientInfo.getRecentTreatments().entrySet()) {
-			final Treatment treatment = entry.getValue();
-			PatientInfoRecord row = new PatientInfoRecord(RowHeaders.TREATMENT, treatment.getLabel());
-			row.setUri(entry.getKey());
-			rows.add(row);
-		}
-	}
+//	private void drawRecentTreatments(Patient patientInfo) {
+//		for (Map.Entry<String, Treatment> entry : patientInfo.getRecentTreatments().entrySet()) {
+//			final Treatment treatment = entry.getValue();
+//			PatientInfoRecord row = new PatientInfoRecord(RowHeaders.TREATMENT, treatment.getLabel());
+//			row.setUri(entry.getKey());
+//			rows.add(row);
+//		}
+//	}
 	
 	private void drawDrugs(Patient patientInfo) {
 		for (Map.Entry<String, Drug> entry : patientInfo.getDrugs().entrySet()) {

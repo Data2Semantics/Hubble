@@ -8,9 +8,10 @@ public class Patient implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private String patientID;
-	private int age;
+	private int age = 0;
 	private String comment;
 	private String status;
+	private String weight;
 	
 	/**
 	 * For these hashmaps, use URI as key
@@ -141,6 +142,12 @@ public class Patient implements Serializable {
 			this.drugs.put(uri, drug);
 		}
 		return drug;
+	}
+	public String getWeight() {
+		return weight;
+	}
+	public void setWeight(String weight) {
+		this.weight = weight;
 	}
 	
 }

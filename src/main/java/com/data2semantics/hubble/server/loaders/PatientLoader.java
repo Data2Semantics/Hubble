@@ -94,7 +94,7 @@ public class PatientLoader {
 			 * These are values (not uri's). Set them in the patient object
 			 */
 			if (varName.equals("age")) {
-				patientObject.setAge(RdfNodeHelper.getInt(rdfNode));
+				patientObject.setAge(RdfNodeHelper.getDurationYears(rdfNode));
 			} else if (varName.equals("comment")) {
 				patientObject.setComment(RdfNodeHelper.getString(rdfNode));
 			} else if (varName.equals("status")) {
@@ -126,6 +126,8 @@ public class PatientLoader {
 				String drugbankID = sameAs.substring(Drug.DRUGBANK_PREFIX.length());
 				String imageLocation = Drug.IMGLOCATION_PREFIX + drugbankID + Drug.IMGLOCATION_POSTFIX;
 				patientObject.getDrug(uri).setImgLocation(imageLocation);
+			} else if (varName.equals("weight")) {
+				patientObject.setWeight(RdfNodeHelper.getString(rdfNode));
 			}
 		} catch (NullPointerException e) {
 			System.out.println("Nullpointer exception for var " + varName + " and rdfNode " + solution.get(varName).toString());
@@ -136,47 +138,46 @@ public class PatientLoader {
 	
 	private ResultSet queryPatientData() throws IllegalArgumentException, SparqlException {
 		String queryString = Helper.getSparqlPrefixesAsString("aers") + "\n" +
+			"PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" + 
 			"SELECT DISTINCT " +
 				"?age \n" +
-				"?comment \n" +
-				"?status \n" +
-				"?measurement \n" +
+//				"?comment \n" +
+//				"?status \n" +
+//				"?measurement \n" +
 				"?indication \n" +
 				"?indication_label \n" +
-				"?recentTreatment \n" +
-				"?recentTreatment_label \n" +
-				"?previousIndication \n" +
+//				"?recentTreatment \n" +
+//				"?recentTreatment_label \n" +
+//				"?previousIndication \n" +
 				"?drug \n" +
 				"?drug_label \n" +
 				"?drug_sameAs \n" +
+				"?weight\n" +
 			"{\n" + 
-				"?patient rdf:type patient:Patient.\n" + 
-				"?patient rdfs:label '" + patientId + "'@en.\n" + 
-				"?patient patient:hasAge ?age.\n" + 
-				"?patient rdfs:comment ?comment.\n" + 
-				"OPTIONAL{?patient patient:usesMedication ?drug.\n" +
-					"?drug rdfs:label ?drug_label;\n" +
-						"skos:exactMatch ?drug_sameAs.\n" +
-					"?drug_sameAs <http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugbank/primaryAccessionNo> ?pan .\n" +
-//					"FILTER regex(str(?drug_sameAs), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" + 
-				"}.\n" + 
-				"OPTIONAL{?patient patient:hasStatus ?status}.\n" + 
-				"OPTIONAL{?patient patient:hasMeasurement ?measurement}.\n" + 
-				"OPTIONAL{\n" +
-					"?patient patient:hasDiagnosis ?indication.\n" +
-					"OPTIONAL{\n" + 
-						"?indication rdfs:label ?indication_label.\n" +
-					"}\n" +
-				"}.\n" + 
-				
-				//Workaround to get 'hadRecentTreatment' from our own 4store. This SHOULD BE in the lld rdf, but isnt :(
-				"OPTIONAL{\n" +
-					"?patient patient:hadRecentTreatment ?recentTreatment.\n" +
-					"?recentTreatment rdfs:label ?recentTreatment_label.\n" +
-				"}.\n" + 
-				"OPTIONAL{?patient patient:hadPreviousIndication ?previousIndication}.\n" + 
-			"}\n" + 
+				"?patient rdf:type patient:Patient;\n" + 
+				"	rdfs:label '" + patientId + "'^^xsd:string;\n" + 
+				" 	patient:hasDiagnosis ?indication.\n" +
+				"OPTIONAL {\n" +
+				"	?patient aersv:age ?age.\n" +
+				"}\n" + 
+				"  OPTIONAL {\n" +
+				"		?patient aersv:weight ?weight\n" + 
+				"}\n" + 
+				"  OPTIONAL {\n" + 
+				"    ?indication rdfs:label ?indication_label\n" + 
+				"  }\n" + 
+				"  OPTIONAL {\n" + 
+				"     ?patient patient:usesMedication ?medication.\n" + 
+				"     ?medication aersv:drug ?drug.\n" + 
+				"     ?drug rdfs:label ?drug_label;\n" + 
+				"    		skos:exactMatch ?drug_sameAs.\n" + 
+				"    ?drug_sameAs <http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugbank/primaryAccessionNo> ?pan.\n" + 
+				"    FILTER regex(str(?drug_sameAs), \"^http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/DB\", \"i\")\n" + 
+				"  }\n" + 
+				"  \n" + 
+				"} " + 
 			"";
+		System.out.println(queryString);
 		return Endpoint.query(Endpoint.ECULTURE2, queryString);
 	}
 	
